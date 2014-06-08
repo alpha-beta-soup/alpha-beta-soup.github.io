@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Near Improv]]></title>
   <link href="http://alpha-beta-soup.github.io/atom.xml" rel="self"/>
   <link href="http://alpha-beta-soup.github.io/"/>
-  <updated>2014-06-08T18:31:21+12:00</updated>
+  <updated>2014-06-08T18:45:07+12:00</updated>
   <id>http://alpha-beta-soup.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Richard Law]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
