@@ -3,7 +3,7 @@ layout: post
 title: "One day in Montréal"
 date: 2014-06-12 17:58:10 +1200
 comments: true
-categories: 
+categories: ["Canada", "Montréal", "Public Transport", "Animation"]
 ---
 
 This video of Montréal's transit system fell across my path today, made by Colin
