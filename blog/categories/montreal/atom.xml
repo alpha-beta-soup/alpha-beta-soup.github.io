@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Near Improv]]></title>
-  <link href="http://alpha-beta-soup.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Montréal | Near Improv]]></title>
+  <link href="http://alpha-beta-soup.github.io/blog/categories/montreal/atom.xml" rel="self"/>
   <link href="http://alpha-beta-soup.github.io/"/>
   <updated>2014-06-13T11:20:49+12:00</updated>
   <id>http://alpha-beta-soup.github.io/</id>
@@ -12,51 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Global Isochrone Travel Time From London (1881)]]></title>
-    <link href="http://alpha-beta-soup.github.io/blog/2014/06/13/global-isochrone-travel-time-from-london-1881/"/>
-    <updated>2014-06-13T10:33:38+12:00</updated>
-    <id>http://alpha-beta-soup.github.io/blog/2014/06/13/global-isochrone-travel-time-from-london-1881</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s an interesting historical map that turned up on <a href="http://www.reddit.com/r/MapPorn/comments/27yfn0/isochronic_passage_chart_for_travelers_global_map/" title="Link to Reddit thread">/r/MapPorn</a> today. Made by
-Francis Galton for the Proceedings of the Royal Geographic Society in 1881, I find
-it particularly interesting because it represents the state of international travel
-only a decade or so after my Scottish and Irish ancestors travelled to New Zealand
-(via way of Cape Town, where one of my great-great aunts was born <em>en route</em>).</p>
-
-<p><span class='caption-wrapper'><img class='caption' src='http://alpha-beta-soup.github.io/images/global-isochrone-travel-time-from-london-1881.jpg' width='' height='' title='**Isochronic passage chart for travellers**, showing the shortest number of days journey from London by the quickest through routes and using such further conveyances as are available without unreasonable cost. It is supposed that local preparations have been made and that other circumstances are favourable.'><span class='caption-text'><strong>Isochronic passage chart for travellers</strong>, showing the shortest number of days journey from London by the quickest through routes and using such further conveyances as are available without unreasonable cost. It is supposed that local preparations have been made and that other circumstances are favourable.</span></span></p>
-
-<p>The work of cartographers past is often so impressive on their own merits (although
-I suspect the chaff has been cut with time) yet when you also consider the technology
-that they <em>didn&rsquo;t</em> have to make their maps&hellip; the mind boggles and you realise that all of use
-currently practising the skill have it so easy. Really, if work of this calibre could be made then,
-there are no excuses for bad maps now.</p>
-
-<p>One particular technique I&rsquo;d like to draw attention to is the shape of the coastlines.
-They&rsquo;re <em>really wobbly</em>. I suspect this is probably because nice little shapefiles didn&rsquo;t
-exist for downloading&mdash;-but the effect that this has is to express that coastlines are
-complex features even if that complexity isn&rsquo;t well known. Rather than generalise
-coastlines to rather round shapes (which would be fine at this scale, really), they
-have been deliberately given additional complexity: it&rsquo;s anti-generalisation.</p>
-
-<p>As far as I am aware, this would be quite hard to achieve with modern software. You would have
-to first add vertices to existing shapes at not-quite-regular intervals, and then shift
-the vertices about to get that head-beach in-out effect.</p>
-
-<p>I also really think the colour distinction between land and water with the same
-category value is really nifty, and of course is crucial when the main form of
-intercontinental travel is by sea (steam ship). It wouldn&rsquo;t really make sense for
-travel <em>par avion</em>, or any other mode.</p>
-
-<p>Finally:</p>
-
-<blockquote><p>It is supposed that local preparations have been made and that other circumstances are favourable.</p></blockquote>
-
-<p>I love this. These kind of assumptions have been made for over a hundred years in
-transportation analysis and cartography. I wonder if it will ever be possible to completely
-overcome them.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[One Day in Montréal]]></title>
@@ -69,8 +24,7 @@ been reading a bit of professor El-Geneidy&rsquo;s work recently for my own rese
 I&rsquo;ve recently been entertaining the idea of visiting Montréal for an extended period
 of time once I print a thesis onto a reconstituted tree. Providence?</p>
 
-<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ztMm5xmk3M" allowfullscreen></iframe></div>
-
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ztMm5xmk3M" allowfullscreen></iframe></div></p>
 
 <p>The video shows 24 hours of transit, from 4:30 in the morning for the Société de
 transport de Montréal (STM), drilling down to individual scheduled trips. It distinguishes
