@@ -24,15 +24,15 @@ weekdays where people are going to work and school, school holiday weekdays, and
 {% imgcap center ../images/airport91_ttcomparison.png Travel time data from the Greater Wellington Regional Council. Open in new tab for larger. %}
 
 This data covers all of April 2014. This year, both primary and secondary school holidays
-began on April 17, and went to May 5, so the data is split roughly evenly between weekdays
-where little Johhny is being ferried to school, and says when he is not. Most of us know from
+began on April 17, and lasted until May 5, so the data is split roughly evenly between weekdays
+where little Johhny is being ferried to school, and days when he is not. Most of us know from
 experience that traffic congestion is worse in the school term than in the school holidays.
 But how much? Well, if we take [the Airport Flyer bus route](http://www.metlink.org.nz/timetables/bus/091/inbound "Click to see the route") as a unit of analysis, school-related
 congestion adds about 14 minutes of travel time across the length of the route. This mostly accrues between
 Jackson St and Murphy St. For those of you playing at home, that's the longest stretch between stops at
 approximately 15 kilometres, and takes in the busiest section of State Highway 2 and the
 urban motorway. However, from experience as a rider on this route, a lot of this
-additional travel time is experience in Petone (Jackson St/Hutt Rd, attempting to get
+additional travel time comes from Petone (Jackson St/Hutt Rd, attempting to get
 onto SH2). Also from experience as a resident in Petone, **school congestion is a total 
 time killer**.
 
@@ -51,11 +51,11 @@ variation in travel time apart from school-related congestion? Here's a list:
 * Possibly some other things
 
 Now, it is possible to separate out these different effects, although I leave that
-as an exercise for the reader. I picked only a sinlge month to ensure I'm comparing
+as an exercise for the reader. I picked only a single month to ensure I'd be comparing
 apples with apples to the greatest extent possible. Admittedly, April **did** see a bit of roadworks
 between Petone and Wellington that would have affected this route. However, this work
-was being performed just as intensely during the school term, and the weekend, as for the 
-rest of April--so there is no reason to attrbute the difference to that.
+was being performed just as intensely during the school term and the weekend as for the 
+rest of April--so there is no reason to attribute the difference to that.
 
 School children don't typically board the Airport bus, not only because it goes to the 
 Airport, but because it carries a surcharge. Some amount of variation is perhaps due to buses
@@ -68,15 +68,15 @@ impact on obesity is noted, as well as the opportunity cost of missed early morn
 exercise which could help boost attention spans.
 
 However, I have not seen it mentioned how this effects our transport system beyond 
-a generally acceptance that congestion is worse. Well, **how much worse**? Although
+a general acceptance that congestion is worse. Although
 I have only shown you one chart, I have played around with displaying the same information
 for a variety of routes. The typical result for buses is that the mean travel time is greater
 during the school term than outside of it. In terms of the variation around this mean, every example 
 I have plotted has shown a much greater standard deviation of travel time.
 
 What does that mean? It means buses are generally getting stuck in school traffic, 
-causing people to be later than they otherwise need to be. It also means **buses are more late
-more often**; people have **less certainty about their arrival time**, and the **schedule becomes
+causing people to be **later than they otherwise need to be**, or making them leave home earlier than otherwise.
+It means **buses are more late more often**; people have **less certainty about their arrival time**, and the **schedule becomes
 less and less useful as a tool to reduce the amount of time you spend waiting**.
 
 Notably, the effect is much more limited for rail services, which does want to put up
