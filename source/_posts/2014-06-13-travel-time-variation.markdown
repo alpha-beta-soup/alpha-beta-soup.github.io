@@ -37,7 +37,7 @@ onto SH2). Also from experience as a resident in Petone, **school congestion is 
 time killer**.
 
 ---
-## What's varies?
+## What varies?
 ---
 
 Now, let's back up a bit, because I can hear a few voices at the back. What can cause
@@ -79,7 +79,7 @@ causing people to be **later than they otherwise need to be**, or making them le
 It means **buses are more late more often**; people have **less certainty about their arrival time**, and the **schedule becomes
 less and less useful as a tool to reduce the amount of time you spend waiting**.
 
-Notably, the effect is much more limited for rail services, which does want to put up
+Notably, the effect is much more limited for rail services, which do not want to put up
 with any of that school-gate SUV madness.
 
 
