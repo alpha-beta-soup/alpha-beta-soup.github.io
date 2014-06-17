@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Waiting Time | Near Improv]]></title>
   <link href="http://alpha-beta-soup.github.io/blog/categories/waiting-time/atom.xml" rel="self"/>
   <link href="http://alpha-beta-soup.github.io/"/>
-  <updated>2014-06-17T14:09:12+12:00</updated>
+  <updated>2014-06-17T14:17:14+12:00</updated>
   <id>http://alpha-beta-soup.github.io/</id>
   <author>
     <name><![CDATA[Richard Law]]></name>
@@ -130,15 +130,7 @@ and 58 minutes for the third. Your average headway in this period is (1+1+58)/3=
 <p>So we&rsquo;re back at 20 minutes! But hold on, none these buses has a 20 minute headway when considered
 as an individual arrival.</p>
 
-<p>This is tricky. What does the TCQSM recommend? Well, as it so happens, the TCQSM
-suggests using the first approach, where buses that arrive within three minutes of each other
-are considered as one bus. So the 7:00, 7:01 and 7:02 buses would collapse down to some time point
-in the range 7:00-7:02. I&rsquo;m not sure what moment exactly should be used within this range.
-It may sound picky to be wondering if the representative arrival is 7:00 or 7:02, but
-when writing code to calculate these headways for you, you have to make rather precise
-decisions. I&rsquo;d guess it&rsquo;d be the average of these values, so 7:01 am.</p>
-
-<p>Whatever it is, here&rsquo;s what the TCQSM has to say (p. 3-29):</p>
+<p>This is tricky. What does the TCQSM recommend (p. 3-29)?</p>
 
 <blockquote><p>Some judgment must be applied to bus stops located near timed transfer centers.
 There is a considerable difference in service from a passenger’s perspective between a
@@ -147,6 +139,14 @@ transfer center every 30 minutes, even though both scenarios result in six buses
 hour serving the stop. In general, buses on separate routes serving the same
 destination that arrive at a stop within 3 minutes of each other should be counted as
 one bus for the purposes of determining service frequency LOS."</p></blockquote>
+
+<p>As it so happens, the TCQSM therefore
+suggests using the first approach, where buses that arrive within three minutes of each other
+are considered as one bus. So the 7:00, 7:01 and 7:02 buses would collapse down to some time point
+in the range 7:00-7:02. I&rsquo;m not sure what moment exactly should be used within this range.
+It may sound picky to be wondering if the representative arrival is 7:00 or 7:02, but
+when writing code to calculate these headways for you, you have to make rather precise
+decisions. I&rsquo;d guess it&rsquo;d be the average of these values, so 7:01 am.</p>
 
 <p>However, if the buses arrived at 7:00, 7:04, 7:08 and 8:00, we&rsquo;d be back to an average headway
 of 20 minutes, and square one. We&rsquo;ll call this Arrival Pattern B.</p>
@@ -173,7 +173,7 @@ A and B can be 60 and 20 minutes, respectively. This seems like a very big diffe
 (and hence waiting time) for such a small difference in vehicle arrivals.</p>
 
 <p>However, if passengers are arriving uniformly at random over the hour 7:00-8:00,
-then the average passenger <em>does</em> indeed wait for 20 minutes in Arrival Pattern B.
+then the average passenger <em>does</em> indeed wait for -20 minutes in Arrival Pattern B.
 In Arrival Pattern A, three minutes, while arbitrary, does seem like a reasonable amount
 of time to consider services to be functionally arriving at the same time, given acceptable
 levels of variation in arrival time.</p>
@@ -311,7 +311,7 @@ at the two edges that progress uninterrupted from A to C, and ignore all others.
 <p>The problem with this is that the number of edges we have in the network has grown.
 Where before we had 7 edges all holding information in our database (route, time, mode, etc.), we
 now have 11. This increase of three doesn&rsquo;t sound big, but the only reason it is small is because
-I have drawn a very simply network. Despite being simple, this is still coming up against the limits
+I have drawn a very simple network. Despite being simple, this is still coming up against the limits
 of what I can reasonably convey in an diagram, what with its overlapping lines.</p>
 
 <p>If instead of 5 stops I had drawn 60 stops, the number of edges now represented would be approximately
@@ -348,7 +348,7 @@ on the waiting time. Especially when the headways are such that you&rsquo;d be m
 not to check the schedule.</p>
 
 <p>Why have I never seen this problem mentioned? I don&rsquo;t see it in the TCQSM. I don&rsquo;t see it
-in any academic paper that has used &ldquo;headway&rdquo; as those it is something you can touch with your hands?</p>
+in any academic paper that has used &ldquo;headway&rdquo; as though it is something you can touch with your hands.</p>
 
 <p>Given I&rsquo;m facing this issue, what do I do? I can&rsquo;t be the only who has thought about it.</p>
 
@@ -376,9 +376,7 @@ as pairs of stops.</p>
 
 <h3>Care to weigh in?</h3>
 
-<p>Have you dealt with calculating headways from schedules or real-time observations of transit arrivals?</p>
-
-<p>What issues did you come across? How did you deal with them?</p>
+<p>Have you dealt with calculating headways from schedules or real-time observations of transit arrivals? What issues did you come across? How did you deal with them?</p>
 ]]></content>
   </entry>
   
