@@ -3,7 +3,7 @@ layout: post
 title: "What is a Headway?"
 date: 2014-06-17 08:38:41 +1200
 comments: true
-categories: 
+categories: ["Headway", "Computation", "Frequency", "Waiting Time"]
 ---
 
 A headway, as used in transit planning and modelling, is typically defined as the time 

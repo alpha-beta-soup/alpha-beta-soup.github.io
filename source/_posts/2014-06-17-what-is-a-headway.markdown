@@ -29,10 +29,10 @@ the second edition of the TCQSM (rather than the 3rd), because I don't have acce
 Level of Service (LOS) |  Avg. Headway (min)  |  Vehicles/h  | Comments
 :---:|:---:|:---:| --- |
 A | <10 | >6 | Passengers do not need schedules
-B | <10-14 | 5-6 | Frequent service, passengers consult schedules
-C | <15-20 | 3-4 | Maximum desirable time to wait if bus/train missed
-D | <21-30 | 2 | Service unattractive to choice riders
-E | <31-60 | 1 | Service available during the hour
+B | 10-14 | 5-6 | Frequent service, passengers consult schedules
+C | 15-20 | 3-4 | Maximum desirable time to wait if bus/train missed
+D | 21-30 | 2 | Service unattractive to choice riders
+E | 31-60 | 1 | Service available during the hour
 F | >60 | <1 | Service unattractive to all riders
 
 Stops with LOS A mean that passengers can just up and board their service with barely any waiting.
