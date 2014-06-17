@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Frequency | Near Improv]]></title>
   <link href="http://alpha-beta-soup.github.io/blog/categories/frequency/atom.xml" rel="self"/>
   <link href="http://alpha-beta-soup.github.io/"/>
-  <updated>2014-06-17T14:17:14+12:00</updated>
+  <updated>2014-06-17T14:24:33+12:00</updated>
   <id>http://alpha-beta-soup.github.io/</id>
   <author>
     <name><![CDATA[Richard Law]]></name>
@@ -257,7 +257,7 @@ routes (distinguished by colour and pattern for the colourblind: red is solid, g
 
 <p>If you&rsquo;re seeking to travel directly from A to D, you don&rsquo;t at all care that there
 is a blue line between A and E. So even if a blue line service arrived at A every minute
-of every day, it would do you know good to board it (we&rsquo;ll assume you can&rsquo;t walk between any of the stops).
+of every day, it would do you no good to board it (we&rsquo;ll assume you can&rsquo;t walk between any of the stops).
 That is, if travelling A-D, your headway is defined only as the headway of the green route.</p>
 
 <p>Now if you&rsquo;re instead travelling A-C, you can choose between the red and the green routes.
@@ -265,7 +265,7 @@ Unless these services arrive at A at the same time, your headway (and hence wait
 is less than it would be if you were travelling A-D, even though you are waiting at the same stop.
 This path A-B-C is a public transport <em>corridor</em> of overlapping routes.</p>
 
-<p>Travelling A-E, you again benefit from the corridor effect, as your line is shared between A and E.
+<p>Travelling A-E, you again benefit from the corridor effect, as your line is shared between the blue and the red services.
 Note, however, that although these overlapping routes work together to reduce your headway,
 you may not necessarily choose to board the first red or blue service that arrives. For instance,
 if blue is an express route that travels A-E while red is a slower route that stops at A-B-C-E,
@@ -283,15 +283,15 @@ certainly an advantage to have this option if C is more comfortable or well-lit 
 to wait than is A.</p>
 
 <p>These are very tricky questions with very tricky answers. The key thing to keep in mind, however, is the mantra:
-<em>*the destination matters</em>. To this end, the TCQSM does acknowledge that headways are defined
+<strong>the destination matters</strong>. To this end, the TCQSM does acknowledge that headways are defined
 with respect to a particular destination. By no means has this been clearly stated, however.
 To quote their fuller definition (p. 3-29):</p>
 
-<blockquote><p>Service frequency LOS is determined &lt;by destination from a given transit stop, as
+<blockquote><p>Service frequency LOS is determined by destination from a given transit stop, as
 several routes may serve a given stop, but not all may serve a particular destination.</p></blockquote>
 
 <p>Take home point: a stop served by more than one route with multiple possible destinations
-doesn&rsquo;t have &ldquo;a&rdquo; headway. It has a headway for each possible destination from each route.</p>
+doesn&rsquo;t have a single headway; it has a headway for each possible direct destination from each stop.</p>
 
 <h3>How do you calculate headways when the destination matters?</h3>
 
@@ -300,9 +300,7 @@ schedule (e.g. from your local GTFS) or from observation of real-time service ar
 is that as soon as we define headways not as one number for each stop, but as one
 number for each possible board-egress stop pair, the dimensionality of the problem grows.</p>
 
-<p>Given this blog is ostensibly about transit visualisation, I&rsquo;ll make a diagram for this.</p>
-
-<p>This is the exact same sample network as we had before, but now shown in terms of the direct
+<p>Given this blog is ostensibly about transit visualisation, I&rsquo;ll make a diagram for this. This is the exact same sample network as we had before, but now shown in terms of the direct
 stop edges that exist. If you&rsquo;re to find the headway of travel A-C, you simply need to look
 at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.</p>
 
