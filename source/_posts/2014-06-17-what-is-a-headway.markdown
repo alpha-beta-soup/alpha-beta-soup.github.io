@@ -190,7 +190,7 @@ between vehicle arrivals at a stop. However, all arrivals are not equivalent. Wh
 is **where they are going**. Let's say we have a network with stops A-E serviced by three different
 routes (distinguished by colour and pattern for the colourblind: red is solid, green is dotted, and blue is dashed).
 
-{% img right ../images/network-headway-diagram.png %}
+{% imgcap right ../images/network-headway-diagram.png %}
 
 If you're seeking to travel directly from A to D, you don't at all care that there
 is a blue line between A and E. So even if a blue line service arrived at A every minute
@@ -241,7 +241,7 @@ Given this blog is ostensibly about transit visualisation, I'll make a diagram f
 stop edges that exist. If you're to find the headway of travel A-C, you simply need to look
 at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.
 
-{% img center ../images/network-headway-diagram-logical.png %}
+{% imgcap center ../images/network-headway-diagram-logical.png %}
 
 The problem with this is that the number of edges we have in the network has grown.
 Where before we had 7 edges all holding information in our database (route, time, mode, etc.), we

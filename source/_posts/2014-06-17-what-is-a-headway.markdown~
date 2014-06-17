@@ -194,7 +194,7 @@ routes (distinguished by colour and pattern for the colourblind: red is solid, g
 
 If you're seeking to travel directly from A to D, you don't at all care that there
 is a blue line between A and E. So even if a blue line service arrived at A every minute
-of every day, it would do you know good to board it (we'll assume you can't walk between any of the stops).
+of every day, it would do you no good to board it (we'll assume you can't walk between any of the stops).
 That is, if travelling A-D, your headway is defined only as the headway of the green route.
 
 Now if you're instead travelling A-C, you can choose between the red and the green routes.
@@ -202,7 +202,7 @@ Unless these services arrive at A at the same time, your headway (and hence wait
 is less than it would be if you were travelling A-D, even though you are waiting at the same stop.
 This path A-B-C is a public transport *corridor* of overlapping routes.
 
-Travelling A-E, you again benefit from the corridor effect, as your line is shared between A and E.
+Travelling A-E, you again benefit from the corridor effect, as your line is shared between the blue and the red services.
 Note, however, that although these overlapping routes work together to reduce your headway,
 you may not necessarily choose to board the first red or blue service that arrives. For instance,
 if blue is an express route that travels A-E while red is a slower route that stops at A-B-C-E, 
@@ -220,15 +220,15 @@ certainly an advantage to have this option if C is more comfortable or well-lit 
 to wait than is A.
 
 These are very tricky questions with very tricky answers. The key thing to keep in mind, however, is the mantra:
-**the destination matters*. To this end, the TCQSM does acknowledge that headways are defined 
+**the destination matters**. To this end, the TCQSM does acknowledge that headways are defined 
 with respect to a particular destination. By no means has this been clearly stated, however.
 To quote their fuller definition (p. 3-29):
 
->Service frequency LOS is determined <by destination from a given transit stop, as 
+>Service frequency LOS is determined by destination from a given transit stop, as 
 >several routes may serve a given stop, but not all may serve a particular destination.
 
 Take home point: a stop served by more than one route with multiple possible destinations
-doesn't have "a" headway. It has a headway for each possible destination from each route.
+doesn't have a single headway; it has a headway for each possible direct destination from each stop.
 
 ### How do you calculate headways when the destination matters?
 
@@ -237,9 +237,7 @@ schedule (e.g. from your local GTFS) or from observation of real-time service ar
 is that as soon as we define headways not as one number for each stop, but as one
 number for each possible board-egress stop pair, the dimensionality of the problem grows.
 
-Given this blog is ostensibly about transit visualisation, I'll make a diagram for this.
-
-This is the exact same sample network as we had before, but now shown in terms of the direct
+Given this blog is ostensibly about transit visualisation, I'll make a diagram for this. This is the exact same sample network as we had before, but now shown in terms of the direct
 stop edges that exist. If you're to find the headway of travel A-C, you simply need to look
 at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.
 
