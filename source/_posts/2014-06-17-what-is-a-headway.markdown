@@ -75,15 +75,7 @@ and 58 minutes for the third. Your average headway in this period is (1+1+58)/3=
 So we're back at 20 minutes! But hold on, none these buses has a 20 minute headway when considered
 as an individual arrival.
 
-This is tricky. What does the TCQSM recommend? Well, as it so happens, the TCQSM 
-suggests using the first approach, where buses that arrive within three minutes of each other
-are considered as one bus. So the 7:00, 7:01 and 7:02 buses would collapse down to some time point
-in the range 7:00-7:02. I'm not sure what moment exactly should be used within this range.
-It may sound picky to be wondering if the representative arrival is 7:00 or 7:02, but 
-when writing code to calculate these headways for you, you have to make rather precise 
-decisions. I'd guess it'd be the average of these values, so 7:01 am.
-
-Whatever it is, here's what the TCQSM has to say (p. 3-29):
+This is tricky. What does the TCQSM recommend (p. 3-29)?
 
 >Some judgment must be applied to bus stops located near timed transfer centers. 
 >There is a considerable difference in service from a passenger’s perspective between a 
@@ -92,6 +84,14 @@ Whatever it is, here's what the TCQSM has to say (p. 3-29):
 >hour serving the stop. In general, buses on separate routes serving the same 
 >destination that arrive at a stop within 3 minutes of each other should be counted as 
 >one bus for the purposes of determining service frequency LOS."
+
+As it so happens, the TCQSM therefore
+suggests using the first approach, where buses that arrive within three minutes of each other
+are considered as one bus. So the 7:00, 7:01 and 7:02 buses would collapse down to some time point
+in the range 7:00-7:02. I'm not sure what moment exactly should be used within this range.
+It may sound picky to be wondering if the representative arrival is 7:00 or 7:02, but 
+when writing code to calculate these headways for you, you have to make rather precise 
+decisions. I'd guess it'd be the average of these values, so 7:01 am.
 
 However, if the buses arrived at 7:00, 7:04, 7:08 and 8:00, we'd be back to an average headway
 of 20 minutes, and square one. We'll call this Arrival Pattern B.
@@ -118,7 +118,7 @@ A and B can be 60 and 20 minutes, respectively. This seems like a very big diffe
 (and hence waiting time) for such a small difference in vehicle arrivals.
 
 However, if passengers are arriving uniformly at random over the hour 7:00-8:00, 
-then the average passenger *does* indeed wait for 20 minutes in Arrival Pattern B. 
+then the average passenger *does* indeed wait for -20 minutes in Arrival Pattern B. 
 In Arrival Pattern A, three minutes, while arbitrary, does seem like a reasonable amount
 of time to consider services to be functionally arriving at the same time, given acceptable
 levels of variation in arrival time.
@@ -194,7 +194,7 @@ routes (distinguished by colour and pattern for the colourblind: red is solid, g
 
 If you're seeking to travel directly from A to D, you don't at all care that there
 is a blue line between A and E. So even if a blue line service arrived at A every minute
-of every day, it would do you know good to board it (we'll assume you can't walk between any of the stops).
+of every day, it would do you no good to board it (we'll assume you can't walk between any of the stops).
 That is, if travelling A-D, your headway is defined only as the headway of the green route.
 
 Now if you're instead travelling A-C, you can choose between the red and the green routes.
@@ -202,7 +202,7 @@ Unless these services arrive at A at the same time, your headway (and hence wait
 is less than it would be if you were travelling A-D, even though you are waiting at the same stop.
 This path A-B-C is a public transport *corridor* of overlapping routes.
 
-Travelling A-E, you again benefit from the corridor effect, as your line is shared between A and E.
+Travelling A-E, you again benefit from the corridor effect, as your line is shared between the blue and the red services.
 Note, however, that although these overlapping routes work together to reduce your headway,
 you may not necessarily choose to board the first red or blue service that arrives. For instance,
 if blue is an express route that travels A-E while red is a slower route that stops at A-B-C-E, 
@@ -220,15 +220,15 @@ certainly an advantage to have this option if C is more comfortable or well-lit 
 to wait than is A.
 
 These are very tricky questions with very tricky answers. The key thing to keep in mind, however, is the mantra:
-**the destination matters*. To this end, the TCQSM does acknowledge that headways are defined 
+**the destination matters**. To this end, the TCQSM does acknowledge that headways are defined 
 with respect to a particular destination. By no means has this been clearly stated, however.
 To quote their fuller definition (p. 3-29):
 
->Service frequency LOS is determined <by destination from a given transit stop, as 
+>Service frequency LOS is determined by destination from a given transit stop, as 
 >several routes may serve a given stop, but not all may serve a particular destination.
 
 Take home point: a stop served by more than one route with multiple possible destinations
-doesn't have "a" headway. It has a headway for each possible destination from each route.
+doesn't have a single headway; it has a headway for each possible direct destination from each stop.
 
 ### How do you calculate headways when the destination matters?
 
@@ -237,9 +237,7 @@ schedule (e.g. from your local GTFS) or from observation of real-time service ar
 is that as soon as we define headways not as one number for each stop, but as one
 number for each possible board-egress stop pair, the dimensionality of the problem grows.
 
-Given this blog is ostensibly about transit visualisation, I'll make a diagram for this.
-
-This is the exact same sample network as we had before, but now shown in terms of the direct
+Given this blog is ostensibly about transit visualisation, I'll make a diagram for this. This is the exact same sample network as we had before, but now shown in terms of the direct
 stop edges that exist. If you're to find the headway of travel A-C, you simply need to look
 at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.
 
@@ -248,7 +246,7 @@ at the two edges that progress uninterrupted from A to C, and ignore all others.
 The problem with this is that the number of edges we have in the network has grown.
 Where before we had 7 edges all holding information in our database (route, time, mode, etc.), we
 now have 11. This increase of three doesn't sound big, but the only reason it is small is because
-I have drawn a very simply network. Despite being simple, this is still coming up against the limits
+I have drawn a very simple network. Despite being simple, this is still coming up against the limits
 of what I can reasonably convey in an diagram, what with its overlapping lines.
 
 If instead of 5 stops I had drawn 60 stops, the number of edges now represented would be approximately
@@ -283,7 +281,7 @@ on the waiting time. Especially when the headways are such that you'd be mad or 
 not to check the schedule.
 
 Why have I never seen this problem mentioned? I don't see it in the TCQSM. I don't see it
-in any academic paper that has used "headway" as those it is something you can touch with your hands?
+in any academic paper that has used "headway" as though it is something you can touch with your hands.
 
 Given I'm facing this issue, what do I do? I can't be the only who has thought about it.
 
@@ -309,6 +307,4 @@ Because I'll have your head if you tell me that you used "the headway" and leave
 
 ### Care to weigh in?
 
-Have you dealt with calculating headways from schedules or real-time observations of transit arrivals?
-
-What issues did you come across? How did you deal with them?
+Have you dealt with calculating headways from schedules or real-time observations of transit arrivals? What issues did you come across? How did you deal with them?
