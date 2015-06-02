@@ -6,25 +6,23 @@ comments: true
 categories: ["Tutorials", "GRASS", "GIS", "Leaflet", "bash"]
 ---
 
-I meant to write this post several months ago. Indeed, I meant to finish the little project on which it is based several months ago. Last year, in fact. Alas, things like a masters thesis, moving regions, and starting a new job tend to get in the way of ultimately pointless projects and pet tutorials. However I have never liked leaving things unfinished.
-
-Some moons ago, I met Pierre Roudier, who works at [Landcare Research New Zealand](http://www.landcareresearch.co.nz/home), at a tutorial on PostGIS being held at the National Institute for Water and Atmospheric Research ([NIWA](https://www.niwa.co.nz/)). I was just getting started on PostGIS at the time, having identified that I was probably going to need it for my thesis. The two-day session, led by Digital Mapping Solutions New Zealand ([DMSNZ](http://www.mapsolutions.co.nz/)), was brilliant. It gave me just enough of an introduction to PostGIS to realise its capability, and a leg-up to explore the rest on my own. I ended up relying entirely on PostGIS for my masters thesis, and now I swear by PostGIS and PL/pgsql as the solution to most issues calling for a spatial database.
+Some moons ago, I met Pierre Roudier, who works at [Landcare Research New Zealand](http://www.landcareresearch.co.nz/home), at a workshop on PostGIS being held at the National Institute for Water and Atmospheric Research ([NIWA](https://www.niwa.co.nz/)). I was just getting started on PostGIS at the time, having identified that I was probably going to need it for my masters thesis. The two-day session, led by Digital Mapping Solutions New Zealand ([DMSNZ](http://www.mapsolutions.co.nz/)), was brilliant. It gave me just enough of an introduction to PostGIS to realise its capability, and a leg-up to explore the rest on my own. I ended up relying entirely on PostGIS for my masters thesis, and now I swear by PostGIS and PL/pgsql as the solution to most issues calling for a spatial database.
 
 What has this got to do with anything? A few things:
 
-1. For the love of all things holy, attend events like these if you can. You meet interesting people, get pizza (I ate kangaroo), and get a kick up the bum to learn new things that, honestly, you wouldn't have bothered learning on your own. (In my case, the only   reason I was able to attend was that I'd won a small cash prize for talking about my thesis—so you if you're studying, try jump on small opportunities like that, too.)
+1. For the love of all things holy, attend events like these if you can. You meet interesting people, get pizza (I ate kangaroo), and get a kick up the bum to learn new things that, honestly, you wouldn't have bothered learning on your own. (In my case, the only reason I was able to attend was that I'd won a small cash prize for talking about my thesis—so you if you're studying, try jump on small opportunities like that, too.)
 
-2. Pierre ran a tutorial at the end of the first day on GRASS GIS. It really piqued my interest in GRASS. At the time, I was struggling with a batch viewshed calculation for work using ArcGIS. It was falling over due to the size of the computation. I described the problem to Pierre, and he said that it sounded like something GRASS could do no problem. Problem was, I'd never used GRASS. It looked hard and scary, it barely has a GUI. Pierre gave me a headstart on the computation, and I adapted his example to my need. It wasn't actually that bad, once I'd seen a complete, straightforward example.
+2. Pierre ran a tutorial at the end of the first day on GRASS GIS. It really piqued my interest in GRASS. At the time, I was struggling with a batch viewshed calculation for work using ArcGIS. It was falling over due to the size of the computation. I described the problem to Pierre, and he said that it sounded like something GRASS could do no problem. Problem was, I'd never used GRASS. It looked hard and scary: it barely has a GUI. Pierre gave me a headstart on the computation, and I adapted his example to my need. It wasn't actually that bad, once I'd seen a complete, straightforward example.
 
 3. I realised the value of a gentle introduction to a new technique, that actually fulfills some goal you have in mind.
 
-This last point is now really important to me. If I'm trying to learn something new, it has never truly helped me to open a book or the documentation and work through silly, disconnected examples one by one. I actually have to make something useful. **Solve a tangible problem.**
+This last point is now really important to me. If I'm trying to learn something new, it has never truly helped me to open a book or the documentation and work through silly, disconnected examples one by one. I actually have to make something useful for myself. **Solve your own, tangible problem.**
 
-Doing this gives you enough motivation to finish, to finish well, and to know when you have finished.
+Doing this gives you enough motivation to finish, to finish well, and to know when you have finished. It also means you run into a wide variety of problems that your textbooks examples never mention; like, how do you write an iterator in bash?
 
 ## What are you going to learn?
 
-With that in mind, I'd like to gift you, dear reader, with a tutorial on using GRASS, Git, Leaflet, bash, Javascript, CSS and HTML. Yes, all of those. No, not to exhaustion. Rather, I've written the tutorial that I would like to have found a few months ago. A tutorial that takes a tangible (albeit frivolous) problem to completion, and uses a realistic combination of tools to solve it. You'll see how these separate tools come together, and how you could then take pieces here and there and work on something completely different. That's an effective way to learn.
+With that said, I'd like to gift you, dear reader, with a tutorial on using GRASS, Git, Leaflet, bash, Javascript, CSS and HTML. Yes, all of those. No, not to exhaustion. Rather, I've written the tutorial that I would like to have found a few months ago. A tutorial that takes a tangible (albeit frivolous) problem to completion, and uses a realistic combination of tools to solve it. You'll see how these separate tools come together, and how you could then take pieces here and there and work on something completely different. That's an effective way to learn, if you invest into the idea of the project.
 
 The end result is this [interactive map](http://www.nearimprov.com/train-landscapes).
 
@@ -37,19 +35,21 @@ The end result is this [interactive map](http://www.nearimprov.com/train-landsca
 
 If you want to code along, you'll need to install GRASS GIS (6.4 or 7.0). Git is optional; if you're not familiar with it, I'd like to just show you how can use it in a little project like this.
 
-I use Ubuntu for my desktop operating system. I don't know how easy GRASS is to install on Windows or Mac, but I like to use the [ubuntugis-unstable PPA](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable). This has GRASS 6.4 bundled up, and is what I recommend you use. GRASS 7.0 is faster due to the addition of new functions, so use that if you're comfortable. If you're not using a flavour of Linux, look into getting a virtual machine set up---it's surprisingly easy and you'll not regret it.
+I use Ubuntu for my desktop operating system. I don't know how easy GRASS is to install on Windows or Mac, but I like to use the [ubuntugis-unstable PPA](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable). This has GRASS 6.4 bundled up. GRASS 7.0 is faster due to the addition of new functions, so use that if you're comfortable. If you're not using a flavour of Linux, look into getting a virtual machine set up---it's surprisingly easy and you'll not regret it.
 
-I'm also going to have to assume a modicum of familiarity with GIS, and some programming concepts (variables, iteration, functions, etc.). Yet you also need a willingness to learn! I'm still learning more about programming every day, so if there's anything that I seem to have brushed over, don't feel too shy to ask me to explain it further.
+I'm also going to have to assume a modicum of familiarity with GIS, and some programming concepts (variables, iteration, functions, etc.). Yet you also need a willingness to learn! I'm still learning more about programming every day, even though I now get paid to do it, so if there's anything that I seem to have brushed over, don't feel too shy to ask me to explain it further.
 
 # The problem
 
-I talked to Pierre about a train trip across the North Island of New Zealand, known as the *Overlander*. He often takes the train to get to Wellington, and I've taken the Overlander several times to get between Auckland and Wellington. It is a lot slower than flying (by around 11+ hours), but personally I find it more enjoyable. It is also very scenic. Being Spatial Scientists™, we discussed how one could go about quantifying the *scenic-ness*... *scenicity*... you get the idea.
+I talked to Pierre about a train trip across the North Island of New Zealand, known as the *Overlander*. He often takes the train to get to Wellington, and I've taken the Overlander several times to get between Auckland and Wellington. It is a lot slower than flying (by around 11+ hours), but personally I find it more enjoyable. In addition to your ability to get some solid solo productive time, it is very scenic. Being Spatial Scientists™, Pierre and I discussed how one could go about quantifying the *scenic-ness*... *scenicity*... the *je ne sais quoi* of the trip.
+
+To solve this problem, you need to think abstractly about it, and then apply that back to the real problem:
 
 **Given a line feature, how can you determine the places that are visible are from the line?**
 
 Translated into the vernacular: if you're sitting on the train, what can you see out of the window?
 
-It is said that there are no fewer than one hundred ways to skin a cat. What could be taken into consideration in this case, from a spatial perspective? The most straightforward one:
+What could be taken into consideration in this case, from a spatial perspective? The most straightforward ideas are:
 
 * What is the terrain like? (Hills block views of what is behind them.)
 * How far can you see out the window ([distance to the horizon](http://en.wikipedia.org/wiki/Horizon#Distance_to_the_horizon), coupled with personal eyesight, and atmospheric refraction).
@@ -59,10 +59,9 @@ The not-so-straighforward, or unresolvable ones:
 * Are you on the left or right side of the train?
 * Is the train going north or south?
 * What speed is the train travelling at?
-* Can you actually see out of the window? Are you asleep? Are there trees in the way?
-* Are there tunnels?
+* Can you actually see out of the window? Is it dark? Are you asleep? Are there trees in the way? Are there tunnels?
 
-Like all good spatial problems, the difficult issues outnumber the tractable ones. **We're just going to be thinking about visibility as determined by the bare terrain, using a constant distance to the horizon.** This (arguably) gives us some measurement of the *maximum extent* of space that is visible.
+Like all good spatial problems, the difficult issues outnumber the tractable ones. **We're just going to be thinking about visibility as determined by the bare terrain, using a constant distance to the horizon.** This (arguably) gives us some measurement of the *maximum extent* of space that is visible, which could be refined further.
 
 The two most influential decisions are the resolution of our terrain model, which determines blocking, and the distance to the horizon, which in an ideal world considers the curvature of the earth and an observer's elevation.
 
@@ -70,7 +69,7 @@ The two most influential decisions are the resolution of our terrain model, whic
 
 Launch your terminal, and navigate to somewhere where we can place a folder of interesting stuff (our project code and input data).
 
-**WARNING: the following instruction will cause you to download a lot of information (> 3 GB). Only proceed if you're certain you want this.**
+**WARNING: the following instruction will cause you to download a lot of information (> 3 GB). Only proceed if you're certain that you want this.**
 
 Git clone my GitHub repository with the following command:
 
@@ -78,9 +77,9 @@ Git clone my GitHub repository with the following command:
 git clone https://github.com/alpha-beta-soup/train-landscapes
 ```
 
-This creates a folder called `train-landscapes` in your current directory, wherein the project is "cloned"—duplicated for your local consumption.
+This creates a folder called `train-landscapes` in your current directory, within which the project is "cloned"—duplicated for your local consumption.
 
-*Pursuant to the above warning, if you don't want to `git clone`, you can just browse the files on Github, write the scripts out yourself as I go over them, or download files individually. The large download comes from the fact that you'd be downloading the tiles that constistute the map we will produce at the end. You should be able to adapt this for your own data with a bit of elbow grease.*
+*Pursuant to the above warning, if you don't want to `git clone`, you can just browse the files on Github, write the scripts out yourself as I go over them, or download files individually. The large download comes from the fact that you'd be downloading the tiles that constitute the map we will produce at the end. You should be able to adapt this for your own data with a bit of elbow grease.*
 
 If you browse my Github repository in your web browser via the link in the `git clone` command, you'll see that I originally "forked" this project from Pierre. That is, he started it, and I carried it on with my own changes. Pierre wrote the initial version of the GRASS procedure, targeting GRASS version 7. I adjusted this script, to make it work a bit faster with a larger input and higher resolution raster terrain model. I also made a second version that would work with GRASS 6.4, which is what I was using at the time. That's what's great about Github and open source code generally: being able to take someone else's idea, and use it or run with it.
 
@@ -95,9 +94,9 @@ data/hillshade/
 
 This tells Git to not track files (or changes to files) with the extension `.qgs~` (which is an automatically-generated backup of a QGIS project file), or anything in the directory `data/hillshade/` (which is the terrain DEM/hillshade model that I use as input for the analysis).
 
-The hillshade and digital elevation model (DEM) I used for this project are several gigabytes in size; I haven't included them in the project to save you the bandwidth.  The `.gitignore` file is a handy way to manage issues like this. For following along with this tutorial, you can download any DEM of New Zealand (projected to NZTM NZGD2000) that you have rights to use.
+The hillshade and digital elevation model (DEM) I used for this project are several gigabytes in size; I haven't included them in the project to save you the bandwidth.  The `.gitignore` file is a handy way to manage issues like this. For following along with this tutorial, you can download any DEM of New Zealand (projected to NZTM NZGD2000) that you have the rights to use. (You can of course pick a region anywhere else in the world.)
 
-We also have `README.md`, which is the Markdown file that provides the documentation you can see on the GitHub repository for this project.
+We also have `README.md`, which is the Markdown file that provides the documentation you can see on the front page of the GitHub repository for this project.
 
 `index.html` is where we have a simple webpage displaying a Leaflet map. We'll get to this later.
 
@@ -130,7 +129,7 @@ grass70
 
 After a short moment, a two-window GUI will open up. GRASS uses some concepts and terminology that are pretty hard to get your head around and are different to other GIS systems, particularly the idea of a "mapset". You should be able to use the default, "PERMANENT" mapset for this tutorial, but I encourage you to look for some other GRASS tutorials that consider making your own mapsets. For now, you can just close or ignore the GUI windows as we will not be using them.
 
-Let's consider the GRASS 6.4 code (a bash script). Open `generate_los.sh` in a text editor. To do this with Gedit from the command line:
+Let's consider the GRASS 6.4 code (a shell script written in bash). Open `generate_los.sh` in a text editor. To do this with Gedit from the command line:
 
 ```bash
 gedit source/generate_los.sh
@@ -144,7 +143,7 @@ The very first line is a "shebang" that just tells the program loader what kind 
 #!/bin/bash
 ```
 
-After that, we define a function called `usage`. Usage is used when checking inputs to the terminal when the code is executed. The function `usage` prints out a small bit of documentation for our code, telling a user that one of two possible arguments can be used: `-train` or `-road`. Choosing train will make sure the script uses some parameters that apply to traveling by train, and similarly for traveling by road. (*Disclaimer: I don't know if this is proper practice for writing this kind of "documentation", but it works.*)
+After that, we define a function called `usage`. Usage is called upon when checking inputs to the terminal when the code is executed. The function `usage` prints out a small bit of documentation for our code, telling a user that one of two possible arguments can be used: `-train` or `-road`. Choosing train will make sure the script uses some parameters that apply to traveling by train, and similarly for traveling by road. (*Disclaimer: I don't actually know if this is proper practice for writing what is essentially help documentation. I can't imagine it's too far from this.*)
 
 The `usage` function and argument parsing:
 
@@ -172,7 +171,7 @@ fi
 
 `if [ $# -ne 1 ]; then` considers all of the arguments that a user enters alongside the command to execute the GRASS shell script. If the number of arguments is not equal to one (`-ne 1`), then the condition is reached: run the `usage` function.
 
-`usage` tells our naïve user that they have to run either (and only one of) these commands to get things going:
+`usage` tells our naïve user that they have to run either (and only one of) these commands at the terminal to get things going:
 
 ```bash
 sh execute_los.sh -train
@@ -181,7 +180,7 @@ sh execute_los.sh -road
 
 Failure to do so simply prints an instruction to the terminal, and causes the script to stop with exit code 1 (`exit 1`), a catch-all for general errors.
 
-If the number of provided arguments is equal to one, we then check if this argument is in the realms of expectation (argument `"$1"` is `-train` or `-road`). If the first arugument is not equal to `train` (`"$1" != "-train"`) or `-road`, then `usage` is triggered again. Otherwise we go on our merry way: setting up some variables according to `train` or `road`:
+If the number of provided arguments is equal to one, we then check if this argument is in the realms of expectation (argument `"$1"` is `-train` or `-road`). If the first argument is not equal to `train` (`"$1" != "-train"`) or `-road`, then `usage` is triggered again. Otherwise we go on our merry way: setting up some variables according to `train` or `road`:
 
 ```bash
 if [ $1 = "-road" ]
@@ -208,15 +207,15 @@ fi
 
 We define a number of variables that have global scope for the remainder of the script:
 
-* `LINE_SHP`: A line "shape", or vector feature. GRASS is happy accepting a wide variety of vecotr formats, and we don't even have to specify what they are. In my case, I downloaded both an Esri Shapefile (for the road following State Highway 1 between Auckland and Wellington) and a [GeoPackage](https://github.com/opengeospatial/geopackage) (for the main trunk railroad of the North Island). Before running this script, I used QGIS to remove all features from my original dataset that I wasn't interested in. I could have also performed this filtering in GRASS, which would have had the advantage of making it easier to change my region of interest. *Note: going forward, please never use Shapefiles again, thank you!*
+* `LINE_SHP`: A line "shape", or vector feature. GRASS is happy accepting a wide variety of vector formats, and we don't even have to specify what they are. In my case, I downloaded both an Esri Shapefile (for the road following State Highway 1 between Auckland and Wellington) and a [GeoPackage](https://github.com/opengeospatial/geopackage) (for the main trunk railroad of the North Island). Before running this script, I used QGIS to remove all features from my original dataset that I wasn't interested in. I could have also performed this filtering in GRASS, which would have had the advantage of making it easier to change my region of interest another time.
 
 * `PTS_FILE`: "points file", a dataset that will be created in the course of the script's execution, and represents points spaced along our original line features. These points represent all of the viewing opportunities we are going to calculate viewsheds for.
 
 * `ELEV`: GRASS's viewshed tools allow us to set observer heights. That is, if you're trying to determine what you can see from your house, ideally you'd account for the fact that your eyes are not at ground level. Importantly, **a train is higher up than a car**, and defining the value of this variable *conditionally* allows us to be slightly more germane when coming up with the answer to our problem.
 
-* `OUTFILE`: the name of the final output raster that we'll collect up at the end and open to see the result. as we will see, the final output is actually just a GeoTiff (image with a projection). It's handy to have a different name depending on whether we are calculating train or road visibility, as we wouldn't want one to overwrite the other.
+* `OUTFILE`: the name of the final output raster that we'll collect up at the end and open to see the result. As we will see, the final output is actually just a GeoTiff (image with a spatial projection). It's handy to have a different name depending on whether we are calculating train or road visibility, as we wouldn't want one to overwrite the other.
 
-Following the conditional variables, there are sme variables that are considered constant regardless of our mode of transport:
+Following the conditional variables, there are some variables that are considered constant regardless of our mode of transport:
 
 ```bash
 R_DEM='../data/hillshade/nidemreproj' # Elevation DEM
@@ -231,7 +230,7 @@ MAX_VIS_DIST=30000 # Maximum distance visible
 
 Together, these global variables determine the precision of our output, and therefore how much of a computational challenge this can be. Taking this to the extreme, you could look at a sub-metre terrain model, and consider a near-continuous movement of a passenger who can see for miles and miles... but you'd need a supercomputer or a very long time to get your output. And when your output is ready, it would still be subject to many of our original limitations (lack of trees is probably the biggest one). Your output would actually be subject to [**false precision**](http://en.wikipedia.org/wiki/False_precision): a very important concept in GIScience.
 
-While testing, I used a `MAX_VIS_DIST` of only 100 metres, and a `DIST_POINTS` of thousands of kilometres. This did not give me the actual output I was after, but tested the logic of the code and calculated very quickly even on the real datasets. The parameter values above I used when making the real output, which took several days to calculate. This is still a very expensive calculation!
+While testing, I used a `MAX_VIS_DIST` of only 100 metres, and a `DIST_POINTS` of thousands of kilometres. This did not give me the actual output I was after, but tested the logic of the code and calculated very quickly even on the real datasets. The parameter values above are the ones that I used when making the real output, which took several days to calculate. This is still a very expensive calculation!
 
 ## Modifying `MAX_VIS_DIST` for GRASS 6.4
 
@@ -241,7 +240,7 @@ Next up, we are preparing to actually use the command `r.los` ("raster"."line of
 
 The equivalent GRASS 7.0 command, not available in GRASS 6.4 is `r.viewshed`, and it does not suffer so.
 
-In order to keep the number of rows and columns in our calculation under 1000, we actually need to adjust the variable `MAX_VIS_DIST` while considering `R_RES`, as it directly determines this. The following commands create a new intermediate variable, `POS_VIS_DIST` (possible visibility distance), which determines the maximum distance we can consider visible without exceeding the limit of 1000 rows or 1000 columns in our visibility calculation. If `POS_VIS_DIST` ends up exceeding `MAX_VIS_DIST`, then we opt for `POS_VIS_DIST` by setting `MAX_VIS_DIST` equal to `POS_VIS_DIST`; otherwise we keep on with our original value of `MAX_VIS_DIST`.
+In order to keep the number of rows and columns in our calculation under 1000, we actually need to adjust the variable `MAX_VIS_DIST` while considering `R_RES`, as the two are actually tightly linked. The following commands create a new intermediate variable, `POS_VIS_DIST` (possible visibility distance), which determines the maximum distance we can possibly define as "visible" without exceeding the limit of 1000 rows or 1000 columns in our visibility calculation. If `POS_VIS_DIST` ends up exceeding `MAX_VIS_DIST`, then we opt for `POS_VIS_DIST` by setting `MAX_VIS_DIST` equal to `POS_VIS_DIST`; otherwise we keep on with our original value of `MAX_VIS_DIST`.
 
 ```bash
 # r.los takes a long time, and the manual says to keep the number of rows and columns
@@ -256,7 +255,9 @@ then
 fi
 ```
 
-To understand this, we should consider what each line is actually doing. `POS_VIS_DIST=$(echo "$R_RES * 1000 / 2" | bc -l)` instantiates a variable that is equal to the resolution of the raster, multiplied by 500. This represents how many cells in any direction an observer can "look" without the number of rows or columns exceeding 1000. `bc` is a command to use "an arbitrary precision calculator language" (it calculates numbers). The pipe (`|`) is a way to connect the output of the left command to the input of the right command.
+To understand this, we should consider what each line is actually doing.
+
+`POS_VIS_DIST=$(echo "$R_RES * 1000 / 2" | bc -l)` instantiates a variable that is equal to the resolution of the raster, multiplied by 500. This represents how many cells in any direction an observer can "look" without the number of rows or columns exceeding 1000. `bc` is a command to access "an arbitrary precision calculator language" (it calculates numbers). The pipe (`|`) is a way to connect the output of the left command to the input of the right command.
 
 In the shell you could write:
 
@@ -287,13 +288,13 @@ Now at this point it is a good idea to point out that I have actually picked arb
 
 >The curvature of the Earth is not taken into account for these calculations. However, for interest's sake, a handy calculation for distance to the true horizon is approximated by d = sqrt(13*h) where h is the height of the observer in meters (above sea level) and d is the distance to the horizon in km. This may be useful for setting the max_dist value.
 
-You could implement this in GRASS with a bit of `bc` and considering the value of each cell beneath each point of visibility, but I'll leave that as an exercise for the reader (God I hate that). Consider this a reminder that any proposed solution to a geographic problem can almost always be improved.
+You could implement this in GRASS with a bit of `bc` and considering the elevation value of each cell beneath each observer point, but I'll leave that as an exercise for the reader (God I hate that). Consider this a reminder that any proposed solution to a geographic problem can almost always be improved.
 
 A partial solution is to switch to GRASS 7.0—[`r.viewshed`](http://grass.osgeo.org/grass70/manuals/r.viewshed.html) allows a `-c` flag that considers the curvature of the earth better than you could—with reference to the current ellipsoid:
 
 >By default the elevations are not adjusted for the curvature of the earth. The user can turn this on with flag -c.
 
-However this doesn't resolve the problem of determining the actual distance to the horizon. In part, this is because that also depends on atmospheric conditions. For example, on an exceptionally clear day you can just make out Mt Taranaki when standing on the Kāpiti Coast:
+However this **still** doesn't resolve the problem of determining the actual distance to the horizon. In part, this is because that also depends on atmospheric conditions. For example, on an exceptionally clear day you can just make out Mt Taranaki when standing on the Kāpiti Coast:
 
 <center><img src=../images/taranaki-from-foxton.jpg max-height:100%></center>
 <center>[Source](http://www.radiolive.co.nz/View-of-Mt-Taranaki-from-Foxton-Beach/tabid/479/articleID/18197/Default.aspx). Unfortunately I don't know whose photo this is, so I could not ask permission to use it; let me know if you have an issue.</center>
@@ -316,7 +317,7 @@ v.out.ascii -r in=line_feature_points fs=, --quiet | awk -F "\"*,\"*" '{print $1
 NPTS=`cat $PTS_FILE | wc -l`
 ```
 
-Try see if you can work out this section of code does. If you have GRASS running in your terminal, you can find out what any given GRASS command does with the following pattern: `r.command --help`, which is the same pattern for most commands at a UNIX terminal.
+Try see if you can work out this section of code does. If you have GRASS running in your terminal, you can find out what any given GRASS command does with the following pattern: `r.command --help`, which is the same pattern for most commands at a UNIX terminal. You can also consult the online help.
 
 To summarise the help documents for the GRASS commands used here:
 
@@ -325,11 +326,11 @@ To summarise the help documents for the GRASS commands used here:
 * `v.to.points`: Create points along input lines in new vector with 2 layers.
 * `v.out.ascii`: Converts a GRASS binary vector map to a GRASS ASCII vector map.
 
-In conjunction with the `--help` option and my comments, try and work out what exactly these comments are doing for yourself. They're a stage of data preparation for the next step. Remember that `$VARIABLE` is a way to access the value of the variable called `VARIABLE`, we defined several of these near the beginning of the script. If you have any questions, leave a comment.
+In conjunction with the `--help` option and my comments, try and work out what exactly these comments are doing for yourself. They represent a stage of data preparation for the next processing step. Remember that the syntax `$VARIABLE` is a way to access the value of the variable called `VARIABLE`, we defined several of these near the beginning of the script. If you have any questions, leave a comment.
 
 ## Computing viewsheds iteratively
 
-The general logic of the viewshed calculation is to take a series of poins sampled along a line feature, find all places on the terrain model that a person standing on each point can see, and then mosaic each of these together into a final visibility surface. There are ways to make this smarter, such as using the fact that once a cell has been identified as visible from any point, to never bother querying it again. I don't explore these, although I might if I ever need to re-use this code (at which point I will make an angry, cryptic tweet about why (?!?!) I didn't do this).
+The general logic of the viewshed calculation is to take a series of points sampled along a line feature, find all places on the terrain model that a person standing on each point can see, and then mosaic each of these together into a final visibility surface. There are ways to make this smarter, such as using the fact that once a cell has been identified as visible from any point, to never bother querying whether it is visible again. I don't explore these, although I might if I ever need to re-use this code (at which point I will make an angry, cryptic tweet about why (?!?!) I didn't do this).
 
 ```bash
 echo -n "\nComputing viewsheds\n"
@@ -362,7 +363,7 @@ while read -r line
 done < $PTS_FILE
 ```
 
-We begin by creating a variable, `COUNTER`, to store our progress through an iteration. Then we start looping. That's actually a bit hard to read, so I'll explain it closely:
+We begin by creating a variable, `COUNTER`, to store our progress through an iteration. Then we start looping. That's actually a bit hard to comprehend, so I'll explain it closely:
 
 ```bash
 while read -r line
@@ -371,15 +372,17 @@ while read -r line
 done < $PTS_FILE
 ```
 
-Notice that before this point, `line` didn't exist. `line` is actually being defined on the last line of the loop syntax: `done < $PTS_FILE` pipes the text file `$PTS_FILE`, representing a sequence of points along a line, into the for loop; each line of the file is then put into a variable called `$line` that we access duing he execution of each loop.
+Notice that before this point, `line` didn't exist. `line` is actually being defined on the last line of the loop syntax: `done < $PTS_FILE` pipes the text file `$PTS_FILE`, representing a sequence of points along a line, into the for loop; each line of the file is then put into a variable called `$line` that we access during the execution of each loop.
 
-The first thing that gets done in the body of the loop is to return some information to the terminal, reporting on the progress of the loop. See if you understand enough of `bc` to see how `PCT_FLOAT` is the progress of the loop expressed as a percentage value of floating point precision. `PCT` stores the result rounded to one decimal place.
+The first thing that gets done in the body of the loop is to return some information to the terminal, reporting on the progress of the loop. See if you now understand enough about `bc` to see how `PCT_FLOAT` is the progress of the loop expressed as a percentage value of floating point precision. `PCT` stores the result rounded to one decimal place.
+
+### GRASS regions
 
 Next up, we use a bit of black magic to speed up the processing. GRASS uses the concept of "regions" when running calculations. Every command will consider the current region, and nothing will be done outside of that region. So if you're calculating a viewshed (a very expensive proceedure), and you know the maximum distance that you consider viewable from any point, you can tell GRASS that its region can be as small as that area. Annotated code:
 
 ```bash
 # Set the region to a smaller subset around the current observer point to speed processing
-# Not that this assumes the soure line feature is projected in metres
+# Note that this assumes the source line feature is projected in metres
 x=$(echo $line | cut -f1 -d,) # Get the x coordinate value from line, the current observer point
 y=$(echo $line | cut -f2 -d,) # The corresponding y value
 ```
@@ -402,7 +405,7 @@ r.los input=dem output=tmp_los_${COUNTER} coordinate=$line obs_elev=$ELEV max_di
 COUNTER=$((COUNTER+1))
 ```
 
-`r.los` is the command that we're really here for. It takes an input DEM, ouputs a raster named `tmp_los_` plus whatever the counter is up to, a point value (our `$line` variable), and the observer elevation... and it goes away and tells us what that observer can see. Well, not really *what* they can see, more *where* they can see. The "what" can come later with some more Spatial Science™. For now, we close the loop and give it its input: `done < $PTS_FILE`.
+`r.los` is the command that we're really here for. It takes an input DEM, outputs a raster named `tmp_los_` plus whatever the counter is up to, a point value (our `$line` variable), and the observer elevation... and it goes away and tells us what that observer can see. Well, not really *what* they can see, more *where* they can see. The "what" can come later with some more Spatial Science™. For now, we close the loop and give it its input to set it in motion: `done < $PTS_FILE`.
 
 ## One Viewshed To Rule Them All
 
@@ -415,7 +418,7 @@ g.region -pm rast=dem --verbose
 #   this as a boolean mask)
 echo "\nCombining component viewsheds\n"
 # Loops because otherwise can easily exceed default hard limit of number of
-#  rasters that can be open at once (1024)
+#   rasters that can be open at once (1024)
 for i in `seq 0 99`;
 do
   # Combine a subset of all the viewsheds
@@ -434,9 +437,9 @@ done
 
 Now that we have created each of the viewsheds for each of the points we sampled along the road or train line, we want to combine these individual raster layers into a single raster layer.
 
-There is considerable scope for interesting complexity here. For instance, you could combine the results additively, thereby building a surface where each cell has a value from 0 (never seen) to a potentially very large number (seen from a variety of points along the route). If you assume that the train travels at a constant speed, this surface would tell you how long you spend looking at any given 25 by 25 metre grid cell. You could use this to determine what type of forest you spend more time looking at: native or exotic.
+There is considerable scope for interesting complexity here. For instance, you could combine the results additively, thereby building a surface where each cell has a value from 0 (never seen) to a potentially very large number (seen from many of the points along the route). If you assume that the train travels at a constant speed, this surface would tell you how long you spend looking at any given 25x25 metre grid cell. You could then use this to determine what type of forest you spend more time looking at: native or exotic.
 
-I'm going for an easy option: not worrying about how the layers are combined. I want a simple Boolean surface: can a cell be seen at any point in the trip, or can it never be seen? There's no room for ambiguity, and the result is not as useful as the rest of the code allows it to be. But, I don't have a real application for this to matter. If you want to fork the repository again on Github and explore this for yourself, go right ahead!
+I'm going for an easy option: not worrying about how the layers are combined. I want a simple Boolean surface: can a cell be seen at any point in the trip, or can it never be seen? There's no room for ambiguity, and the result is not as useful as the rest of the code allows it to be. But, I don't have a "real" application for this to matter. If you want to fork the repository again on Github and explore this for yourself, go right ahead!
 
 First, we use `g.region` to reset the region to the full extent of our input raster layer. Recall that without this command, the region would be stuck at whatever it was in the last iteration of the preceding loop!
 
@@ -452,9 +455,9 @@ Therefore the pseudo-code is to:
 
 > Lists available GRASS data base files of the user-specified data type optionally using the search pattern.
 
-So when we want to combine only a fraction of our intermediate viewshed rasters at one time, we tell `g.mlist` to go away and find all layers that match a particular pattern (e.g. all rasters called "name_\*00", where \* is a wildcard—that is, all of our intermediate layers ending in "00"). `r.series` then takes this list of layers and combines them with the `method` we have specified. (I used `sum`, although I actually ignore this.)
+So when we want to combine only a fraction of our intermediate viewshed rasters at one time, we tell `g.mlist` to go away and find all layers that match a particular pattern (e.g. all rasters called "name_\*00", where \* is a wildcard—that is, all of our intermediate layers ending in "00"). `r.series` then takes this list of layers and combines them with the `method` we have specified. (I used `sum`, although as I said I actually ignore this.)
 
-What we're then left with is a series of 99 raster layers, each representing a small part of what will become our finished product. (I realise now that it would be smarter to combine the intermediate layer with the pattern-match layers within the above loop... but at the price of one additional `r.series` it ain't the end of the world, you pedant.)
+What we're then left with is a series of 99 raster layers, each representing a small part of what will become our finished product. (I realise now that it would be smarter to combine the intermediate layer with the pattern-match layers as part of the above loop... but at the price of one additional `r.series` it ain't the end of the world, you pedant.)
 
 So, combine these up into our finished product with another pattern matching exercise:
 
@@ -464,7 +467,7 @@ r.series in=`g.mlist --q type=rast pattern=total_los_* sep=,` out=total_los meth
 
 ## All that remains is making it pretty and washing our hands!
 
-You could display the result now if you wanted the map to represent the number of times each cell has been determined as being "viewable". I actually like the idea of a binary (viewhable, not viewable) surface, where shading can be used to indicate distance from the line feature. So that's what a I do. However it may be a little misleading, as distance from the line feature used in the exercise is not technically synonymous with the minimum distance from which it can be seen!
+You could display the result now if you wanted the map to represent the number of times each cell has been determined as being "viewable". I actually like the idea of a binary (viewable/not viewable) surface, where shading can be used to indicate distance from the line feature. So that's what I do. However it may be a little misleading, as distance from the line feature used in the exercise is not technically synonymous with the minimum distance from which it can be seen!
 
 ```bash
 # Create distance to line_feature map
@@ -473,7 +476,7 @@ v.to.rast in=line_feature out=line_feature use=val val=1 --o --q
 r.grow.distance -m input=line_feature distance=dist_from_line_feature --o --q
 ```
 
-This takes our line feaure input and turns it into a raster; it then "grows" (raster buffers) this line... how far? To the same size as the entire GRASS region. There is no need to tell GRASS that; and it stores the output surface as `distance` (rather misleadingly).
+This takes our line feature input and turns it into a raster; it then "grows" (raster buffers) this line... how far? To the same size as the entire GRASS region. There is no need to tell GRASS that; and it stores the output surface as a dataset specified by the rather misleading title of `distance`.
 
 ```bash
 # Use distance to line_feature instead of sum of times seen in the result map
@@ -481,7 +484,7 @@ echo "\nSubstituting number of times seen for distance to cell from line\n"
 r.mapcalc "$OUTFILE = if(total_los, dist_from_line_feature, null())"
 ```
 
-Here we use a bit of raster calculation (otherwise known as image manipulation) to make a new layer. To put the if statement into human terms to help you interpret it: "if there is a  non-null value of `total_los` (i.e. a cell has been identified as visible), substitute its value with the value of the equivalent cell from the layer `dist_from_line_feature` (the distance from the line feature), otherwise make its value null.
+Here we use a bit of raster calculation (otherwise known as image manipulation) to make a new layer. To put the if statement into human terms: "if there is a  non-null value of `total_los` (i.e. a cell has been identified as visible), substitute its value with the value of the equivalent cell from the layer `dist_from_line_feature` (a raster surface where each cell knows its minimum distance from the line feature), otherwise make its value null.
 
 The rest should be self-explanatory:
 
@@ -497,15 +500,15 @@ g.mremove -f "total_los_*" --q
 echo "\ngenerate_los.sh complete\n"
 ```
 
-The final output is simply a GeoTiff. Try opening it in QGIS if you have been playing along at home. If you're just reading, then in the [interactive map](http://www.nearimprov.com/train-landscapes), the GeoTiff is the special layer you see on top of the basemap.
+The final output is simply a GeoTiff. Try opening it in QGIS if you have been playing along at home. If you're just reading, then in the [interactive map](http://www.nearimprov.com/train-landscapes), the output GeoTiff is the special coloured layer you see on top of the basemap.
 
 So how do we get to this next stage?
 
 ## Making Mapnik tiles with QTiles
 
-There are a variety of ways to make map tiles. (Don't know what tiles are? That's OK, everyone had to find out at some point. I really liked [this introduction](http://lyzidiamond.com/leaflet/#0) by [Lyzi Diamond](https://twitter.com/lyzidiamond). The simplest method for constructing map tiles, in my opinion, is to use a QGIS plugin called [QTiles](https://github.com/nextgis/QTiles). You can control all your styling and extents with QGIS layers, and then just tell the plugin to go away and make your map tiles.
+There are a variety of ways to make map tiles. (Don't know what tiles are? That's OK, everyone had to find out at some point. I really liked [this introduction](http://lyzidiamond.com/leaflet/#0) by [Lyzi Diamond](https://twitter.com/lyzidiamond).) The simplest method for constructing map tiles, in my opinion, is to use a QGIS plugin called [QTiles](https://github.com/nextgis/QTiles). You can control all your styling and extents with QGIS layers, and then just tell the plugin to go away and make your map tiles.
 
-* To find out how to install a QGIS plugin, see [here](http://www.qgistutorials.com/en/docs/using_plugins.html).
+To find out how to install a QGIS plugin, look [here](http://www.qgistutorials.com/en/docs/using_plugins.html).
 
 The process for our purposes is rather simple.
 
@@ -517,7 +520,7 @@ The process for our purposes is rather simple.
 
 4. To add context, add a pre-existing baselayer, or make your own. For example, you could create a colour relief map (hypsometric tint). [Mapbox has a good tutorial using more command line GIS](https://www.mapbox.com/tilemill/docs/guides/terrain-data/), this time GDAL. I just took the easy route (again), and went for a Web Mapping Service ([WMS](https://data.linz.govt.nz/p/web-services/)) from the good folk at Landcare Research. Look for the add data button in the sidebar with the tooltip "Add WMS/WMST Layer". When it opens, create a new connection using the URL to the Landcare Research WMS: `http://maps.scinfo.org.nz/basemaps/wms?`. There are a variety of layers you can add (see image); the one I used is called the "Landcover Terrain Map".
 
-5. Once you've added this basemap, styled and ordered your layers and are happy with the appearance of your map, install QTiles and fire it up via the menu Plugins > QTiles > QTiles. See the second image below for example parameters. Just be cautious before going ahead with your settings: you are generating exponentially more tiles (i.e. PNG images) for each additional level of zoom (1 is the most zoomed out, 18 is the most zoomed in). I only generated tiles between zooms 7 and 13, because I knew I was going to restrict the user to these zoom levels in the end. Allow the tool to run, and you're ready to make a web map.
+5. Once you've added this basemap, styled and ordered your layers and are happy with the appearance of your map, install QTiles and fire it up via the menu Plugins > QTiles > QTiles. See the second image below for example parameters. Just be cautious before going ahead with your settings: you are generating exponentially more tiles (i.e. PNG images) for each additional level of zoom (1 is the most zoomed out, 18 is the most zoomed in). I only generated tiles between zoom levels 7 and 13, because I knew I was going to restrict the user to these zoom levels in the end. Allow the tool to run, and you're ready to make a web map.
 
 <center><img src=../images/LR-example.png max-height:100%></center>
 <center>Screenshot from QGIS 2.8, of the Landcare Research WMS.</center>
@@ -547,7 +550,7 @@ The head:
 </head>
 ```
 
-This is all pretty standard, if you've ever hit "View Page Source" on a webpage. Can you see where we bring in the Leaflet CSS (`leaflet.css`)? And a custom bit of CSS (`style.css`)?
+This is all pretty standard, if you've ever hit "View Page Source" on a webpage. Can you see where we tell the page to read the Leaflet CSS (`leaflet.css`)? And a custom bit of CSS (`style.css`)?
 
 Now for the body:
 
@@ -566,7 +569,7 @@ Now for the body:
 </body>
 ```
 
-We have two `div` elements in the body, and two scripts. The first `div` is the text you see at the top of the map. The second `div`, with the ID of `"map"`, contains our map, though there is very little indication yet that it does anything. The clue lies in the two pieces of Javascript that get loaded next. The first is the standard Leaflet Javascript that brings along the functionality of every Leaflet map you've ever seen. The second is a custom bit of code where we specify our own special map. This bit of code is in the Github repo, and is called `make_map.js`. Let's take a look at that next.
+We have two `div` elements in the body, and two scripts. The first `div` contains the header text you see at the top of the map. The second `div`, with the ID of `"map"`, contains our map, although there is very little indication yet that it actually does anything. The clue lies in the two pieces of Javascript that get loaded next. The first is the standard Leaflet Javascript that brings along the functionality of every Leaflet slippy map you've ever seen. The second is a custom bit of code where we specify our own special map. This bit of code is in the Github repo, and is called `make_map.js`. Let's take a look at that next.
 
 ```javascript
 var carViewshed = '/data/tiles/car/Mapnik/{z}/{x}/{y}.png',
@@ -618,7 +621,7 @@ var viewshedBasemaps = {
 L.control.layers(viewshedBasemaps).addTo(map); // Add the layer control to the map
 ```
 
-The first unbroken section of code above creates a bunch of variables. While the `var` keyword is only used once, it could be used on each line if the commas at the end were omitted. `carViewshed` and `trainViewshed` are the relative paths to the folders that contain the tiles we made earlier with QTiles. `southWest` and `northEast` are global parameters that I use to constrain the user's ability to move: I only want them to be able to scroll around the North Island... mostly because that's the only place I've actually created any map. The variables `attribution`, if you're paying attention, is the bit of text you see at the botto of the map. Leaflet is good about using that, and so should you.
+The first unbroken section of code above creates a bunch of variables. While the `var` keyword is only used once, it could be used on each line if the commas at the end were omitted. `carViewshed` and `trainViewshed` are the relative paths to the folders that contain the tiles we made earlier with QTiles. `southWest` and `northEast` are global parameters that I use to constrain the user's ability to move: I only want them to be able to scroll around the North Island... mostly because that's the only place I've actually created any map. The variables `attribution`, if you're paying attention, is the bit of text you see at the bottom of the map. Leaflet is good about using that, and so should you be.
 
 Notice that `global_max_zoom` and `global_min_zoom` correspond to the numbers I used in the tile generation step. I didn't make tiles beyond the range 7-13, so I don't let the user zoom beyond that range (otherwise they'd see nothing).
 
@@ -632,7 +635,7 @@ map.options.minZoom = global_min_zoom;
 map.options.maxZoom = global_max_zoom;
 ```
 
-Later, we will call on this `map` to actualy display (you guessed it) a map.
+Later, we will call on this `map` to actually display (you guessed it) a map.
 
 But first, I need to tell it what it's allowed to display.
 
@@ -660,9 +663,9 @@ var train = L.tileLayer(trainViewshed, {
 }); //non-default layer, so don't add to map
 ```
 
-I made two tile datasets, for the view from the car and from the train. The syntax for accessing them is naturally quite similar. There are more settings I didn't play with, and I even commented out two that didn't work very well after some experimenting.
+I made two tile datasets, for the view from the car and from the train. The syntax for accessing them is naturally quite similar. There are more settings I didn't play with, and I even commented out two that didn't work very well after some experimentation.
 
-Without this next block of code, the map would function, but you would never be able to get to the `train` tiles. So we add a controller with the following bit of code:
+Without this next block of code, the map would function, but you would never be able to get to the `train` tiles. So we add a controller to allow a user to switch between our two sets of map tiles:
 
 ```javascript
 var viewshedBasemaps = {
@@ -698,7 +701,7 @@ html, body {
 }
 
 #map{
-   height: 92%;
+   height: 89%;
    width: 100%;
    }
 
@@ -725,7 +728,7 @@ html, body {
 
 ## Getting the map online
 
-So, you have used a complex geographic routine to make a cool viewshed for the North Island of New Zealand. You have made a working web map and added some custom flair. How do you show it off? There are lots of ways to host webpages, but since we're using Github, Github is actually a very good option for little projects like these.
+So, you have used a complex geographic routine to make a cool viewshed for the North Island of New Zealand. You have made a working web map and added some custom flair. How do you show it off? There are lots of ways to host webpages, but since we're using Github, Github is actually a very good option for projects like these.
 
 In any Github project, if you make a branch called `gh-pages`, some magic happens. [Github is the authority on the matter](https://pages.github.com/). Once you have your username.github.io repository ready, any *other* repository you make can have a hosted website simply by making a `gh-pages` branch.
 
@@ -735,10 +738,10 @@ You can go one step further and also get a custom domain name, if you want to be
 
 # Wrapping up
 
-This has been a really long tutorial, so I apologise for that. But I've been frustrated many times in the past by the need to patch together a series of tutorials from different authors to actually get my own project off the ground, from data to a finished product. I hope this has been helpful for you to realise something from your own imagination.
+I've been frustrated many times in the past by the need to patch together a series of tutorials from different authors to actually get my own project off the ground, from data to a finished product. I hope this has been helpful for you to realise something from your own imagination.
 
 If there's any element that you feel needs better explanation, please leave a comment and I'll help you out.
 
-Similarly, if there's anything that you feel is a glaring mistake in my code, point it out, I'd love to improve. This was actually the first piece of bash I'd ever read or written, so I'm sure I'm fallible.
+Similarly, if there's anything that you feel is a glaring mistake in my code, point it out, I'd love to improve. I'm sure I'm fallible: Pierre's bash script was the first piece of bash that I'd ever read; my changes were my first experience with shell scripts. I've since found them very useful.
 
 Have fun!
