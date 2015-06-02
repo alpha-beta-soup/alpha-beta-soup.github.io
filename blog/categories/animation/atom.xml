@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Animation | Near Improv]]></title>
+  <link href="http://alpha-beta-soup.github.io/blog/categories/animation/atom.xml" rel="self"/>
+  <link href="http://alpha-beta-soup.github.io/"/>
+  <updated>2014-06-17T14:31:31+12:00</updated>
+  <id>http://alpha-beta-soup.github.io/</id>
+  <author>
+    <name><![CDATA[Richard Law]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[One day in Montréal]]></title>
+    <link href="http://alpha-beta-soup.github.io/blog/2014/06/12/montreal-transit/"/>
+    <updated>2014-06-12T17:58:10+12:00</updated>
+    <id>http://alpha-beta-soup.github.io/blog/2014/06/12/montreal-transit</id>
+    <content type="html"><![CDATA[<p>This video of Montréal&rsquo;s transit system fell across my path today, made by Colin
+Stewart and Ahmed El-Geneidy at McGill University&rsquo;s School of Urban Planning. I&rsquo;ve
+been reading a bit of professor El-Geneidy&rsquo;s work recently for my own research, and
+I&rsquo;ve recently been entertaining the idea of visiting Montréal for an extended period
+of time once I print a thesis onto a reconstituted tree. Providence?</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ztMm5xmk3M" allowfullscreen></iframe></div></p>
+
+<p>The video shows 24 hours of transit, from 4:30 in the morning for the Société de
+transport de Montréal (STM), drilling down to individual scheduled trips. It distinguishes
+between the green, orange, yellow and blue metro lines as well as buses operating every ten minutes
+(the purple points) and &ldquo;regular&rdquo; buses (white).</p>
+
+<p>It is presented on quite a high-resolution basemap, with plenty of attendant information.</p>
+
+<p>While it is an interesting look at the network operation, there are a handful of
+problems I have with this video that anyone reading may like to think about if
+they are to make their own animation.</p>
+
+<p>Note: if you&rsquo;re content with just looking at the cool flashing lights (and it is cool!)
+don&rsquo;t bother reading on. I&rsquo;m going to focus on the negatives and leave the positives
+as self-evident. Oh, I&rsquo;m such an optimistic young fellow.</p>
+
+<hr />
+
+<h2>Critique</h2>
+
+<hr />
+
+<p>Firstly, the information given in the video margins is a little overbearing, and
+isn&rsquo;t even what I would consider to be the most important information. We are not
+told what day of the week is represented (weekday schedules are typically different
+from Saturday and Sunday schedules), or where the data is from. Even in the video
+description, we have no link to further information. It almost seems as though
+it is a recruitment device for transit buffs to hit McGill&rsquo;s website. Which worked
+for me, let it be known, but I&rsquo;d still like some more information on how this was
+constructed&mdash;especially if it is made with open data.</p>
+
+<p>The margin of the video could be improved if the unnecessary information was removed
+entirely (and left to text descriptions or the embedding web page) or allowed to fade
+out after the first 20 or so seconds. Ideally, only time would remain after this
+introductory period.</p>
+
+<p>The base map, although nice in isolation, is too distracting. The blue
+&lsquo;pops&rsquo; when it is the least important piece of information on the map. The St. Lawrence
+River can be used here to give context to the map, but even in this capacity the basemap
+works against intuition by orienting the map away from north. As a foreigner, I am
+only vaguely aware of the shape of Montréal, but I still would have recognised it
+immediately if north was up as per convention. In short, the colours and orientation
+of the basemap ensure the basemap fails at its primary goal of providing immediate
+contextual recognition.</p>
+
+<p>Both colour and size are used to distinguish the types of modes represented, which
+is appropriate. For the metro lines, the yellow and orange are hard to distinguish
+on moving objects that (seem?) to share a line, although the use of a track is good.
+I don&rsquo;t know if the capacity of a vehicle on the metro is several orders of magnitude
+greater than a bus, but it probably is, and the relative size of the metro to the buses
+is appropriate. However I think the metro points are probably a little too big, as they
+bleed into each other and obscure the bus routes.</p>
+
+<p>I think the two types of bus should have points of the same size (unless one has
+a greater per-vehicle capacity), and allow small traces for the vehicles to distinguish
+the higher frequency in one, which should emerge naturally if they are indeed high-frequency.</p>
+
+<p>It is also worth asking whether the format is appropriate. Is a video a useful format
+for presenting this information? The people in the comments seem happy enough, with
+only one or two pointing out that this shows an idealised system where nothing comes
+early or late&hellip; or arrives with no seats left. Could an interactive data visualisation
+show the same information with additional value? I think so; particularly in that
+I&rsquo;d like to zoom into particular neighbourhoods. I do appreciate, however, that
+the authors of the video probably did this in their free time, and a video has higher
+bang for your buck.</p>
+
+<p>The other in-your-face issue with video as a format is that you&rsquo;re stuck with the
+frame rate the authors found most interesting&hellip; or bearable given the number of times
+they must have seen this in preparing it. I&rsquo;d love to slow it down during the busiest
+moments, but alas.</p>
+
+<p>The music. No comment. Mute it. Yuck.</p>
+
+<hr />
+
+<h2>Summary</h2>
+
+<hr />
+
+<p>Overall, this is an effective and interesting visualisation, but one that needs
+a tidy-up around the edges&mdash;literally and figuratively.</p>
+]]></content>
+  </entry>
+  
+</feed>
