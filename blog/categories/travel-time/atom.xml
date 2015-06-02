@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Travel Time | Near Improv]]></title>
+  <link href="http://alpha-beta-soup.github.io/blog/categories/travel-time/atom.xml" rel="self"/>
+  <link href="http://alpha-beta-soup.github.io/"/>
+  <updated>2015-06-02T21:25:42+12:00</updated>
+  <id>http://alpha-beta-soup.github.io/</id>
+  <author>
+    <name><![CDATA[Richard Law]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[What does dropping little Johnny off at school mean for commuters?]]></title>
+    <link href="http://alpha-beta-soup.github.io/blog/2014/06/13/travel-time-variation/"/>
+    <updated>2014-06-13T17:44:17+12:00</updated>
+    <id>http://alpha-beta-soup.github.io/blog/2014/06/13/travel-time-variation</id>
+    <content type="html"><![CDATA[<p>I have recently been fortunate enough to gain access to the real-time information (RTI)
+for buses and trains in the Wellington region. This is the information that gets displayed in the
+box at your bus or train stop giving an estimate of how many minutes until your bus arrives.
+This information isn&rsquo;t publicly available as a download or as an API, although
+you can try your luck looking at <a href="http://m.metlink.org.nz/stop/5006" title="Change the number at the end of the URL for a different stop">the mobile version of the Metlink website</a>.
+Building statistics from that is a different thing entirely. I tried to write a
+program to scrape the information, but you have to look at each stop individually
+and &lsquo;Due&rsquo;, &lsquo;2 mins&rsquo;, &lsquo;3 mins&rsquo;, etc. isn&rsquo;t actually very useful beyond catching your service.</p>
+
+<p>So. Without further ado, here is something I whipped up today. It demonstrates not
+only the travel time variation along a single bus route, but also how the mean travel
+time changes according to different conditions. In particular, I added information
+to the dates stored with the data to be able to distinguish trips made on &lsquo;ordinary&rsquo;
+weekdays where people are going to work and school, school holiday weekdays, and weekends.</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/airport91_ttcomparison.png' width='' height='' title='Travel time data from the Greater Wellington Regional Council. Open in new tab for larger.'><span class='caption-text'>Travel time data from the Greater Wellington Regional Council. Open in new tab for larger.</span></span></p>
+
+<p>This data covers all of April 2014. This year, both primary and secondary school holidays
+began on April 17, and lasted until May 5, so the data is split roughly evenly between weekdays
+where little Johhny is being ferried to school, and days when he is not. Most of us know from
+experience that traffic congestion is worse in the school term than in the school holidays.
+But how much? Well, if we take <a href="http://www.metlink.org.nz/timetables/bus/091/inbound" title="Click to see the route">the Airport Flyer bus route</a> as a unit of analysis, school-related
+congestion adds about 14 minutes of travel time across the length of the route. This mostly accrues between
+Jackson St and Murphy St. For those of you playing at home, that&rsquo;s the longest stretch between stops at
+approximately 15 kilometres, and takes in the busiest section of State Highway 2 and the
+urban motorway. However, from experience as a rider on this route, a lot of this
+additional travel time comes from Petone (Jackson St/Hutt Rd, attempting to get
+onto SH2). Also from experience as a resident in Petone, <strong>school congestion is a total
+time killer</strong>.</p>
+
+<hr />
+
+<h2>What varies?</h2>
+
+<hr />
+
+<p>Now, let&rsquo;s back up a bit, because I can hear a few voices at the back. What can cause
+variation in travel time apart from school-related congestion? Here&rsquo;s a list:</p>
+
+<ul>
+<li>Passengers getting on and off</li>
+<li>Road maintenance</li>
+<li>Bus driver behaviour</li>
+<li>Non-school related road congestion</li>
+<li>Weather</li>
+<li>Possibly some other things</li>
+</ul>
+
+
+<p>Now, it is possible to separate out these different effects, although I leave that
+as an exercise for the reader. I picked only a single month to ensure I&rsquo;d be comparing
+apples with apples to the greatest extent possible. Admittedly, April <strong>did</strong> see a bit of roadworks
+between Petone and Wellington that would have affected this route. However, this work
+was being performed just as intensely during the school term and the weekend as for the
+rest of April&mdash;so there is no reason to attribute the difference to that.</p>
+
+<p>School children don&rsquo;t typically board the Airport bus, not only because it goes to the
+Airport, but because it carries a surcharge. Some amount of variation is perhaps due to buses
+on this route getting stuck behind the buses on other routes which school children are
+boarding in the school term, and are not boarding in the holidays.</p>
+
+<p>It&rsquo;s been noted that New Zealand has seen a significant increase in the proportion
+of children and teenagers who are driven (or drive themselves) to school. Often the
+impact on obesity is noted, as well as the opportunity cost of missed early morning
+exercise which could help boost attention spans.</p>
+
+<p>However, I have not seen it mentioned how this effects our transport system beyond
+a general acceptance that congestion is worse. Although
+I have only shown you one chart, I have played around with displaying the same information
+for a variety of routes. The typical result for buses is that the mean travel time is greater
+during the school term than outside of it. In terms of the variation around this mean, every example
+I have plotted has shown a much greater standard deviation of travel time.</p>
+
+<p>What does that mean? It means buses are generally getting stuck in school traffic,
+causing people to be <strong>later than they otherwise need to be</strong>, or making them leave home earlier than otherwise.
+It means <strong>buses are more late more often</strong>; people have <strong>less certainty about their arrival time</strong>, and the <strong>schedule becomes
+less and less useful as a tool to reduce the amount of time you spend waiting</strong>.</p>
+
+<p>Notably, the effect is much more limited for rail services, which do not want to put up
+with any of that school-gate SUV madness.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Global Isochrone Travel Time from London (1881)]]></title>
+    <link href="http://alpha-beta-soup.github.io/blog/2014/06/13/global-isochrone-travel-time-from-london-1881/"/>
+    <updated>2014-06-13T10:33:38+12:00</updated>
+    <id>http://alpha-beta-soup.github.io/blog/2014/06/13/global-isochrone-travel-time-from-london-1881</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s an interesting historical map that turned up on <a href="http://www.reddit.com/r/MapPorn/comments/27yfn0/isochronic_passage_chart_for_travelers_global_map/" title="Link to Reddit thread">/r/MapPorn</a> today. Made by
+Francis Galton for the Proceedings of the Royal Geographic Society in 1881, I find
+it particularly interesting because it represents the state of international travel
+only a decade or so after my Scottish and Irish ancestors travelled to New Zealand
+(via way of Cape Town, where one of my great-great aunts was born <em>en route</em>).</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/global-isochrone-travel-time-from-london-1881.jpg' width='' height='' title='<strong>Isochronic passage chart for travellers</strong>, showing the shortest number of days journey from London by the quickest through routes and using such further conveyances as are available without unreasonable cost. It is supposed that local preparations have been made and that other circumstances are favourable.'><span class='caption-text'><strong>Isochronic passage chart for travellers</strong>, showing the shortest number of days journey from London by the quickest through routes and using such further conveyances as are available without unreasonable cost. It is supposed that local preparations have been made and that other circumstances are favourable.</span></span></p>
+
+<p>The work of cartographers past is often so impressive on their own merits (although
+I suspect the chaff has been cut with time) yet when you also consider the technology
+that they <em>didn&rsquo;t</em> have to make their maps&hellip; the mind boggles and you realise that all of use
+currently practising the skill have it so easy. Really, if work of this calibre could be made then,
+there are no excuses for bad maps now.</p>
+
+<p>One particular technique I&rsquo;d like to draw attention to is the shape of the coastlines.
+They&rsquo;re <em>really wobbly</em>. I suspect this is probably because nice little shapefiles didn&rsquo;t
+exist for downloading&mdash;-but the effect that this has is to express that coastlines are
+complex features even if that complexity isn&rsquo;t well known. Rather than generalise
+coastlines to rather round shapes (which would be fine at this scale, really), they
+have been deliberately given additional complexity: it&rsquo;s anti-generalisation.</p>
+
+<p>As far as I am aware, this would be quite hard to achieve with modern software. You would have
+to first add vertices to existing shapes at not-quite-regular intervals, and then shift
+the vertices about to get that head-beach in-out effect.</p>
+
+<p>I also really think the colour distinction between land and water with the same
+category value is really nifty, and of course is crucial when the main form of
+intercontinental travel is by sea (steam ship). It wouldn&rsquo;t really make sense for
+travel <em>par avion</em>, or any other mode.</p>
+
+<p>Finally:</p>
+
+<blockquote><p>It is supposed that local preparations have been made and that other circumstances are favourable.</p></blockquote>
+
+<p>I love this. These kind of assumptions have been made for over a hundred years in
+transportation analysis and cartography. I wonder if it will ever be possible to completely
+overcome them.</p>
+]]></content>
+  </entry>
+  
+</feed>
