@@ -4,7 +4,11 @@
   <title><![CDATA[Near Improv]]></title>
   <link href="http://alpha-beta-soup.github.io/atom.xml" rel="self"/>
   <link href="http://alpha-beta-soup.github.io/"/>
+<<<<<<< HEAD
   <updated>2015-06-02T21:25:42+12:00</updated>
+=======
+  <updated>2014-06-17T14:31:31+12:00</updated>
+>>>>>>> adc5edb976836c2f55d0457e795f37ca510e7fdb
   <id>http://alpha-beta-soup.github.io/</id>
   <author>
     <name><![CDATA[Richard Law]]></name>
@@ -14,6 +18,7 @@
 
   
   <entry>
+<<<<<<< HEAD
     <title type="html"><![CDATA[The things you see on a journey: a tutorial on GRASS, bash and Leaflet]]></title>
     <link href="http://alpha-beta-soup.github.io/blog/2015/06/01/the-things-you-see-on-a-journey-a-tutorial-on-grass/"/>
     <updated>2015-06-01T23:07:10+12:00</updated>
@@ -1095,6 +1100,8 @@
   </entry>
   
   <entry>
+=======
+>>>>>>> adc5edb976836c2f55d0457e795f37ca510e7fdb
     <title type="html"><![CDATA[What is a Headway?]]></title>
     <link href="http://alpha-beta-soup.github.io/blog/2014/06/17/what-is-a-headway/"/>
     <updated>2014-06-17T08:38:41+12:00</updated>
@@ -1689,6 +1696,7 @@ a tidy-up around the edges&mdash;literally and figuratively.</p>
 ]]></content>
   </entry>
   
+<<<<<<< HEAD
   <entry>
     <title type="html"><![CDATA[Hello world]]></title>
     <link href="http://alpha-beta-soup.github.io/blog/2014/06/08/hello-world/"/>
@@ -1749,4 +1757,6 @@ bullshit?</p></blockquote>
 ]]></content>
   </entry>
   
+=======
+>>>>>>> adc5edb976836c2f55d0457e795f37ca510e7fdb
 </feed>
