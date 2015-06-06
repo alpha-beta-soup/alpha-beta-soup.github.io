@@ -6,7 +6,7 @@ description: > # this means to ignore newlines until "baseurl:"
   New Zealand and beyond
 baseurl: "" # the subpath of your site, e.g. /blog/
 permalink: "/:title"
-url: "http://nearimprov.com" # the base hostname & protocol for your site
+url: "http://www.nearimprov.com" # the base hostname & protocol for your site
 twitter_username: alphabeta_soup
 github_username:  alpha-beta-soup
 
