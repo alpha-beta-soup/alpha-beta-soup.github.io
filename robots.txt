@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: http://alpha-beta-soup.github.io/sitemap.xml 
