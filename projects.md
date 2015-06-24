@@ -19,6 +19,28 @@ This project was [featured](http://www.nzherald.co.nz/data-blog/news/article.cfm
 
 To explore data in the [General Transit Feed Specification](https://developers.google.com/transit/gtfs/) in preparation for my Master's thesis, I decided to make some videos of Wellington city's public transport system.
 
-<center><iframe src="https://player.vimeo.com/video/88324152" width="500" height="314" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></center>
+<center>
+<iframe src="https://player.vimeo.com/video/88324152" width="100%" height="520" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+</center>
 
 The code for this still exists but it is no longer public because it is very rough. If you're interested, I'd be willing to tidy it so you can use it with any GTFS for any city. The code is written in Python and makes use of [SQLite/Spatialite](http://www.gaia-gis.it/gaia-sins/), [Matplotlib's Basemap](http://matplotlib.org/basemap/), and [Shapely](https://pypi.python.org/pypi/Shapely).
+
+&nbsp;
+# Census cycling statistics for Wellington
+
+CartoDB is a great initiative, that for many is a first taste of the power of PostgreSQL and PostGIS. I made this for the benefit of a Wellington-based cycling advocacy group, and it has been used in many discussions relating to the Island Bay protected cycleway which has recently been approved.
+
+<center>
+<iframe width='100%' height='520' frameborder='0' src='https://alphabetasoup.cartodb.com/viz/3c1e307c-e196-11e3-969e-0e10bcd91c2b/embed_map' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+</center>
+
+&nbsp;
+# Collaborative cycle mapping with Google Maps Engine Lite
+
+I am a member of the Hutt Cycle Network, a cycling advocacy group for Lower Hutt city. The group needed a way to share ideas for cycle-friendly routes, risks to cyclists, and other pertinent pieces of spatial information that the group has knowledge of, but had no means to record digitally. I suggested that the group try Google Maps Engine Lite, as a lightweight web GIS that most people find intuitive to use. [This is the result.](https://www.google.com/maps/d/edit?mid=zs0qRfa6-1hw.kYwo2V4cv3Pg) Non-technical members commented that they felt empowered to record their knowledge through the tool.
+
+<center>
+![](/assets/gme-sample.png)
+</center>
+
+Behind the scenes, I have a script running on a schedule to download the information, and upsert it into a PostGIS-enabled database. I combine this with other information to support the HCN's comments on matters relating to cycling in Lower Hutt. For instance, our response to an idea to develop protected cycle lanes was accompanied by information about how many students attend school within 500m of the protected cycle lanes.
