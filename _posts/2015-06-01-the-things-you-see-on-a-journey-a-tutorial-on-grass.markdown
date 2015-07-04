@@ -45,7 +45,6 @@ I'm also going to have to assume a modicum of familiarity with GIS, and some pro
 
 ----
 # The problem
-=============
 
 I talked to Pierre about a train trip across the North Island of New Zealand, known as the *Overlander*. He often takes the train to get to Wellington, and I've taken the Overlander several times to get between Auckland and Wellington. It is a lot slower than flying (by around 11+ hours), but personally I find it more enjoyable. In addition to your ability to get some solid solo productive time, it is very scenic. Being Spatial Scientists™, Pierre and I discussed how one could go about quantifying the *scenic-ness*... *scenicity*... the *je ne sais quoi* of the trip.
 
@@ -73,7 +72,6 @@ The two most influential decisions are the resolution of our terrain model, whic
 
 ----
 # Setting up with Git
-=====================
 
 Launch your terminal, and navigate to somewhere where we can place a folder of interesting stuff (our project code and input data).
 
@@ -121,7 +119,6 @@ The `generate_los` shell scripts (`.sh`) are files that contain a series of comm
 
 ----
 # GRASS and shell scripts
-=========================
 
 If you have installed GRASS, you can start it up at the command line by running the appropriate command for your version of GRASS:
 
@@ -534,7 +531,6 @@ The process for our purposes is rather simple.
 
 ----
 # Making a web-ready map with Leaflet
-=====================================
 
 There are lots of good tutorials on making webmaps, and I encourage you to explore them. I don't consider myself very good at making them (yet). This is a very simple example, using two tile datasets and allowing the user to switch between them.
 
@@ -711,12 +707,12 @@ html, body {
    width: 100%;
    }
 
-/* background of leaflet container: transparent */
+/* background of leaflet container: transparent \*/
 .leaflet-container {
     background-color:rgba(255,0,0,0.0);
 }
 
-/* custom style for the layer control to make it a bit more obvious */
+/* custom style for the layer control to make it a bit more obvious \*/
 .leaflet-control-layers-toggle:after{
     content:"Toggle transport mode";
     color:#000 ;
@@ -734,7 +730,6 @@ html, body {
 
 ----
 # Getting the map online
-========================
 
 So, you have used a complex geographic routine to make a cool viewshed for the North Island of New Zealand. You have made a working web map and added some custom flair. How do you show it off? There are lots of ways to host webpages, but since we're using Github, Github is actually a very good option for projects like these.
 
@@ -787,7 +782,6 @@ Check out [http://localhost:8000/](http://localhost:8000/) once this server is r
 
 ----
 # Wrapping up
-=============
 
 I've been frustrated many times in the past by the need to patch together a series of tutorials from different authors to actually get my own project off the ground, from data to a finished product. I hope this has been helpful for you to realise something from your own imagination.
 
