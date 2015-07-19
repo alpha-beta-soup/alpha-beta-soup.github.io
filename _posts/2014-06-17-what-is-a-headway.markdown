@@ -3,7 +3,7 @@ layout: post
 title: "What is a headway?"
 date: 2014-06-17 08:38:41 +1200
 comments: true
-category: "Portfolio"
+category: Portfolio
 tags: ["Headway", "Computation", "Frequency", "Waiting Time"]
 ---
 

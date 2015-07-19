@@ -22,3 +22,6 @@ permalink: /about/
 
 <div style="text-align: justify; text-justify: inter-word">
 <p>Le contenu de ce site web est mis à disposition selon les termes de la <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.en">Licence Creative Commons Attribution - Partage dans les Mêmes Conditions 3.0 non transposé</a>.</p></div>
+
+<br>
+<iframe width='100%' height='520' frameborder='0' scrolling="no" marginheight="0" marginwidth="0" src="http://www.topomap.co.nz/NZTopoMapEmbedded?v=2&ll=-37.801002,174.868784&z=14"></iframe><br /><small><a href="http://www.topomap.co.nz/NZTopoMap?v=2&ll=-37.801002,174.868784&z=14" style="text-align:left">View Larger Topographic Map</a></small>

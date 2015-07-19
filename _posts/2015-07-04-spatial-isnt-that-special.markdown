@@ -5,6 +5,7 @@ date: 2015-07-04 1:00:00 +1200
 comments: true
 category: Other
 tags: [GIS]
+draft: true
 ---
 
 This may be a strange thing for me to say, given that my postgraduate qualification,
@@ -31,7 +32,7 @@ Now this headline assertion is not without nuance. While I currently think that 
   * Spatial sampling
 * <span class="bold-span">Stochastic processes</span> (My own masters thesis considered this issue for measuring public transport accessibility: bus arrival time is a stochastic process, not a deterministic one. Further, spatial data is too often considered to be a random sample with many observations—I posit instead that it be viewed as a single realisation of a stochastic process. This should hardly be radical, but the gap in the literature for thinking like this is enormous.)
 
-Within the spatial profession (AKA the Twittersphere, where I hear from most of these people), I also don't feel like enough attention is being paid to emerging and not-so-emerging technologies and how they can revolutionise the way spatial questions are posed and answered, and hopefully assisting in shifting some attention to the 10% of real spatial problems, either directly, or by making the 90% more readily accomplishable.
+Within the spatial profession (AKA the Twittersphere, where I hear from most of these people), I also don't feel like enough attention is being paid to emerging and not-so-emerging technologies and how they can revolutionise the way spatial questions are posed and answered, and hopefully assist in shifting some attention to the 10% of real spatial problems, either directly, or by making the 90% more readily accomplishable.
 
 [Spatially-augmented graph databases](https://github.com/neo4j-contrib/spatial) are something that has been piquing my interest recently and I intend to write a blog post about some experiments shortly. Why is no one really talking about them?
 
@@ -43,7 +44,7 @@ Why is [GeoGig](http://geogig.org/) still in beta? Why is no one really using it
 
 Turf.js!
 
-There are exceptions of course. But if you want to participate in these exceptions, I found some useful advice that notes that a desktop GIS is increasingly akin to word processing software:
+There are exceptions of course. But if you want to participate in these exceptions, I found some useful advice that builds on the argument that a desktop GIS is increasingly akin to word processing software:
 
 > So if you’re considering a GIS career, you might want to reframe the question.
   Instead of learning ArcGIS and getting a GISP certificate, I would recommend
