@@ -1,11 +1,10 @@
 ---
 layout: post
 title: "Spatial isn't that special"
-date: 2015-07-04 1:00:00 +1200
+date:
 comments: true
 category: Other
 tags: [GIS]
-draft: true
 ---
 
 This may be a strange thing for me to say, given that my postgraduate qualification,
