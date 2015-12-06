@@ -1,11 +1,19 @@
 ---
 layout: post
-title: "Algorithms Group at Eindhoven University of Technology"
+title: "Vector fields of population travel demand"
+date: 2015-12-06 18:16:00 +1300
+comments: true
+category: [Algorithms, Spatial Algorithms]
+tags: ["Algorithms", "Spatial Algorithms"]
+---
+
+
+<!-- layout: post
+title: "Vector fields of population travel demand"
 date: 2015-12-06 08:06:00 +1300
 comments: true
-category: [academic literature, visualisation, time geography]
-tags: ["academic literature"], "visualisation", "time geography", "vector fields"]
----
+category: ["Academic Literature", "Visualisation", "Time Geography"]
+tags: ["academic literature"], "visualisation", "time geography", "vector fields"] -->
 
 I just finished reading an interesting paper by Xintao Liu and colleauges entitled *Time-geographic relationships between vector fields of activity patterns
 and transport systems*, in the Journal of Transport Geography.
@@ -19,6 +27,8 @@ I don't really have much to say about it, but I'll post a link to it anyway so I
 <center>
 ![](/assets/commutecontours.png)
 </center>
+
+Do you know of any similar examples?
 
 ---
 
