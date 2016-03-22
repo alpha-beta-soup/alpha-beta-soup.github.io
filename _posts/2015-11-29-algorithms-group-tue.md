@@ -11,23 +11,25 @@ I recently stumbled across [the webpage](http://www.win.tue.nl/algo/) for the (s
 
 In particular, I found one entitled [*Embedding cues about travel time in schematic maps*](http://www.win.tue.nl/~hermanh//stack/Haverkort-cues-about-travel-time.pdf). This is an interesting paper on schematic public transport maps, where it is first established that although excellent at allowing users to avoid unnecessary transfers, schematic maps of public transport pay the price of preventing people from determining how long a particular trips are, in both absolute and relative terms.
 
-<center>
-![](/assets/Haverkort1.png)
+<br>
+{% fullwidth "/assets/Haverkort1.png" %}
 
-![](/assets/Haverkort2.png)
+<br>
+{% fullwidth "/assets/Haverkort2.png" %}
 
-![](/assets/Haverkort3.png)
-</center>
+<br>
+{% fullwidth "/assets/Haverkort3.png" %}
 
 Haverkort presents a range of ideas for getting the best of both worlds, leading to a portfolio of intriguing ideas about hybridised schematic maps with travel time. I've included three of them here, and really encourage you to read the full paper.
 
-<center>
-![](/assets/Haverkort4.png)
+<br>
+{% fullwidth "/assets/Haverkort4.png" %}
 
-![](/assets/Haverkort5.png)
+<br>
+{% fullwidth "/assets/Haverkort5.png" %}
 
-![](/assets/Haverkort6.png)
-</center>
+<br>
+{% fullwidth "/assets/Haverkort6.png" %}
 
 I think it'd be a brilliant challenge to employ some of these ideas for a local network. There are also some interesting papers on automated graph drawing on the TUE webpage; if you're anything like me, while you can appreciate the necessity and beauty of a one-off piece of cartography, the true Holy Grail is in abstracting and automating the procedure, giving space for updating source information or changing the extent of your geographic focus with minimal to no additional work.
 

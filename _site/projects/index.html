@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Projects</title>
+  <meta name="description" content="Musings on spatial data, transportation, and spatial transportation data in New Zealand and beyond">
+
+
+  <link rel="stylesheet" href="/blog/css/tufte.css">	
+  
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+  <link rel="canonical" href="http://www.nearimprov.com/blog/projects/">
+  <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/blog/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/blog/"><img class="badge" src="/blog/assets/img/new_badge.png" alt="CH"></a>
+	
+		
+		    
+		      <a href="/blog/feed.xml"></a>
+		    
+	    
+  	
+		
+		    
+		      <a href="/blog/">blog</a>
+		    
+	    
+  	
+		
+		    
+		      <a href="/blog/about/">About</a>
+		    
+	    
+  	
+		
+		    
+		      <a class="active" href="/blog/projects/" class="active">Projects</a>
+		    
+	    
+  	
+		
+  	
+	</nav>
+</header>
+
+    <article class="group">
+      <h1>Projects</h1>
+<p class="subtitle"></p>
+
+
+<h1 id="new-zealand-crash-maphttpwwwnearimprovcomnational-crash-statistics"><a href="http://www.nearimprov.com/national-crash-statistics/">New Zealand Crash Map</a></h1>
+
+<p>An interactive web map of the New Zealand Transport Agency’s (NZTA) Crash Analysis System (CAS) data. The location, causes and circumstances behind each road crash attended by NZ Police can be explored. Most of the interface was written by <a href="https://twitter.com/parnelandr">Andrew Parnell</a> did most of the work on this interface, my role was more data munging.</p>
+
+<p>This project was <a href="http://www.nzherald.co.nz/data-blog/news/article.cfm?c_id=1503710&amp;objectid=11378832">featured</a> in the New Zealand Herald on Christmas 2014, becoming the most read article on the website for that day.</p>
+
+<p><br /></p>
+<figure class="fullwidth"><img src="/blog//assets/crash-map.png" /><figcaption>New Zealand Crash Map interface.</figcaption></figure>
+
+<h1 id="videos-of-wellingtons-public-transport-system">Videos of Wellington’s public transport system</h1>
+
+<p>To explore data in the <a href="https://developers.google.com/transit/gtfs/">General Transit Feed Specification</a> in preparation for my Master’s thesis, I decided to make some videos of Wellington city’s public transport system.</p>
+
+<p><br /></p>
+<iframe src="https://player.vimeo.com/video/88324152" width="85%" height="520" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+<p><br /></p>
+
+<p>See the <a href="https://vimeo.com/album/2763946">album</a> for more.</p>
+
+<p>The code for this still exists but it is no longer public because it is very rough. If you’re interested, I’d be willing to tidy it so you can use it with any GTFS for any city. The code is written in Python and makes use of <a href="http://www.gaia-gis.it/gaia-sins/">SQLite/Spatialite</a>, <a href="http://matplotlib.org/basemap/">Matplotlib’s Basemap</a>, and <a href="https://pypi.python.org/pypi/Shapely">Shapely</a>.</p>
+
+<h1 id="census-cycling-statistics-for-wellington">Census cycling statistics for Wellington</h1>
+
+<p>CartoDB is a great initiative, that for many is a first taste of the power of PostgreSQL and PostGIS. I made this for the benefit of a Wellington-based cycling advocacy group, and it has been used in many discussions relating to the Island Bay protected cycleway which has recently been approved.</p>
+
+<p><br /></p>
+<iframe width="80%" height="520" frameborder="0" src="https://alphabetasoup.cartodb.com/viz/3c1e307c-e196-11e3-969e-0e10bcd91c2b/embed_map" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" oallowfullscreen="" msallowfullscreen=""></iframe>
+
+<h1 id="collaborative-cycle-mapping-with-google-maps-engine-lite">Collaborative cycle mapping with Google Maps Engine Lite</h1>
+
+<p>I am a member of the Hutt Cycle Network, a cycling advocacy group for Lower Hutt city. The group needed a way to share ideas for cycle-friendly routes, risks to cyclists, and other pertinent pieces of spatial information that the group has knowledge of, but had no means to record digitally. I suggested that the group try Google Maps Engine Lite, as a lightweight web GIS that most people find intuitive to use. <a href="https://www.google.com/maps/d/edit?mid=zs0qRfa6-1hw.kYwo2V4cv3Pg">This is the result.</a> Non-technical members commented that they felt empowered to record their knowledge through the tool.</p>
+
+<p><br /></p>
+<figure class="fullwidth"><img src="/blog//assets/gme-sample.png" /><figcaption>Google Maps Engine lite, showing the layers maintained by the Hutt Cycle Network members.</figcaption></figure>
+<p><br /></p>
+
+<p>Behind the scenes, I have a script running on a schedule to download the information, and upsert it into a PostGIS-enabled database. I combine this with other information to support the HCN’s comments on matters relating to cycling in Lower Hutt. For instance, our response to an idea to develop protected cycle lanes was accompanied by information about how many students attend school within 500m of the protected cycle lanes.</p>
+
+<h1 id="projects-unrelated-to-transportation">Projects unrelated to transportation</h1>
+
+<h2 id="nz-ufo-sightingshttpwwwnearimprovcomnz-ufo-sightings"><a href="http://www.nearimprov.com/nz-ufo-sightings/">NZ UFO Sightings</a></h2>
+
+<p><br /></p>
+<figure class="fullwidth"><img src="/blog//assets/ufos.png" /><figcaption>Interactive map of NZ UFO sightings.</figcaption></figure>
+
+<p>Disclaimer: I don’t believe aliens visit earth, though they probably exist in some form in the vastness of infinite space.</p>
+
+<p>For this project, I maintain a web scraper that I use periodically to update the data for the interactive map. Geocoding is done imperfectly, using the fantastic <a href="http://geopy.readthedocs.org/en/latest/"><code class="highlighter-rouge">geopy</code></a> Python module.</p>
+
+<p>I’d like to do some analysis, trying to find reports of similar phenomena, reported around the same time, in around the same place. Sightings by an isolated stoner in Motueka are much less interesting than those reported by independent witnesses who describe the same thing. Get in touch if this could be of interest to you.</p>
+
+<h2 id="cloudburst-apihttpsgithubcommetoceancloudburst-api"><a href="https://github.com/metocean/cloudburst-api">Cloudburst API</a></h2>
+
+<p>Currently I am working to build a map tile server for weather data, which has a free tier, exposed via the linked API. I also wrote the API. Soon, you will be able to use it connect to a range of global weather forecasts, using Leaflet, OpenLayers, or Google Maps.</p>
+
+<p><br /></p>
+<figure class="fullwidth"><img src="/blog//assets/cloudburst.png" /><figcaption>Example tile map layer and interface constructed using the Cloudburst API.</figcaption></figure>
+<p><br /></p>
+
+<h2 id="real-time-lightning-server">Real-time lightning server</h2>
+
+<p>I wrote a web socket server for sending lightning strikes to client applications in real time: seconds after they are detected by physical instrumentation.</p>
+
+<p><br /></p>
+<figure class="fullwidth"><img src="/blog//assets/lightning.gif" /><figcaption>This is a GIF of ten seconds of lightning occurring in central Australia; watch carefully around the major cluster of strikes as new ones occur.</figcaption></figure>
+<p><br /></p>
+
+<p>I think there is massive underuse of web sockets in geographic applications; I have the beginnings of a QGIS plugin to connect to GeoJSON-serving web sockets to demonstrate their utility.</p>
+
+
+    </article>
+    <span class="print-footer">Projects - Richard Law</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.twitter.com/alphabeta_soup"><span class="icon-twitter"></span></a>
+      </li>
+    
+      <li>
+        <a href="//plus.google.com/+RichardLawNZ"><span class="icon-googleplus"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/alpha-beta-soup"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="/blog/feed.xml"><span class="icon-feed"></span></a>
+      </li>
+    
+      <li>
+        <a href="mailto:richard.m.law@gmail.com"><span class="icon-mail"></span></a>
+      </li>
+    
+  </ul>
+<div class="credits">
+<!-- <span>&copy; 2016 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
+<span>This site is created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme </a> for <a href="//jekyllrb.com">Jekyll</a>.</span>
+</div>
+</footer>
+
+  </body>
+</html>

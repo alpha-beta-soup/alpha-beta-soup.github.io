@@ -8,14 +8,15 @@ tags: ["GeoServer", "Docker"]
 ---
 
 <center>
-[![](/assets/docker.png)](https://www.docker.com/)
+{% fullwidth "/assets/docker.png" %}
 
-[![](/assets/geoserver.png)](geoserver.org)
+{% fullwidth "/assets/geoserver.png" %}
 </center>
 
 I've been exploring [GeoServer](geoserver.org/) recently, while also doing the same with [Docker](https://www.docker.com/). I figured I'd share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there's a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.
 
 ```dockerfile
+
 # Dockerfile
 FROM debian:wheezy
 
@@ -56,6 +57,7 @@ WORKDIR $GEOSERVER_HOME/bin
 Then to build and run the Docker container:
 
 ```bash
+
 docker build -t user/geoserver-master:test .
 docker run -it --net="host" user/geoserver-master:test
 ./startup.sh
@@ -65,8 +67,8 @@ Now you have GeoServer running, so head to `localhost:8080/geoserver`, and login
 
 If you want to try out GeoServer with data on your machine, you can just mount your data volume to the Docker container and point GeoServer to it in the admin panel. For instance, I mount `/home/data/sampledata` to `$GEOSERVER_HOME/data_dir/sampledata` with [Docker Compose](https://docs.docker.com/compose/).
 
-There. Now play around with GeoServer. I expect a cheque for 5% of what you would have spent on ArcGIS Server. (I'm going to be rich! :dollar:)
+There. Now play around with GeoServer. I expect a cheque for 5% of what you would have spent on ArcGIS Server.
 
-#### Update
+### Update
 
-Docker hygeine is important, although I'm still figuring it out. I've made the image use Debian Wheezy as a lightweight alternative to the Ubuntu 15.04 image I had before. It was also broken because I hadn't added the command to install `wget`, among a litany of other problems. Usually pays to test things, sorry if you tried it out earlier!
+Docker hygeine is important, although I'm still figuring it out. I've made the image use Debian Wheezy as a lightweight alternative to the Ubuntu 15.04 image I had before. It was also broken because I hadn't added the command to install `wget`, among a litany of other problems. It usually pays to test things, sorry if you tried it out earlier!

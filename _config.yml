@@ -1,19 +1,38 @@
-# Site settings
-title: Near Improv
-email: richard.m.law@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-  Musings on spatial data, transportation, and spatial transportation data in
-  New Zealand and beyond
-baseurl: "" # the subpath of your site, e.g. /blog/
-permalink: "/:title"
-url: "http://www.nearimprov.com" # the base hostname & protocol for your site
+baseurl: /blog
+title: nearimprov
+# subtitle:
+author: Richard Law
+url: "http://www.nearimprov.com"
+simple_search: http://google.com/search
+description: Musings on spatial data, transportation, and spatial transportation data in New Zealand and beyond
+# name: tufte
+# markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+permalink: /:title
+timezone: Pacific/Auckland
+# excerpt_separator: <!--more-->  # you can specify your own separator, of course.
+exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md']
+post:
+  template: _post.txt
+  extension: md
+page:
+  template: _page.txt
+  extension: md
+# editor: gvim
+# git:
+#   branch: master
+# transfer:
+#   command: rsync
+#   settings: -av
+#   source: _site/
+#   destination: ~/Git/clayh53.github.com/
 twitter_username: alphabeta_soup
 github_username:  alpha-beta-soup
-
-# Build settings
-#markdown: kramdown
-markdown: redcarpet
-
+# markdown: redcarpet
+# gems:
+# - jekyll-mentions
+# - jemoji
+# - jekyll-redirect-from
+# - jekyll-sitemap
 gems:
 - jekyll-mentions
 - jemoji
