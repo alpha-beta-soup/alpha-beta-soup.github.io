@@ -33,8 +33,3 @@ github_username:  alpha-beta-soup
 # - jemoji
 # - jekyll-redirect-from
 # - jekyll-sitemap
-gems:
-- jekyll-mentions
-- jemoji
-- jekyll-redirect-from
-- jekyll-sitemap
