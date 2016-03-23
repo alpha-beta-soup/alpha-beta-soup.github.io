@@ -9,7 +9,7 @@
   <meta name="description" content="">
 
 
-  <link rel="stylesheet" href="/blog/css/tufte.css">	
+  <link rel="stylesheet" href="/css/tufte.css">	
   
 
   <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
@@ -21,37 +21,37 @@
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
-  <link rel="canonical" href="http://www.nearimprov.com/blog/geoserver-quickstart-with-docker">
-  <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/blog/feed.xml" />
+  <link rel="canonical" href="http://www.nearimprov.com/geoserver-quickstart-with-docker">
+  <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/feed.xml" />
 </head>
 
   <body>
     <!--- Header and nav template site-wide -->
 <header>
     <nav class="group">
-	<a href="/blog/"><img class="badge" src="/blog/assets/img/new_badge.png" alt="CH"></a>
+	<a href="/"><img class="badge" src="/assets/img/new_badge.png" alt="CH"></a>
 	
 		
 		    
-		      <a href="/blog/feed.xml"></a>
+		      <a href="/feed.xml"></a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/">blog</a>
+		      <a href="/">blog</a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/about/">About</a>
+		      <a href="/about/">About</a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/projects/">Projects</a>
+		      <a href="/projects/">Projects</a>
 		    
 	    
   	
@@ -66,9 +66,9 @@
 
 
 <center>
-<figure class="fullwidth"><img src="/blog//assets/docker.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/docker.png" /><figcaption></figcaption></figure>
 
-<figure class="fullwidth"><img src="/blog//assets/geoserver.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/geoserver.png" /><figcaption></figcaption></figure>
 </center>
 
 <p>I’ve been exploring <a href="geoserver.org/">GeoServer</a> recently, while also doing the same with <a href="https://www.docker.com/">Docker</a>. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.</p>

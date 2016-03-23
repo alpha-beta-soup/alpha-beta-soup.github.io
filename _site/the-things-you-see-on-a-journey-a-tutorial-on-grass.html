@@ -9,7 +9,7 @@
   <meta name="description" content="What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand">
 
 
-  <link rel="stylesheet" href="/blog/css/tufte.css">	
+  <link rel="stylesheet" href="/css/tufte.css">	
   
 
   <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
@@ -21,37 +21,37 @@
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
-  <link rel="canonical" href="http://www.nearimprov.com/blog/the-things-you-see-on-a-journey-a-tutorial-on-grass">
-  <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/blog/feed.xml" />
+  <link rel="canonical" href="http://www.nearimprov.com/the-things-you-see-on-a-journey-a-tutorial-on-grass">
+  <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/feed.xml" />
 </head>
 
   <body>
     <!--- Header and nav template site-wide -->
 <header>
     <nav class="group">
-	<a href="/blog/"><img class="badge" src="/blog/assets/img/new_badge.png" alt="CH"></a>
+	<a href="/"><img class="badge" src="/assets/img/new_badge.png" alt="CH"></a>
 	
 		
 		    
-		      <a href="/blog/feed.xml"></a>
+		      <a href="/feed.xml"></a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/">blog</a>
+		      <a href="/">blog</a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/about/">About</a>
+		      <a href="/about/">About</a>
 		    
 	    
   	
 		
 		    
-		      <a href="/blog/projects/">Projects</a>
+		      <a href="/projects/">Projects</a>
 		    
 	    
   	
@@ -66,7 +66,7 @@
 
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/example.png" /><figcaption>What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand</figcaption></figure>
+<figure class="fullwidth"><img src="//assets/example.png" /><figcaption>What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand</figcaption></figure>
 
 <p>Some moons ago, I met Pierre Roudier, who works at <a href="http://www.landcareresearch.co.nz/home">Landcare Research New Zealand</a>, at a workshop on PostGIS being held at the National Institute for Water and Atmospheric Research (<a href="https://www.niwa.co.nz/">NIWA</a>). I was just getting started on PostGIS at the time, having identified that I was probably going to need it for my masters thesis. The two-day session, led by Digital Mapping Solutions New Zealand (<a href="http://www.mapsolutions.co.nz/">DMS</a>), was brilliant. It gave me just enough of an introduction to PostGIS to realise its capability, and a leg-up to explore the rest on my own. I ended up relying entirely on PostGIS for my masters thesis, and now I swear by PostGIS and PL/pgsql as the solution to most issues calling for a spatial database.</p>
 
@@ -647,10 +647,10 @@ g.mremove -f “total_los_</em>” –q</p>
 </ol>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog/assets/LR-example.png" /><figcaption>Screenshot from QGIS 2.8, of the Landcare Research WMS.</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/LR-example.png" /><figcaption>Screenshot from QGIS 2.8, of the Landcare Research WMS.</figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/qtiles.png" /><figcaption>Screenshot from QGIS 2.8, QTiles plugin.</figcaption></figure>
+<figure class="fullwidth"><img src="//assets/qtiles.png" /><figcaption>Screenshot from QGIS 2.8, QTiles plugin.</figcaption></figure>
 
 <h1 id="making-a-web-ready-map-with-leaflet">Making a web-ready map with Leaflet</h1>
 
@@ -884,10 +884,10 @@ map.options.maxZoom = global_max_zoom;
 <p>If you sign up for an AWS account and navigate to your console, you should be able to see where you can create a “bucket”. Once you’ve made your bucket, you can then create folders just like any other directory. Then, inside each folder, you can store your tiles.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/aws1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/aws1.png" /><figcaption></figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/aws2.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/aws2.png" /><figcaption></figcaption></figure>
 
 <p>There are two catches:</p>
 
@@ -914,10 +914,10 @@ map.options.maxZoom = global_max_zoom;
 <p>Repeat the above with your other tile dataset. Refer back to the Javascript to see how I the referred to the URLs where you can see these images. You can see an example tile <a href="https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/10/1007/381.png">here</a>, while it lasts.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/aws3.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/aws3.png" /><figcaption></figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/blog//assets/aws4.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="//assets/aws4.png" /><figcaption></figcaption></figure>
 
 <h3 id="local-tiles">Local tiles</h3>
 

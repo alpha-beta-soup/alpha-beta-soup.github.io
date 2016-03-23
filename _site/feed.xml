@@ -102,12 +102,12 @@ SET postgis.backend = ‘sfcgal’;
         <description>&lt;p&gt;I just finished reading an interesting paper by Xintao Liu and colleauges entitled &lt;em&gt;Time-geographic relationships between vector fields of activity patterns and transport systems&lt;/em&gt;, in the Journal of Transport Geography.&lt;label for=&quot;sn-id-ref&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-ref&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Liu, Xintao, Wai Yeung Yan, and Joseph Y.J. Chow. &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/S0966692314002191&quot;&gt;‘Time-geographic relationships between vector fields of activity patterns and transport systems.’&lt;/a&gt; &lt;em&gt;Journal of Transport Geography&lt;/em&gt; 42 (2015): 22-33. &lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/liu.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/liu.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;I don’t really have much to say about it, but I’ll post a link to it anyway so I don’t forget about it: I’ve briefly explored this technique in the past, and hope to revisit it in the future. It’s pretty damn hard.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/commutecontours.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/commutecontours.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;Do you know of any similar examples?&lt;/p&gt;
 </description>
@@ -123,24 +123,24 @@ SET postgis.backend = ‘sfcgal’;
 &lt;p&gt;In particular, I found one entitled &lt;a href=&quot;http://www.win.tue.nl/~hermanh//stack/Haverkort-cues-about-travel-time.pdf&quot;&gt;&lt;em&gt;Embedding cues about travel time in schematic maps&lt;/em&gt;&lt;/a&gt;. This is an interesting paper on schematic public transport maps, where it is first established that although excellent at allowing users to avoid unnecessary transfers, schematic maps of public transport pay the price of preventing people from determining how long a particular trips are, in both absolute and relative terms.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort1.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort1.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort2.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort2.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort3.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort3.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;Haverkort presents a range of ideas for getting the best of both worlds, leading to a portfolio of intriguing ideas about hybridised schematic maps with travel time. I’ve included three of them here, and really encourage you to read the full paper.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort4.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort4.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort5.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort5.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/Haverkort6.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort6.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;I think it’d be a brilliant challenge to employ some of these ideas for a local network. There are also some interesting papers on automated graph drawing on the TUE webpage; if you’re anything like me, while you can appreciate the necessity and beauty of a one-off piece of cartography, the true Holy Grail is in abstracting and automating the procedure, giving space for updating source information or changing the extent of your geographic focus with minimal to no additional work.&lt;/p&gt;
 
@@ -185,9 +185,9 @@ SET postgis.backend = ‘sfcgal’;
       <item>
         <title>GeoServer Quickstart with Docker</title>
         <description>&lt;center&gt;
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/docker.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/docker.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/blog//assets/geoserver.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/geoserver.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 &lt;/center&gt;
 
 &lt;p&gt;I’ve been exploring &lt;a href=&quot;geoserver.org/&quot;&gt;GeoServer&lt;/a&gt; recently, while also doing the same with &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt;. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.&lt;/p&gt;
