@@ -79,21 +79,21 @@
 
 <p>Here’s a short sample demonstrating the simplicity of the module:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="kn">from</span> <span class="nn">geopy.geocoders</span> <span class="kn">import</span> <span class="n">Nominatim</span>
-<span class="n">geolocator</span> <span class="o">=</span> <span class="n">Nominatim</span><span class="p">(</span><span class="n">country_bias</span><span class="o">=</span><span class="s">'New Zealand'</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">geocoded</span> <span class="o">=</span> <span class="n">geolocator</span><span class="o">.</span><span class="n">geocode</span><span class="p">(</span><span class="s">'Raglan, Waikato'</span><span class="p">,</span> <span class="n">exactly_one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">geocoded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="c"># success</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">geocoded</span><span class="o">.</span><span class="n">latitude</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">geocoder</span><span class="o">.</span><span class="n">longitude</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="c"># Here, perhaps you can run the geocoding function again,</span>
-    <span class="c"># after cleaning your input a little bit</span>
-    <span class="c"># Then you have recursion until you get a result!</span>
-    <span class="k">pass</span>
-</code></pre>
-</div>
+<p>```python</p>
+
+<p>from geopy.geocoders import Nominatim
+geolocator = Nominatim(country_bias=’New Zealand’, timeout=4)
+geocoded = geolocator.geocode(‘Raglan, Waikato’, exactly_one=True)
+if geocoded is not None:
+    # success
+    lat = geocoded.latitude
+    lon = geocoder.longitude
+else:
+    # Here, perhaps you can run the geocoding function again,
+    # after cleaning your input a little bit
+    # Then you have recursion until you get a result!
+    pass
+```</p>
 
 <p>If you want to use OpenMapQuest (for example), you just need to swap it out for Nominatim, and also remove the country bias (which OpenMapQuest doesn’t support).</p>
 
@@ -107,32 +107,32 @@
 
 <p>In my case, I had a list of objects (<code class="highlighter-rouge">sightings</code>) which are members of a class that has a method called <code class="highlighter-rouge">geocode</code> that essentially launches the geocoding routine I showed you above. (In my case, the function doesn’t return anything, but has the side-effect of setting each Address object’s <code class="highlighter-rouge">latitude</code> and <code class="highlighter-rouge">longitude</code>.)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<p>```python</p>
 
-<span class="n">addresses</span> <span class="o">=</span> <span class="c"># Gather a list of Address objects with a `geocode`</span>
+<p>import multiprocessing</p>
 
-<span class="k">def</span> <span class="nf">geocode_worker</span><span class="p">(</span><span class="n">address</span><span class="p">):</span>
-    <span class="n">address</span><span class="o">.</span><span class="n">geocode</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">address</span>
+<p>addresses = # Gather a list of Address objects with a <code class="highlighter-rouge">geocode</code></p>
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="c"># Start as many worker processes as you have cores</span>
-    <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
-    <span class="c"># Apply geocode worker to each address, asynchronously</span>
-    <span class="n">addresses</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">geocode_worker</span><span class="p">,</span> <span class="n">addresses</span><span class="p">)</span>
+<p>def geocode_worker(address):
+    address.geocode()
+    return address</p>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre>
-</div>
+<p>def main():
+    # Start as many worker processes as you have cores
+    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    # Apply geocode worker to each address, asynchronously
+    addresses = pool.map(geocode_worker, addresses)</p>
+
+<p>if <strong>name</strong> == ‘<strong>main</strong>’:
+    main()
+```</p>
 
 <p><span class="newthought">A quick gotcha</span>  is that the worker function has to be <a href="http://docs.python.org/library/pickle.html#what-can-be-pickled-and-unpickled">able to be pickled</a>. In simple terms, you have to have the worker function at the top level. The above snippet would not work if <code class="highlighter-rouge">geocode_worker</code> were defined within <code class="highlighter-rouge">main</code>. In that case, you’d see this error:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-cPickle.PicklingError: Can't pickle &lt;type 'function'&gt;: attribute lookup __builtin__.function failed
-</code></pre>
-</div>
+<p>```</p>
+
+<p>cPickle.PicklingError: Can’t pickle &lt;type ‘function’&gt;: attribute lookup <strong>builtin</strong>.function failed
+```</p>
 
 <p><span class="newthought">Don’t use Nominatim for this!</span>  I made the mistake of <em>not</em> reading <a href="http://nominatim.openstreetmap.org/">the usage restrictions</a> of the geocoding service, and forgetting a debug switch, and then launched tens of requests at the same time, repeatedly, hundreds of times, and then had my IP address blocked. Currently I can’t even <em>visit</em> <a href="http://nominatim.openstreetmap.org/">http://nominatim.openstreetmap.org/</a>, let alone use the geocoder.</p>
 
@@ -146,57 +146,57 @@ cPickle.PicklingError: Can't pickle &lt;type 'function'&gt;: attribute lookup __
 
 <p>Looking at the logs, here’s what the difference in processing looks like for a sample of my addresses. When you see <code class="highlighter-rouge">fail</code>, that is when my recursion kicks in that applies an algorithm to clean the address string before trying to geocode again.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-'Gluepot Road, Oropi, Tauranga, North Island' ← geocoder starting up
-'Gluepot Road, Oropi, Tauranga, New Zealand' ← fail
-'Gluepot Road, Tauranga, New Zealand' -37.8475939 176.1500778 ← success
-'Maungaraki, Lower Hutt, North Island' ← geocoder starting up
-'Maungaraki, Lower Hutt, New Zealand' -41.2058337 174.8800422 ← success
-'Rimutaka Ranges, Wairarapa, North Island' ← geocoder starting up
-'Rimutaka Ranges, Wairarapa, New Zealand' ← fail
-'Rimutaka, Wairarapa, New Zealand' -41.3573081 175.0005109 ← success
-'Mourea, Rotorua, North Island' ← geocoder starting up
-'Mourea, Rotorua, New Zealand' -38.0442035 176.3261444 ← success
-'Tauranga, North Island' ← geocoder starting up
-'Tauranga, New Zealand' -37.6867319 176.1673614 ← success
-'Waihopai Valley, Marlborough, South Island' ← geocoder starting up
-'Waihopai Valley, Marlborough, New Zealand' -41.5149705 173.7897351 ← success
-'At sea off the coast of the Bay of Plenty, North Island' ← geocoder starting up
-'At sea off the coast of the Bay of Plenty, New Zealand' ← fail
-'At Bay Plenty, New Zealand' ← fail
-'sea off the coast of the Bay of Plenty, New Zealand' ← fail
-'Bay of Plenty, New Zealand' -37.9503755 176.938287362 ← success
-'Taupo, North Island' ← geocoder starting up
-'Taupo, New Zealand' -38.6883048 176.0755486 ← success
-Done in 16s
-</code></pre>
-</div>
+<p>```</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-'Gluepot Road, Oropi, Tauranga, North Island' ← geocoder starting up
-'Maungaraki, Lower Hutt, North Island' ← geocoder starting up
-'Rimutaka Ranges, Wairarapa, North Island' ← geocoder starting up
-'Mourea, Rotorua, North Island' ← geocoder starting up
-'Waihopai Valley, Marlborough, South Island' ← geocoder starting up
-'Tauranga, North Island' ← geocoder starting up
-'At sea off the coast of the Bay of Plenty, North Island' ← geocoder starting up
-'Taupo, North Island' ← geocoder starting up
-'Tauranga, New Zealand' -37.6867319 176.1673614 ← success
-'Mourea, Rotorua, New Zealand' -38.0442035 176.3261444 ← success
-'Waihopai Valley, Marlborough, New Zealand' -41.5149705 173.7897351 ← success
-'Taupo, New Zealand' -38.6883048 176.0755486 ← success
-'Gluepot Road, Oropi, Tauranga, New Zealand' ← fail
-'Rimutaka Ranges, Wairarapa, New Zealand' ← fail
-'Maungaraki, Lower Hutt, New Zealand' -41.2058337 174.8800422 ← success
-'At sea off the coast of the Bay of Plenty, New Zealand' ← fail
-'Gluepot Road, Tauranga, New Zealand' -37.8475939 176.1500778 ← success
-'Rimutaka, Wairarapa, New Zealand' -41.3573081 175.0005109 ← success
-'At Bay Plenty, New Zealand' ← fail
-'sea off the coast of the Bay of Plenty, New Zealand' ← fail
-'Bay of Plenty, New Zealand' -37.9503755 176.938287362 ← success
+<p>‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Tauranga, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
+‘Taupo, North Island’ ← geocoder starting up
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+Done in 16s
+```</p>
+
+<p>```</p>
+
+<p>‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Tauranga, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘Taupo, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
 Done in 4s
-</code></pre>
-</div>
+```</p>
 
 <p>Notice the difference? In the latter case, there are multiple processes: 8 addresses get geocoded at once. They don’t return in order because they’re all happening at the same time and take different lengths of time to complete depending on their complexity. Failing addresses don’t prevent others from getting underway, and the whole process is so much smoother.</p>
 

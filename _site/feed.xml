@@ -23,17 +23,17 @@
         <title>3D spatial indexes in PostGIS&lt;br&gt;&lt;small&gt;And even 4D spatio-teporal indexes!&lt;/small&gt;</title>
         <description>&lt;p&gt;I have just watched Paul Ramsay’s (CartoDB) breakout presentation from &lt;em&gt;PGConf Silicon Valley 2015&lt;/em&gt;. I love watching these kinds of videos. They’re reasonably short (~40 minutes) so are good while you’re eating lunch or killing time. They also tend to have little nuggets of wisdom to solve “gotchas” that for some reason no one has ever told you about. This presentation in particular has lots of these for using PostGIS. One I did not know about was the ability to specify an n-dimensional index in PostGIS. The typical way to construct a two-dimensional GIST index in PostGIS is to do:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE INDEX idx ON table USING gist(geom);
+```&lt;/p&gt;
 
 &lt;p&gt;However if you have XYZ or XYZT data and you want to issue queries that take advantage of these additional dimensions with a multidimensional index, you will need:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gist_geometry_ops_nd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE INDEX idx ON table USING gist(geom gist_geometry_ops_nd);
+```&lt;/p&gt;
 
 &lt;p&gt;The different operator, internally, means that the spatial functions use the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&amp;amp;&lt;/code&gt; operator, rather than the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; operator.&lt;/p&gt;
 
@@ -73,11 +73,11 @@
 
 &lt;p&gt;SFCGAL will need to be compiled, and then activated within PostgreSQL:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EXTENSION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgis_sfcgal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backend&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;sfcgal&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE EXTENSION postgis_sfcgal;
+SET postgis.backend = ‘sfcgal’;
+```&lt;/p&gt;
 
 &lt;p&gt;There is also a dedicated PostgreSQL extension for storing point cloud data: &lt;a href=&quot;https://github.com/pgpointcloud/pointcloud&quot;&gt;https://github.com/pgpointcloud/pointcloud&lt;/a&gt;&lt;/p&gt;
 
@@ -192,52 +192,53 @@
 
 &lt;p&gt;I’ve been exploring &lt;a href=&quot;geoserver.org/&quot;&gt;GeoServer&lt;/a&gt; recently, while also doing the same with &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt;. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-dockerfile&quot;&gt;
-# Dockerfile
-FROM debian:wheezy
+&lt;p&gt;```dockerfile&lt;/p&gt;
 
-# Update the sources list
-RUN apt-get update
-RUN apt-get upgrade -y
+&lt;h1 id=&quot;dockerfile&quot;&gt;Dockerfile&lt;/h1&gt;
+&lt;p&gt;FROM debian:wheezy&lt;/p&gt;
 
-# Install basic applications
-RUN apt-get install -y build-essential wget unzip
+&lt;h1 id=&quot;update-the-sources-list&quot;&gt;Update the sources list&lt;/h1&gt;
+&lt;p&gt;RUN apt-get update
+RUN apt-get upgrade -y&lt;/p&gt;
 
-# Get the JRE/JDK installation
-RUN apt-get install -y default-jre default-jdk
+&lt;h1 id=&quot;install-basic-applications&quot;&gt;Install basic applications&lt;/h1&gt;
+&lt;p&gt;RUN apt-get install -y build-essential wget unzip&lt;/p&gt;
+
+&lt;h1 id=&quot;get-the-jrejdk-installation&quot;&gt;Get the JRE/JDK installation&lt;/h1&gt;
+&lt;p&gt;RUN apt-get install -y default-jre default-jdk
 RUN apt-get install -y openjdk-7-jre openjdk-7-jdk
-ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64&lt;/p&gt;
 
-# Get GeoServer
-ENV GEOSERVER_HOME=/usr/share/geoserver/
+&lt;h1 id=&quot;get-geoserver&quot;&gt;Get GeoServer&lt;/h1&gt;
+&lt;p&gt;ENV GEOSERVER_HOME=/usr/share/geoserver/
 RUN mkdir $GEOSERVER_HOME
 RUN wget http://ares.boundlessgeo.com/geoserver/master/geoserver-master-latest-bin.zip
 RUN cp geoserver-master-latest-bin.zip $GEOSERVER_HOME
 RUN unzip $GEOSERVER_HOME/geoserver-master-latest-bin.zip -d $GEOSERVER_HOME
 RUN rm $GEOSERVER_HOME/geoserver-master-latest-bin.zip
-ENV GEOSERVER_VER=2.9
+ENV GEOSERVER_VER=2.9&lt;/p&gt;
 
-# A plugin
-ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
+&lt;h1 id=&quot;a-plugin&quot;&gt;A plugin&lt;/h1&gt;
+&lt;p&gt;ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
 RUN wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/$A_PLUGIN.zip
 RUN cp $A_PLUGIN.zip $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
 RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip -d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
-RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip
+RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip&lt;/p&gt;
 
-ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
+&lt;p&gt;ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
 WORKDIR $GEOSERVER_HOME/bin
-&lt;/code&gt;&lt;/pre&gt;
+```&lt;/p&gt;
 
 &lt;p&gt;Then to build and run the Docker container:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-docker build -t user/geoserver-master:test .
-docker run -it --net&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;host&quot;&lt;/span&gt; user/geoserver-master:test
+&lt;p&gt;```bash&lt;/p&gt;
+
+&lt;p&gt;docker build -t user/geoserver-master:test .
+docker run -it –net=”host” user/geoserver-master:test
 ./startup.sh
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+```&lt;/p&gt;
 
 &lt;p&gt;Now you have GeoServer running, so head to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:8080/geoserver&lt;/code&gt;, and login with the default user and password: &lt;code class=&quot;highlighter-rouge&quot;&gt;admin&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;geoserver&lt;/code&gt;.&lt;/p&gt;
 
@@ -354,21 +355,21 @@ Or some combination of the four (and an application area of interest wouldn’t 
 
 &lt;p&gt;Here’s a short sample demonstrating the simplicity of the module:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;geopy.geocoders&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Nominatim&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;geolocator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Nominatim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;country_bias&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;New Zealand&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;geocoded&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;geolocator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geocode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Raglan, Waikato&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exactly_one&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;geocoded&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# success&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;lat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;geocoded&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;latitude&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;lon&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;geocoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;longitude&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Here, perhaps you can run the geocoding function again,&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# after cleaning your input a little bit&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Then you have recursion until you get a result!&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```python&lt;/p&gt;
+
+&lt;p&gt;from geopy.geocoders import Nominatim
+geolocator = Nominatim(country_bias=’New Zealand’, timeout=4)
+geocoded = geolocator.geocode(‘Raglan, Waikato’, exactly_one=True)
+if geocoded is not None:
+    # success
+    lat = geocoded.latitude
+    lon = geocoder.longitude
+else:
+    # Here, perhaps you can run the geocoding function again,
+    # after cleaning your input a little bit
+    # Then you have recursion until you get a result!
+    pass
+```&lt;/p&gt;
 
 &lt;p&gt;If you want to use OpenMapQuest (for example), you just need to swap it out for Nominatim, and also remove the country bias (which OpenMapQuest doesn’t support).&lt;/p&gt;
 
@@ -382,32 +383,32 @@ Or some combination of the four (and an application area of interest wouldn’t 
 
 &lt;p&gt;In my case, I had a list of objects (&lt;code class=&quot;highlighter-rouge&quot;&gt;sightings&lt;/code&gt;) which are members of a class that has a method called &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode&lt;/code&gt; that essentially launches the geocoding routine I showed you above. (In my case, the function doesn’t return anything, but has the side-effect of setting each Address object’s &lt;code class=&quot;highlighter-rouge&quot;&gt;latitude&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;longitude&lt;/code&gt;.)&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;multiprocessing&lt;/span&gt;
+&lt;p&gt;```python&lt;/p&gt;
 
-&lt;span class=&quot;n&quot;&gt;addresses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# Gather a list of Address objects with a `geocode`&lt;/span&gt;
+&lt;p&gt;import multiprocessing&lt;/p&gt;
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;geocode_worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geocode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;
+&lt;p&gt;addresses = # Gather a list of Address objects with a &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode&lt;/code&gt;&lt;/p&gt;
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Start as many worker processes as you have cores&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;multiprocessing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;processes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;multiprocessing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpu_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Apply geocode worker to each address, asynchronously&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;addresses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geocode_worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addresses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;p&gt;def geocode_worker(address):
+    address.geocode()
+    return address&lt;/p&gt;
 
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;__main__&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;def main():
+    # Start as many worker processes as you have cores
+    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    # Apply geocode worker to each address, asynchronously
+    addresses = pool.map(geocode_worker, addresses)&lt;/p&gt;
+
+&lt;p&gt;if &lt;strong&gt;name&lt;/strong&gt; == ‘&lt;strong&gt;main&lt;/strong&gt;’:
+    main()
+```&lt;/p&gt;
 
 &lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;A quick gotcha&lt;/span&gt;  is that the worker function has to be &lt;a href=&quot;http://docs.python.org/library/pickle.html#what-can-be-pickled-and-unpickled&quot;&gt;able to be pickled&lt;/a&gt;. In simple terms, you have to have the worker function at the top level. The above snippet would not work if &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode_worker&lt;/code&gt; were defined within &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;. In that case, you’d see this error:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-cPickle.PicklingError: Can&#39;t pickle &amp;lt;type &#39;function&#39;&amp;gt;: attribute lookup __builtin__.function failed
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;cPickle.PicklingError: Can’t pickle &amp;lt;type ‘function’&amp;gt;: attribute lookup &lt;strong&gt;builtin&lt;/strong&gt;.function failed
+```&lt;/p&gt;
 
 &lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;Don’t use Nominatim for this!&lt;/span&gt;  I made the mistake of &lt;em&gt;not&lt;/em&gt; reading &lt;a href=&quot;http://nominatim.openstreetmap.org/&quot;&gt;the usage restrictions&lt;/a&gt; of the geocoding service, and forgetting a debug switch, and then launched tens of requests at the same time, repeatedly, hundreds of times, and then had my IP address blocked. Currently I can’t even &lt;em&gt;visit&lt;/em&gt; &lt;a href=&quot;http://nominatim.openstreetmap.org/&quot;&gt;http://nominatim.openstreetmap.org/&lt;/a&gt;, let alone use the geocoder.&lt;/p&gt;
 
@@ -421,57 +422,57 @@ cPickle.PicklingError: Can&#39;t pickle &amp;lt;type &#39;function&#39;&amp;gt;:
 
 &lt;p&gt;Looking at the logs, here’s what the difference in processing looks like for a sample of my addresses. When you see &lt;code class=&quot;highlighter-rouge&quot;&gt;fail&lt;/code&gt;, that is when my recursion kicks in that applies an algorithm to clean the address string before trying to geocode again.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&#39;Gluepot Road, Oropi, Tauranga, North Island&#39; ← geocoder starting up
-&#39;Gluepot Road, Oropi, Tauranga, New Zealand&#39; ← fail
-&#39;Gluepot Road, Tauranga, New Zealand&#39; -37.8475939 176.1500778 ← success
-&#39;Maungaraki, Lower Hutt, North Island&#39; ← geocoder starting up
-&#39;Maungaraki, Lower Hutt, New Zealand&#39; -41.2058337 174.8800422 ← success
-&#39;Rimutaka Ranges, Wairarapa, North Island&#39; ← geocoder starting up
-&#39;Rimutaka Ranges, Wairarapa, New Zealand&#39; ← fail
-&#39;Rimutaka, Wairarapa, New Zealand&#39; -41.3573081 175.0005109 ← success
-&#39;Mourea, Rotorua, North Island&#39; ← geocoder starting up
-&#39;Mourea, Rotorua, New Zealand&#39; -38.0442035 176.3261444 ← success
-&#39;Tauranga, North Island&#39; ← geocoder starting up
-&#39;Tauranga, New Zealand&#39; -37.6867319 176.1673614 ← success
-&#39;Waihopai Valley, Marlborough, South Island&#39; ← geocoder starting up
-&#39;Waihopai Valley, Marlborough, New Zealand&#39; -41.5149705 173.7897351 ← success
-&#39;At sea off the coast of the Bay of Plenty, North Island&#39; ← geocoder starting up
-&#39;At sea off the coast of the Bay of Plenty, New Zealand&#39; ← fail
-&#39;At Bay Plenty, New Zealand&#39; ← fail
-&#39;sea off the coast of the Bay of Plenty, New Zealand&#39; ← fail
-&#39;Bay of Plenty, New Zealand&#39; -37.9503755 176.938287362 ← success
-&#39;Taupo, North Island&#39; ← geocoder starting up
-&#39;Taupo, New Zealand&#39; -38.6883048 176.0755486 ← success
-Done in 16s
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;```&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&#39;Gluepot Road, Oropi, Tauranga, North Island&#39; ← geocoder starting up
-&#39;Maungaraki, Lower Hutt, North Island&#39; ← geocoder starting up
-&#39;Rimutaka Ranges, Wairarapa, North Island&#39; ← geocoder starting up
-&#39;Mourea, Rotorua, North Island&#39; ← geocoder starting up
-&#39;Waihopai Valley, Marlborough, South Island&#39; ← geocoder starting up
-&#39;Tauranga, North Island&#39; ← geocoder starting up
-&#39;At sea off the coast of the Bay of Plenty, North Island&#39; ← geocoder starting up
-&#39;Taupo, North Island&#39; ← geocoder starting up
-&#39;Tauranga, New Zealand&#39; -37.6867319 176.1673614 ← success
-&#39;Mourea, Rotorua, New Zealand&#39; -38.0442035 176.3261444 ← success
-&#39;Waihopai Valley, Marlborough, New Zealand&#39; -41.5149705 173.7897351 ← success
-&#39;Taupo, New Zealand&#39; -38.6883048 176.0755486 ← success
-&#39;Gluepot Road, Oropi, Tauranga, New Zealand&#39; ← fail
-&#39;Rimutaka Ranges, Wairarapa, New Zealand&#39; ← fail
-&#39;Maungaraki, Lower Hutt, New Zealand&#39; -41.2058337 174.8800422 ← success
-&#39;At sea off the coast of the Bay of Plenty, New Zealand&#39; ← fail
-&#39;Gluepot Road, Tauranga, New Zealand&#39; -37.8475939 176.1500778 ← success
-&#39;Rimutaka, Wairarapa, New Zealand&#39; -41.3573081 175.0005109 ← success
-&#39;At Bay Plenty, New Zealand&#39; ← fail
-&#39;sea off the coast of the Bay of Plenty, New Zealand&#39; ← fail
-&#39;Bay of Plenty, New Zealand&#39; -37.9503755 176.938287362 ← success
+&lt;p&gt;‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Tauranga, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
+‘Taupo, North Island’ ← geocoder starting up
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+Done in 16s
+```&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Tauranga, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘Taupo, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
 Done in 4s
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+```&lt;/p&gt;
 
 &lt;p&gt;Notice the difference? In the latter case, there are multiple processes: 8 addresses get geocoded at once. They don’t return in order because they’re all happening at the same time and take different lengths of time to complete depending on their complexity. Failing addresses don’t prevent others from getting underway, and the whole process is so much smoother.&lt;/p&gt;
 
