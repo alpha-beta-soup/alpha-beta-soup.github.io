@@ -200,9 +200,9 @@ calculation does not account for the scheduled arrivals, and I would not recomme
 <p>I’ve been a little dishonest in my definition of what a headway is. Well, I’ve said a half-truth. The headway <em>is</em> the time between vehicle arrivals at a stop. However, all arrivals are not equivalent. What matters is <strong>where they are going</strong>. Let’s say we have a network with stops A-E serviced by three different routes.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/network-headway-diagram.png" /><figcaption>For the colourblind, red is solid, blue is dashed, and green is dotted.</figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/network-headway-diagram.png" /><figcaption></figcaption></figure>
 
-<p>If you’re seeking to travel directly from A to D, you don’t at all care that there is a blue line between A and E. So even if a blue line service arrived at A every minute of every day, it would do you no good to board it (we’ll assume you can’t walk between any of the stops). That is, if travelling A-D, your headway is defined only as the headway of the green route.</p>
+<p>If you’re seeking to travel directly from A to D, you don’t at all care that there is a blue line between A and E. So even if a blue line service arrived at A every minute of every day, it would do you no good to board it (we’ll assume you can’t walk between any of the stops). That is, if travelling A-D, your headway is defined only as the headway of the green route.<label for="sn-id-cb" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-cb" class="margin-toggle" /><span class="sidenote">For the colourblind, red is solid, blue is dashed, and green is dotted. </span></p>
 
 <p>Now if you’re instead travelling A-C, you can choose between the red and the green routes. Unless these services arrive at A at the same time, your headway (and hence waiting time) is less than it would be if you were travelling A-D, even though you are waiting at the same stop. This path A-B-C is a public transport <em>corridor</em> of overlapping routes.</p>
 
@@ -227,7 +227,7 @@ calculation does not account for the scheduled arrivals, and I would not recomme
 <p>Given this blog is ostensibly about transit visualisation, I’ll make a diagram for this. This is the exact same sample network as we had before, but now shown in terms of the direct stop edges that exist. If you’re to find the headway of travel A-C, you simply need to look at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/network-headway-diagram-logical.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/network-headway-diagram-logical.png" /><figcaption></figcaption></figure>
 
 <p>The problem with this is that the number of edges we have in the network has grown. Where before we had 7 edges all holding information in our database (route, time, mode, etc.), we now have 11. This increase of three doesn’t sound big, but the only reason it is small is because I have drawn a very simple network. Despite being simple, this is still coming up against the limits of what I can reasonably convey in an diagram, what with its overlapping lines.</p>
 

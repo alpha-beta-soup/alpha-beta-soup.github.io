@@ -66,7 +66,7 @@
 
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/example.png" /><figcaption>What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand</figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/example.png" /><figcaption>What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand</figcaption></figure>
 
 <p>Some moons ago, I met Pierre Roudier, who works at <a href="http://www.landcareresearch.co.nz/home">Landcare Research New Zealand</a>, at a workshop on PostGIS being held at the National Institute for Water and Atmospheric Research (<a href="https://www.niwa.co.nz/">NIWA</a>). I was just getting started on PostGIS at the time, having identified that I was probably going to need it for my masters thesis. The two-day session, led by Digital Mapping Solutions New Zealand (<a href="http://www.mapsolutions.co.nz/">DMS</a>), was brilliant. It gave me just enough of an introduction to PostGIS to realise its capability, and a leg-up to explore the rest on my own. I ended up relying entirely on PostGIS for my masters thesis, and now I swear by PostGIS and PL/pgsql as the solution to most issues calling for a spatial database.</p>
 
@@ -134,10 +134,7 @@
 
 <p><code class="highlighter-rouge">git clone</code> my GitHub repository with the following command:</p>
 
-<p>```bash</p>
-
-<p>git clone https://github.com/alpha-beta-soup/train-landscapes
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone https://github.com/alpha-beta-soup/train-landscapes</code></pre></figure>
 
 <p>This creates a folder called <code class="highlighter-rouge">train-landscapes</code> in your current directory, within which the project is “cloned”: duplicated for your local consumption.</p>
 
@@ -145,13 +142,9 @@
 
 <p>After cloning, you’ll see that there are a few files and folders, if you enter the <code class="highlighter-rouge">train-landscapes</code> directory. <code class="highlighter-rouge">.gitignore</code> is a text file with the following contents:</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">data/</code></pre></figure>
 
-<p>data/
-*.qgs~
-```</p>
-
-<p>This tells Git to not track files (or changes to files) with the extension <code class="highlighter-rouge">.qgs~</code> (which is an automatically-generated backup of a QGIS project file), or anything in the directory <code class="highlighter-rouge">data/</code> (which contains the source and output data, like the terrain DEM/hillshade model that I used as input).</p>
+<p>This tells Git to not track files (or changes to files) in the directory <code class="highlighter-rouge">data/</code> (which contains the source and output data, like the terrain DEM/hillshade model that I used as input).</p>
 
 <p>The hillshade and digital elevation model (DEM) I used for this project are several gigabytes in size; I haven’t included them in the project to save you the bandwidth. Likewise, the tiles that actually constitute what you see on the map aren’t on Github either (they’re hosted by Amazon, more on that later). The <code class="highlighter-rouge">.gitignore</code> file is a handy way to manage issues like this one on excluding large datasets from source control when they don’t need it. For following along with this tutorial, you can download any DEM of New Zealand (projected to NZTM NZGD2000) that you have the rights to use. (You can of course pick a region anywhere else in the world.)</p>
 
@@ -163,16 +156,13 @@
 
 <p>The directory <code class="highlighter-rouge">source</code> contains the real work: our project code. We can list its contents from the terminal with the <code class="highlighter-rouge">ls</code> command:</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ls <span class="nb">source</span>/<span class="k">*</span>
 
-<p>ls source/*</p>
-
-<p>generate_los.sh
+  generate_los.sh
   generate_los_70.sh
   make_map.js
   obtain_corners.py
-  style.css
-```</p>
+  style.css</code></pre></figure>
 
 <p>The <code class="highlighter-rouge">generate_los</code> shell scripts (<code class="highlighter-rouge">.sh</code>) are files that contain a series of commands that will be understood by GRASS GIS, versions 6.4 and 7. Let’s consider them now.</p>
 
@@ -180,100 +170,79 @@
 
 <p>If you have installed GRASS, you can start it up at the command line by running the appropriate command for your version of GRASS:</p>
 
-<p>```bash</p>
-
-<p>grass64
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">grass64</code></pre></figure>
 
 <p>or</p>
 
-<p>```bash</p>
-
-<p>grass70
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">grass70</code></pre></figure>
 
 <p>After a short moment, a two-window GUI will open up. GRASS uses some concepts and terminology that are pretty hard to get your head around becausr they are different to other GIS programs, particularly the idea of a “mapset”. You should be able to use the default, “PERMANENT” mapset for this tutorial, but I encourage you to look for some other GRASS tutorials that consider making your own mapsets. For now, you can just close or ignore the GUI windows as we will not be using them.</p>
 
 <p>Let’s consider the GRASS 6.4 code (a shell script written in bash). Open <code class="highlighter-rouge">generate_los.sh</code> in a text editor. To do this with Gedit from the command line:</p>
 
-<p>```bash</p>
-
-<p>gedit source/generate_los.sh
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gedit <span class="nb">source</span>/generate_los.sh</code></pre></figure>
 
 <p>Browse through the file for a bit.</p>
 
 <p>The very first line is a “shebang” that just tells the program loader what kind of interpreter to use. Here, we are using bash, as opposed to an alternative UNIX shell, like dash.</p>
 
-<p>```bash</p>
-
-<h1 id="binbash">!/bin/bash</h1>
-<p>```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span></code></pre></figure>
 
 <p>After that, we define a function called <code class="highlighter-rouge">usage</code>. Usage is called upon when checking inputs to the terminal when the code is executed. The function <code class="highlighter-rouge">usage</code> prints out a small bit of documentation for our code, telling a user that one of two possible arguments can be used: <code class="highlighter-rouge">-train</code> or <code class="highlighter-rouge">-road</code>. Choosing train will make sure the script uses some parameters that apply to traveling by train, and similarly for traveling by road.<label for="sn-id-disclaimer" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-disclaimer" class="margin-toggle" /><span class="sidenote">Disclaimer: I don’t actually know if this is proper practice for writing what is essentially help documentation. I can’t imagine it’s too far from this. </span></p>
 
 <p>The <code class="highlighter-rouge">usage</code> function and argument parsing:</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">usage<span class="o">()</span> <span class="o">{</span>
+   cat <span class="sh">&lt;&lt; EOF
+Usage: generate_los.sh [-train | -road]
 
-<p>usage() {
-   cat « EOF
-Usage: generate_los.sh [-train | -road]</p>
-
-<p>-train    perform the viewshed analysis for the train journey
+-train    perform the viewshed analysis for the train journey
 -road     perform the viewshed analysis for the road journey
 EOF
-   exit 1
-}</p>
+</span>   <span class="nb">exit </span>1
+<span class="o">}</span>
 
-<p>if [ $# -ne 1 ]; then
-   # Number of arguments
-   # If there is more or less than one, do usage()
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-ne 1 <span class="o">]</span>; <span class="k">then</span>
+   <span class="c"># Number of arguments</span>
+   <span class="c"># If there is more or less than one, do usage()</span>
    usage;
-fi</p>
+<span class="k">fi
 
-<p>if [ “$1” != “-train” ] &amp;&amp; [ “$1” != “-road” ]; then
-  usage;
-fi
-```</p>
+if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"-train"</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"-road"</span> <span class="o">]</span>; <span class="k">then
+  </span>usage;
+<span class="k">fi</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">if [ $# -ne 1 ]; then</code> considers all of the arguments that a user enters alongside the command to execute the GRASS shell script. If the number of arguments is not equal to one (<code class="highlighter-rouge">-ne 1</code>), then the condition is reached: run the <code class="highlighter-rouge">usage</code> function.</p>
 
 <p><code class="highlighter-rouge">usage</code> tells our naïve user that they have to run either (and only one of) these commands at the terminal to get things going:</p>
 
-<p>```bash</p>
-
-<p>sh execute_los.sh -train
-sh execute_los.sh -road
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sh execute_los.sh -train
+sh execute_los.sh -road</code></pre></figure>
 
 <p>Failure to do so simply prints an instruction to the terminal, and causes the script to stop with exit code 1 (<code class="highlighter-rouge">exit 1</code>), a catch-all for general errors.</p>
 
 <p>If the number of provided arguments is equal to one, we then check if this argument is in the realms of expectation (argument <code class="highlighter-rouge">"$1"</code> is <code class="highlighter-rouge">-train</code> or <code class="highlighter-rouge">-road</code>). If the first argument is not equal to <code class="highlighter-rouge">train</code> (<code class="highlighter-rouge">"$1" != "-train"</code>) or <code class="highlighter-rouge">-road</code>, then <code class="highlighter-rouge">usage</code> is triggered again. Otherwise we go on our merry way: setting up some variables according to <code class="highlighter-rouge">train</code> or <code class="highlighter-rouge">road</code>:</p>
 
-<p>```bash</p>
-
-<p>if [ $1 = “-road” ]
-then
-    LINE_SHP=’../data/road/roads.shp’ # Roads shapefile
-    PTS_FILE=”../data/road/road_points_coords.csv”
-    # ^ An intermediate output of this script; coordinates of LINE_SHP
-    ELEV=1.2 # Metres above the ground that the observer stands
-    # ^ just a guess (note, try include the vehicle, too)
-    OUTFILE=”dist_los_car” # Name of final output raster
-elif [ $1 = “-train” ]
-then
-    # We live in a post-shapefile world, baby!
-    LINE_SHP=’../data/train/nz-railway-centrelines-topo-150k.gpkg’ # Rail geopackage
-    PTS_FILE=”../data/train/rail_points_coords.csv”
-    # ^ An intermediate output of this script; coordinates of LINE_SHP
-    ELEV=2.5 # Metres above the ground that the observer stands
-    # ^ just a guess (note, try include the vehicle, too)
-    OUTFILE=”dist_los_rail” # Name of final output raster
-else
-    usage; # shouldn’t need this
-fi
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">if</span> <span class="o">[</span> <span class="nv">$1</span> <span class="o">=</span> <span class="s2">"-road"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nv">LINE_SHP</span><span class="o">=</span><span class="s1">'../data/road/roads.shp'</span> <span class="c"># Roads shapefile</span>
+    <span class="nv">PTS_FILE</span><span class="o">=</span><span class="s2">"../data/road/road_points_coords.csv"</span>
+    <span class="c"># ^ An intermediate output of this script; coordinates of LINE_SHP</span>
+    <span class="nv">ELEV</span><span class="o">=</span>1.2 <span class="c"># Metres above the ground that the observer stands</span>
+    <span class="c"># ^ just a guess (note, try include the vehicle, too)</span>
+    <span class="nv">OUTFILE</span><span class="o">=</span><span class="s2">"dist_los_car"</span> <span class="c"># Name of final output raster</span>
+<span class="k">elif</span> <span class="o">[</span> <span class="nv">$1</span> <span class="o">=</span> <span class="s2">"-train"</span> <span class="o">]</span>
+<span class="k">then</span>
+    <span class="c"># We live in a post-shapefile world, baby!</span>
+    <span class="nv">LINE_SHP</span><span class="o">=</span><span class="s1">'../data/train/nz-railway-centrelines-topo-150k.gpkg'</span> <span class="c"># Rail geopackage</span>
+    <span class="nv">PTS_FILE</span><span class="o">=</span><span class="s2">"../data/train/rail_points_coords.csv"</span>
+    <span class="c"># ^ An intermediate output of this script; coordinates of LINE_SHP</span>
+    <span class="nv">ELEV</span><span class="o">=</span>2.5 <span class="c"># Metres above the ground that the observer stands</span>
+    <span class="c"># ^ just a guess (note, try include the vehicle, too)</span>
+    <span class="nv">OUTFILE</span><span class="o">=</span><span class="s2">"dist_los_rail"</span> <span class="c"># Name of final output raster</span>
+<span class="k">else
+    </span>usage; <span class="c"># shouldn't need this</span>
+<span class="k">fi</span></code></pre></figure>
 
 <p>We define a number of variables that have global scope for the remainder of the script:</p>
 
@@ -287,13 +256,10 @@ fi
 
 <p>Following the conditional variables, there are some variables that are considered constant regardless of our mode of transport:</p>
 
-<p>```bash</p>
-
-<p>R_DEM=’../data/hillshade/nidemreproj’ # Elevation DEM
-R_RES=25 # The resolution of the DEM (metres)
-DIST_PTS=25 # Ideally the resolution of the DEM
-MAX_VIS_DIST=30000 # Maximum distance visible
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">R_DEM</span><span class="o">=</span><span class="s1">'../data/hillshade/nidemreproj'</span> <span class="c"># Elevation DEM</span>
+<span class="nv">R_RES</span><span class="o">=</span>25 <span class="c"># The resolution of the DEM (metres)</span>
+<span class="nv">DIST_PTS</span><span class="o">=</span>25 <span class="c"># Ideally the resolution of the DEM</span>
+<span class="nv">MAX_VIS_DIST</span><span class="o">=</span>30000 <span class="c"># Maximum distance visible</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">DIST_PTS</code> is a really important parameter. It will be used to determine how far our source viewing locations may be from one another. There is no point in this value being smaller than <code class="highlighter-rouge">R_RES</code>, because two different points that lie within the same cell of our terrain model will have the same viewable cells.</p>
 
@@ -315,28 +281,25 @@ MAX_VIS_DIST=30000 # Maximum distance visible
 
 <p>In order to keep the number of rows and columns in our calculation under 1000, we actually need to adjust the variable <code class="highlighter-rouge">MAX_VIS_DIST</code> while considering <code class="highlighter-rouge">R_RES</code>, as the two are actually tightly linked. The following commands create a new intermediate variable, <code class="highlighter-rouge">POS_VIS_DIST</code> (possible visibility distance), which determines the maximum distance we can possibly define as “visible” without exceeding the limit of 1000 rows or 1000 columns in our visibility calculation. If <code class="highlighter-rouge">POS_VIS_DIST</code> ends up exceeding <code class="highlighter-rouge">MAX_VIS_DIST</code>, then we opt for <code class="highlighter-rouge">POS_VIS_DIST</code> by setting <code class="highlighter-rouge">MAX_VIS_DIST</code> equal to <code class="highlighter-rouge">POS_VIS_DIST</code>; otherwise we keep on with our original value of <code class="highlighter-rouge">MAX_VIS_DIST</code>.</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># r.los takes a long time, and the manual says to keep</span>
+<span class="c"># the number of rows and columns "under 1000". Here we</span>
+<span class="c"># adjust MAX_VIS_DIST by considering the resolution of</span>
+<span class="c"># the raster (R_RES), so that there is a maximum of</span>
+<span class="c"># 1000 rows and columns</span>
 
-<h1 id="rlos-takes-a-long-time-and-the-manual-says-to-keep">r.los takes a long time, and the manual says to keep</h1>
-<p># the number of rows and columns “under 1000”. Here we
-# adjust MAX_VIS_DIST by considering the resolution of
-# the raster (R_RES), so that there is a maximum of
-# 1000 rows and columns</p>
+<span class="c"># The maximum possible vis dist to use and still have</span>
+<span class="c"># 1000 rows and cols</span>
+<span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$R_RES</span><span class="s2"> * 1000 / 2"</span> | bc -l<span class="k">)</span>
 
-<h1 id="the-maximum-possible-vis-dist-to-use-and-still-have">The maximum possible vis dist to use and still have</h1>
-<p># 1000 rows and cols
-POS_VIS_DIST=$(echo “$R_RES * 1000 / 2” | bc -l)</p>
-
-<p>if [ 1 -eq <code class="highlighter-rouge">echo "$POS_VIS_DIST &lt; $MAX_VIS_DIST" | bc</code> ]
-then
-  # If the maximum distance r.los can sustain exceeds the
-  # user-selected value, override it
-  echo “The MAX_VIS_DIST parameter has been changed \n
-  from $MAX_VIS_DIST to $POS_VIS_DIST for performance \n
-  reasons.”
-  MAX_VIS_DIST=$POS_VIS_DIST
-fi
-```</p>
+<span class="k">if</span> <span class="o">[</span> 1 -eq <span class="sb">`</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$POS_VIS_DIST</span><span class="s2"> &lt; </span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc<span class="sb">`</span> <span class="o">]</span>
+<span class="k">then</span>
+  <span class="c"># If the maximum distance r.los can sustain exceeds the</span>
+  <span class="c"># user-selected value, override it</span>
+  <span class="nb">echo</span> <span class="s2">"The MAX_VIS_DIST parameter has been changed </span><span class="se">\n</span><span class="s2">
+  from </span><span class="nv">$MAX_VIS_DIST</span><span class="s2"> to </span><span class="nv">$POS_VIS_DIST</span><span class="s2"> for performance </span><span class="se">\n</span><span class="s2">
+  reasons."</span>
+  <span class="nv">MAX_VIS_DIST</span><span class="o">=</span><span class="nv">$POS_VIS_DIST</span>
+<span class="k">fi</span></code></pre></figure>
 
 <p>To understand this, we should consider what each line is actually doing.</p>
 
@@ -344,11 +307,8 @@ fi
 
 <p>In the shell you could write:</p>
 
-<p>```bash</p>
-
-<p>POS_VIS_DIST=$(echo “25 * 1000 /2” | bc -l)
-echo $POS_VIS_DIST
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"25 * 1000 /2"</span> | bc -l<span class="k">)</span>
+<span class="nb">echo</span> <span class="nv">$POS_VIS_DIST</span></code></pre></figure>
 
 <p>And it would spit out the value of your calculation: 12500</p>
 
@@ -358,11 +318,8 @@ echo $POS_VIS_DIST
 
 <p>Consider the following commands:</p>
 
-<p>```bash</p>
-
-<p>v1=$(echo “10 &lt; 20” | bc -l)
-v2=$(echo “20 &lt; 10” | bc -l)
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">v1</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"10 &lt; 20"</span> | bc -l<span class="k">)</span>
+<span class="nv">v2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"20 &lt; 10"</span> | bc -l<span class="k">)</span></code></pre></figure>
 
 <p>Can you see that we’re doing inequality checks? The value of <code class="highlighter-rouge">v1</code> is 1, true (10 is less than 20); the value of <code class="highlighter-rouge">v2</code> is 0, false (20 is not less than 10). <code class="highlighter-rouge">if [ 1 -eq result ]</code> then asks “if 1 is equal to result”, or more fluidly, “if result is true”. If it is, then you can see above that we reset <code class="highlighter-rouge">MAX_VIS_DIST</code> as it violates our 1000 rows and columns constraint.</p>
 
@@ -425,47 +382,41 @@ v.out.ascii -r <span class="k">in</span><span class="o">=</span>line_feature_poi
 
 <p>The general logic of the viewshed calculation is to take a series of points sampled along a line feature, find all places on the terrain model that a person standing on each point can see, and then mosaic each of these together into a final visibility surface. There are ways to make this smarter, such as using the fact that once a cell has been identified as visible from any point, to never bother querying whether it is visible again. I don’t explore these, although I might if I ever need to re-use this code.</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -n <span class="s2">"</span><span class="se">\n</span><span class="s2">Computing viewsheds</span><span class="se">\n</span><span class="s2">"</span>
 
-<p>echo -n “\nComputing viewsheds\n”</p>
+<span class="nv">COUNTER</span><span class="o">=</span>0
+<span class="k">while </span><span class="nb">read</span> -r line
+  <span class="k">do
 
-<p>COUNTER=0
-while read -r line
-  do</p>
+  </span><span class="nv">PCT_FLOAT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"100*</span><span class="k">$((</span>COUNTER+1<span class="k">))</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  <span class="nv">PCT</span><span class="o">=</span><span class="sb">`</span><span class="nb">printf</span> <span class="s2">"%0.1f</span><span class="se">\n</span><span class="s2">"</span> <span class="nv">$PCT_FLOAT</span><span class="sb">`</span>
 
-<p>PCT_FLOAT=$(echo “100*$((COUNTER+1))/$NPTS” | bc -l)
-  PCT=<code class="highlighter-rouge">printf "%0.1f\n" $PCT_FLOAT</code></p>
+  <span class="nb">echo</span> -ne <span class="s2">"Processing </span><span class="nv">$NPTS</span><span class="s2"> viewshed instances: </span><span class="se">\t</span><span class="s2"> </span><span class="nv">$PCT</span><span class="s2"> % (</span><span class="nv">$COUNTER</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">) </span><span class="se">\r</span><span class="s2">"</span>
 
-<p>echo -ne “Processing $NPTS viewshed instances: \t $PCT % ($COUNTER/$NPTS) \r”</p>
+  <span class="c"># Set the region to a smaller subset around the current observer point</span>
+  <span class="c">#   to speed processing</span>
+  <span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f1 -d,<span class="k">)</span>
+  <span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f2 -d,<span class="k">)</span>
+  <span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  <span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  <span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  <span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  g.region <span class="nv">n</span><span class="o">=</span><span class="nv">$N</span> <span class="nv">s</span><span class="o">=</span><span class="nv">$S</span> <span class="nv">e</span><span class="o">=</span><span class="nv">$E</span> <span class="nv">w</span><span class="o">=</span><span class="nv">$W</span>
 
-<p># Set the region to a smaller subset around the current observer point
-  #   to speed processing
-  x=$(echo $line | cut -f1 -d,)
-  y=$(echo $line | cut -f2 -d,)
-  W=$(echo “$x-$MAX_VIS_DIST” | bc -l)
-  E=$(echo “$x+$MAX_VIS_DIST” | bc -l)
-  N=$(echo “$y+$MAX_VIS_DIST” | bc -l)
-  S=$(echo “$y-$MAX_VIS_DIST” | bc -l)
-  g.region n=$N s=$S e=$E w=$W</p>
+  <span class="c"># Does not overwrite, so SIGINT (Ctrl+C) can be used to interrupt a</span>
+  <span class="c">#  long-running process, to be resumed later</span>
+  <span class="c">#  (keep parameters constant between runs)</span>
+  r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> --v
+  <span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span>COUNTER+1<span class="k">))</span>
 
-<p># Does not overwrite, so SIGINT (Ctrl+C) can be used to interrupt a
-  #  long-running process, to be resumed later
-  #  (keep parameters constant between runs)
-  r.los input=dem output=tmp_los_${COUNTER} coordinate=$line obs_elev=$ELEV max_dist=$MAX_VIS_DIST –v
-  COUNTER=$((COUNTER+1))</p>
-
-<p>done &lt; $PTS_FILE
-```</p>
+<span class="k">done</span> &lt; <span class="nv">$PTS_FILE</span></code></pre></figure>
 
 <p>We begin by creating a variable, <code class="highlighter-rouge">COUNTER</code>, to store our progress through an iteration. Then we start looping. That’s actually a bit hard to comprehend, so I’ll explain it closely:</p>
 
-<p>```bash</p>
-
-<p>while read -r line
-  do
-  # do something
-done &lt; $PTS_FILE
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">while </span><span class="nb">read</span> -r line
+  <span class="k">do</span>
+  <span class="c"># do something</span>
+<span class="k">done</span> &lt; <span class="nv">$PTS_FILE</span></code></pre></figure>
 
 <p>Notice that before this point, <code class="highlighter-rouge">line</code> didn’t exist. <code class="highlighter-rouge">line</code> is actually being defined on the last line of the loop syntax: <code class="highlighter-rouge">done &lt; $PTS_FILE</code> pipes the text file <code class="highlighter-rouge">$PTS_FILE</code>, representing a sequence of points along a line, into the for loop; each line of the file is then put into a variable called <code class="highlighter-rouge">$line</code> that we access during the execution of each loop.</p>
 
@@ -475,64 +426,52 @@ done &lt; $PTS_FILE
 
 <p>Next up, we use a bit of black magic to speed up the processing. GRASS uses the concept of “regions” when running calculations. Every command will consider the current region, and nothing will be done outside of that region. So if you’re calculating a viewshed (a very expensive procedure), and you know the maximum distance that you consider viewable from any point, you can tell GRASS that its region can be as small as that area. Annotated code:</p>
 
-<p>```bash</p>
-
-<h1 id="set-the-region-to-a-smaller-subset-around-the-current-observer-point-to-speed-processing">Set the region to a smaller subset around the current observer point to speed processing</h1>
-<p># Note that this assumes the source line feature is projected in metres
-x=$(echo $line | cut -f1 -d,) # Get the x coordinate value from line, the current observer point
-y=$(echo $line | cut -f2 -d,) # The corresponding y value
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Set the region to a smaller subset around the current observer point to speed processing</span>
+<span class="c"># Note that this assumes the source line feature is projected in metres</span>
+<span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f1 -d,<span class="k">)</span> <span class="c"># Get the x coordinate value from line, the current observer point</span>
+<span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f2 -d,<span class="k">)</span> <span class="c"># The corresponding y value</span></code></pre></figure>
 
 <p>Try <code class="highlighter-rouge">cut --help</code> coupled with the clue that <code class="highlighter-rouge">$line</code> is comma-delimited, if you don’t understand this.</p>
 
-<p>```bash</p>
-
-<p>W=$(echo “$x-$MAX_VIS_DIST” | bc -l) # x minus the maximum visible distance: the western reach of the region
-E=$(echo “$x+$MAX_VIS_DIST” | bc -l) # x + MAX_VIS_DIST: eastern reach
-N=$(echo “$y+$MAX_VIS_DIST” | bc -l) # y + MAX_VIS_DIST: northern reach
-S=$(echo “$y-$MAX_VIS_DIST” | bc -l) # y - MAX_VIS_DIST: southern reach
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># x minus the maximum visible distance: the western reach of the region</span>
+<span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># x + MAX_VIS_DIST: eastern reach</span>
+<span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># y + MAX_VIS_DIST: northern reach</span>
+<span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># y - MAX_VIS_DIST: southern reach</span></code></pre></figure>
 
 <p>Finally, we use this command to actually set the region in each iteration: <code class="highlighter-rouge">g.region n=$N s=$S e=$E w=$W</code>. I found that resetting the region each loop was remarkably faster than leaving the region equal to the union of all inputs.</p>
 
 <p>The final section of the loop performs the following:</p>
 
-<p>```bash</p>
-
-<p>r.los input=dem output=tmp_los_${COUNTER} coordinate=$line obs_elev=$ELEV max_dist=$MAX_VIS_DIST –v
-COUNTER=$((COUNTER+1))
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> --v
+<span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span>COUNTER+1<span class="k">))</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">r.los</code> is the command that we’re really here for. It takes an input DEM, outputs a raster named <code class="highlighter-rouge">tmp_los_</code> plus whatever the counter is up to, a point value (our <code class="highlighter-rouge">$line</code> variable), and the observer elevation… and it goes away and tells us what that observer can see. Well, not really <em>what</em> they can see, more <em>where</em> they can see. The “what” can come later with some more Spatial Science™. For now, we close the loop and give it its input to set it in motion: <code class="highlighter-rouge">done &lt; $PTS_FILE</code>.</p>
 
 <h3 id="one-viewshed-to-rule-them-all">One Viewshed To Rule Them All</h3>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Set computational region to full extent</span>
+g.region -pm <span class="nv">rast</span><span class="o">=</span>dem --verbose
 
-<h1 id="set-computational-region-to-full-extent">Set computational region to full extent</h1>
-<p>g.region -pm rast=dem –verbose</p>
-
-<h1 id="combine-results-in-a-single-map">Combine results in a single map</h1>
-<p>#   (aggregation method doesn’t matter as we use
-#   this as a boolean mask)
-echo “\nCombining component viewsheds\n”
-# Loops because otherwise can easily exceed default hard limit of number of
-#   rasters that can be open at once (1024)
-for i in <code class="highlighter-rouge">seq 0 99</code>;
-do
-  # Combine a subset of all the viewsheds
-  # * is a wildcard for zero or more characters
-  if [ $i -le 9 ] # If i &lt;= 9
-  then # append a 0 to the start of $i
-    PATT=tmp_los_<em>0$i
-    OUT=total_los_0$i
-  else # don’t modify the pattern of $i
-    PATT=tmp_los_</em>$i
-    OUT=total_los_$i
-  fi
-  r.series in=<code class="highlighter-rouge">g.mlist --q type=rast pattern=$PATT sep=,</code> out=$OUT method=sum –o –q
-done
-```</p>
+<span class="c"># Combine results in a single map</span>
+<span class="c">#   (aggregation method doesn't matter as we use</span>
+<span class="c">#   this as a boolean mask)</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Combining component viewsheds</span><span class="se">\n</span><span class="s2">"</span>
+<span class="c"># Loops because otherwise can easily exceed default hard limit of number of</span>
+<span class="c">#   rasters that can be open at once (1024)</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 0 99<span class="sb">`</span>;
+<span class="k">do</span>
+  <span class="c"># Combine a subset of all the viewsheds</span>
+  <span class="c"># * is a wildcard for zero or more characters</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$i</span> -le 9 <span class="o">]</span> <span class="c"># If i &lt;= 9</span>
+  <span class="k">then</span> <span class="c"># append a 0 to the start of $i</span>
+    <span class="nv">PATT</span><span class="o">=</span>tmp_los_<span class="k">*</span>0<span class="nv">$i</span>
+    <span class="nv">OUT</span><span class="o">=</span>total_los_0<span class="nv">$i</span>
+  <span class="k">else</span> <span class="c"># don't modify the pattern of $i</span>
+    <span class="nv">PATT</span><span class="o">=</span>tmp_los_<span class="k">*</span><span class="nv">$i</span>
+    <span class="nv">OUT</span><span class="o">=</span>total_los_<span class="nv">$i</span>
+  <span class="k">fi
+  </span>r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist --q <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span><span class="nv">$PATT</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span><span class="nv">$OUT</span> <span class="nv">method</span><span class="o">=</span>sum --o --q
+<span class="k">done</span></code></pre></figure>
 
 <p>Now that we have created each of the viewsheds for each of the points we sampled along the road or train line, we want to combine these individual raster layers into a single raster layer.</p>
 
@@ -575,46 +514,34 @@ done
 
 <p>So, combine these up into our finished product with another pattern matching exercise:</p>
 
-<p>```bash</p>
-
-<p>r.series in=<code class="highlighter-rouge">g.mlist --q type=rast pattern=total_los_* sep=,</code> out=total_los method=sum –o –q
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist --q <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span>total_los_<span class="k">*</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span>total_los <span class="nv">method</span><span class="o">=</span>sum --o --q</code></pre></figure>
 
 <p>You could display the result now if you wanted the map to represent the number of times each cell has been determined as being “viewable”. I actually like the idea of a binary (viewable/not viewable) surface, where shading can be used to indicate distance from the line feature. So that’s what I’ll do. However it may be a little misleading, as distance from the line feature used in the exercise is not technically synonymous with the minimum distance from which it can be seen!</p>
 
-<p>```bash</p>
-
-<h1 id="create-distance-to-linefeature-map">Create distance to line_feature map</h1>
-<p>echo “\nDetermining distance from features\n”
-v.to.rast in=line_feature out=line_feature use=val val=1 –o –q
-r.grow.distance -m input=line_feature distance=dist_from_line_feature –o –q
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Create distance to line_feature map</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Determining distance from features</span><span class="se">\n</span><span class="s2">"</span>
+v.to.rast <span class="k">in</span><span class="o">=</span>line_feature <span class="nv">out</span><span class="o">=</span>line_feature <span class="nv">use</span><span class="o">=</span>val <span class="nv">val</span><span class="o">=</span>1 --o --q
+r.grow.distance -m <span class="nv">input</span><span class="o">=</span>line_feature <span class="nv">distance</span><span class="o">=</span>dist_from_line_feature --o --q</code></pre></figure>
 
 <p>This takes our line feature input and turns it into a raster; it then “grows” (raster buffers) this line… how far? To the same size as the entire GRASS region. There is no need to tell GRASS that; and it stores the output surface as a dataset specified by the rather misleading title of <code class="highlighter-rouge">distance</code>.</p>
 
-<p>```bash</p>
-
-<h1 id="use-distance-to-linefeature-instead-of-sum-of-times-seen-in-the-result-map">Use distance to line_feature instead of sum of times seen in the result map</h1>
-<p>echo “\nSubstituting number of times seen for distance to cell from line\n”
-r.mapcalc “$OUTFILE = if(total_los, dist_from_line_feature, null())” –o –v
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Use distance to line_feature instead of sum of times seen in the result map</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Substituting number of times seen for distance to cell from line</span><span class="se">\n</span><span class="s2">"</span>
+r.mapcalc <span class="s2">"</span><span class="nv">$OUTFILE</span><span class="s2"> = if(total_los, dist_from_line_feature, null())"</span> --o --v</code></pre></figure>
 
 <p>Here we use a bit of raster calculation (otherwise known as image manipulation) to make a new layer. To put the if statement into human terms: “if there is a  non-null value of <code class="highlighter-rouge">total_los</code> (i.e. a cell has been identified as visible), substitute its value with the value of the equivalent cell from the layer <code class="highlighter-rouge">dist_from_line_feature</code> (a raster surface where each cell knows its minimum distance from the line feature), otherwise make its value null.</p>
 
 <p>The rest should be self-explanatory:</p>
 
-<p>```bash</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Write output (as geotiff)</span>
+r.out.gdal <span class="nv">input</span><span class="o">=</span><span class="nv">$OUTFILE</span> <span class="nv">output</span><span class="o">=</span>../data/output/<span class="nv">$OUTFILE</span>.tif <span class="nv">format</span><span class="o">=</span>GTiff --o --v
 
-<h1 id="write-output-as-geotiff">Write output (as geotiff)</h1>
-<p>r.out.gdal input=$OUTFILE output=../data/output/$OUTFILE.tif format=GTiff –o –v</p>
+<span class="c"># Clean up, removing the component visibility rasters, only after outputs have been written</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Deleting temporary files</span><span class="se">\n</span><span class="s2">"</span>
+g.mremove -f <span class="s2">"tmp_los_*"</span> --q
+g.mremove -f <span class="s2">"total_los_*"</span> --q
 
-<h1 id="clean-up-removing-the-component-visibility-rasters-only-after-outputs-have-been-written">Clean up, removing the component visibility rasters, only after outputs have been written</h1>
-<p>echo “\nDeleting temporary files\n”
-g.mremove -f “tmp_los_<em>” –q
-g.mremove -f “total_los_</em>” –q</p>
-
-<p>echo “\ngenerate_los.sh complete\n”
-```</p>
+<span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">generate_los.sh complete</span><span class="se">\n</span><span class="s2">"</span></code></pre></figure>
 
 <p>The final output is simply a GeoTiff. Try opening it in QGIS if you have been playing along at home. If you’re just reading, then in the <a href="http://www.nearimprov.com/train-landscapes">interactive map</a>, the output GeoTiff is the special coloured layer you see on top of the basemap.</p>
 
@@ -647,10 +574,10 @@ g.mremove -f “total_los_</em>” –q</p>
 </ol>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/assets/LR-example.png" /><figcaption>Screenshot from QGIS 2.8, of the Landcare Research WMS.</figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/LR-example.png" /><figcaption>Screenshot from QGIS 2.8, of the Landcare Research WMS.</figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/qtiles.png" /><figcaption>Screenshot from QGIS 2.8, QTiles plugin.</figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/qtiles.png" /><figcaption>Screenshot from QGIS 2.8, QTiles plugin.</figcaption></figure>
 
 <h1 id="making-a-web-ready-map-with-leaflet">Making a web-ready map with Leaflet</h1>
 
@@ -660,93 +587,84 @@ g.mremove -f “total_los_</em>” –q</p>
 
 <p>The head:</p>
 
-<p>```html</p>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"./source/style.css"</span> <span class="nt">/&gt;</span>
 
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-  <link rel="stylesheet" href="./source/style.css" />
-
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-</head>
-<p>```</p>
+  <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-type"</span> <span class="na">content=</span><span class="s">"text/html; charset=utf-8"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/head&gt;</span></code></pre></figure>
 
 <p>This is all pretty standard, if you’ve ever hit “View Page Source” on a webpage. Can you see where we tell the page to read the Leaflet CSS (<code class="highlighter-rouge">leaflet.css</code>)? And a custom bit of CSS (<code class="highlighter-rouge">style.css</code>)?</p>
 
 <p>Now for the body:</p>
 
-<p>```html</p>
-
-<body>
-    <!-- header div -->
-    <div id="title-text">
-      <h2>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;body&gt;</span>
+    <span class="c">&lt;!-- header div --&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"title-text"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;h2&gt;</span>
         Travelling overland between Auckland and Wellington: what can you see?
-      </h2>
-    </div>
-    <!-- map div -->
-    <div id="map"></div>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src="./source/make_map.js" type="text/javascript"></script>
-</body>
-<p>```</p>
+      <span class="nt">&lt;/h2&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="c">&lt;!-- map div --&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"map"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./source/make_map.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span></code></pre></figure>
 
 <p>We have two <code class="highlighter-rouge">div</code> elements in the body, and two scripts. The first <code class="highlighter-rouge">div</code> contains the header text you see at the top of the map. The second <code class="highlighter-rouge">div</code>, with the ID of <code class="highlighter-rouge">"map"</code>, contains our map, although there is very little indication yet that it actually does anything. The clue lies in the two pieces of Javascript that get loaded next. The first is the standard Leaflet Javascript that brings along the functionality of every Leaflet slippy map you’ve ever seen. The second is a custom bit of code where we specify our own special map. This bit of code is in the Github repo, and is called <code class="highlighter-rouge">make_map.js</code>. Let’s take a look at that next.</p>
 
-<p>```javascript</p>
-
-<p>var  carViewshed = ‘https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/{z}/{x}/{y}.png’,
-    trainViewshed = ‘https://s3-ap-southeast-2.amazonaws.com/train-landscapes/rail/Mapnik/{z}/{x}/{y}.png’,
-    southWest = [-41.722,171.748],
-    northEast = [-36.441,179.124],
-    bounds = [southWest, northEast],
-    attribution = ‘Richard Law | \
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span>  <span class="nx">carViewshed</span> <span class="o">=</span> <span class="s1">'https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/{z}/{x}/{y}.png'</span><span class="p">,</span>
+    <span class="nx">trainViewshed</span> <span class="o">=</span> <span class="s1">'https://s3-ap-southeast-2.amazonaws.com/train-landscapes/rail/Mapnik/{z}/{x}/{y}.png'</span><span class="p">,</span>
+    <span class="nx">southWest</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">41.722</span><span class="p">,</span><span class="mf">171.748</span><span class="p">],</span>
+    <span class="nx">northEast</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">36.441</span><span class="p">,</span><span class="mf">179.124</span><span class="p">],</span>
+    <span class="nx">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="nx">southWest</span><span class="p">,</span> <span class="nx">northEast</span><span class="p">],</span>
+    <span class="nx">attribution</span> <span class="o">=</span> <span class="s1">'Richard Law | \
     Pierre Roudier | \
-    Basemap © <a href="http://maps.scinfo.org.nz/">Landcare Research</a> 2014. Contains data sourced from LINZ. Crown Copyright Reserved. <a href="http://creativecommons.org/licenses/by/3.0/nz/">CC BY 3.0 NZ</a> | \
-    <a href="https://koordinates.com/layer/40-nz-road-centrelines-topo-150k/">LINZ</a> <a href="http://creativecommons.org/licenses/by/3.0/nz/">CC BY 3.0 NZ</a> | \
-    <a href="http://grass.osgeo.org/">GRASS GIS</a>’,
-    global_min_zoom = 7,
-    global_max_zoom = 13;</p>
+    Basemap © &lt;a href="http://maps.scinfo.org.nz/"&gt;Landcare Research&lt;/a&gt; 2014. Contains data sourced from LINZ. Crown Copyright Reserved. &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | \
+    &lt;a href="https://koordinates.com/layer/40-nz-road-centrelines-topo-150k/"&gt;LINZ&lt;/a&gt; &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | \
+    &lt;a href="http://grass.osgeo.org/"&gt;GRASS GIS&lt;/a&gt;'</span><span class="p">,</span>
+    <span class="nx">global_min_zoom</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="nx">global_max_zoom</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
 
-<p>var map = new L.Map(‘map’);
-map.setView([-38.6875, 176.0694], 7); //centre and zoom of map, initially
-map.setMaxBounds(bounds);
-map.options.minZoom = global_min_zoom;
-map.options.maxZoom = global_max_zoom;</p>
+<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="o">-</span><span class="mf">38.6875</span><span class="p">,</span> <span class="mf">176.0694</span><span class="p">],</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">//centre and zoom of map, initially</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">setMaxBounds</span><span class="p">(</span><span class="nx">bounds</span><span class="p">);</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">minZoom</span> <span class="o">=</span> <span class="nx">global_min_zoom</span><span class="p">;</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxZoom</span> <span class="o">=</span> <span class="nx">global_max_zoom</span><span class="p">;</span>
 
-<p>var car = L.tileLayer(carViewshed, {
-  attribution: attribution,
-  bounds: bounds,
-  minZoom: global_min_zoom,
-  maxZoom: global_max_zoom,
-  tms: true,
-  isBaseLayer: true,
-  //opacity: 0.7,
-  //transparent: true
-}).addTo(map); //default layer, so add to map</p>
+<span class="kd">var</span> <span class="nx">car</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="nx">carViewshed</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">attribution</span><span class="p">:</span> <span class="nx">attribution</span><span class="p">,</span>
+  <span class="na">bounds</span><span class="p">:</span> <span class="nx">bounds</span><span class="p">,</span>
+  <span class="na">minZoom</span><span class="p">:</span> <span class="nx">global_min_zoom</span><span class="p">,</span>
+  <span class="na">maxZoom</span><span class="p">:</span> <span class="nx">global_max_zoom</span><span class="p">,</span>
+  <span class="na">tms</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">isBaseLayer</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="c1">//opacity: 0.7,</span>
+  <span class="c1">//transparent: true</span>
+<span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span> <span class="c1">//default layer, so add to map</span>
 
-<p>var train = L.tileLayer(trainViewshed, {
-  attribution: attribution,
-  bounds: bounds,
-  minZoom: global_min_zoom,
-  maxZoom: global_max_zoom,
-  tms: true,
-  isBaseLayer: true,
-  //opacity: 0.7,
-  //transparent: true
-}); //non-default layer, so don’t add to map</p>
+<span class="kd">var</span> <span class="nx">train</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="nx">trainViewshed</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">attribution</span><span class="p">:</span> <span class="nx">attribution</span><span class="p">,</span>
+  <span class="na">bounds</span><span class="p">:</span> <span class="nx">bounds</span><span class="p">,</span>
+  <span class="na">minZoom</span><span class="p">:</span> <span class="nx">global_min_zoom</span><span class="p">,</span>
+  <span class="na">maxZoom</span><span class="p">:</span> <span class="nx">global_max_zoom</span><span class="p">,</span>
+  <span class="na">tms</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">isBaseLayer</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="c1">//opacity: 0.7,</span>
+  <span class="c1">//transparent: true</span>
+<span class="p">});</span> <span class="c1">//non-default layer, so don't add to map</span>
 
-<p>var viewshedBasemaps = {
-    “Car/bus view”: car,
-    “Overlander view”: train
-};</p>
+<span class="kd">var</span> <span class="nx">viewshedBasemaps</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"Car/bus view"</span><span class="p">:</span> <span class="nx">car</span><span class="p">,</span>
+    <span class="s2">"Overlander view"</span><span class="p">:</span> <span class="nx">train</span>
+<span class="p">};</span>
 
-<p>L.control.layers(viewshedBasemaps).addTo(map); // Add the layer control to the map
-```</p>
+<span class="nx">L</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">layers</span><span class="p">(</span><span class="nx">viewshedBasemaps</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span> <span class="c1">// Add the layer control to the map</span></code></pre></figure>
 
 <p>The first unbroken section of code above creates a bunch of variables. While the <code class="highlighter-rouge">var</code> keyword is only used once, it could be used on each line if the commas at the end were omitted. <code class="highlighter-rouge">carViewshed</code> and <code class="highlighter-rouge">trainViewshed</code> are the relative paths to the hosted folders that contain the tiles we made earlier with QTiles. (I’ll explain the Amazon business soon.) <code class="highlighter-rouge">southWest</code> and <code class="highlighter-rouge">northEast</code> are global parameters that I use to constrain the user’s ability to move: I only want them to be able to scroll around the North Island… mostly because that’s the only place I’ve actually created any map. The variables <code class="highlighter-rouge">attribution</code>, if you’re paying attention, is the bit of text you see at the bottom of the map. Leaflet is good about using that, and so should you be.</p>
 
@@ -754,57 +672,48 @@ map.options.maxZoom = global_max_zoom;</p>
 
 <p>I then make a very important variable, <code class="highlighter-rouge">map</code>, and set a few of its options:</p>
 
-<p>```javascript</p>
-
-<p>var map = new L.Map(‘map’);
-map.setView([-38.6875, 176.0694], 7); //centre and zoom of map, initially
-map.setMaxBounds(bounds);
-map.options.minZoom = global_min_zoom;
-map.options.maxZoom = global_max_zoom;
-```</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="o">-</span><span class="mf">38.6875</span><span class="p">,</span> <span class="mf">176.0694</span><span class="p">],</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">//centre and zoom of map, initially</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">setMaxBounds</span><span class="p">(</span><span class="nx">bounds</span><span class="p">);</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">minZoom</span> <span class="o">=</span> <span class="nx">global_min_zoom</span><span class="p">;</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxZoom</span> <span class="o">=</span> <span class="nx">global_max_zoom</span><span class="p">;</span></code></pre></figure>
 
 <p>Later, we will call on this <code class="highlighter-rouge">map</code> to actually display (you guessed it) a map.</p>
 
 <p>But first, I need to tell it what it’s allowed to display.</p>
 
-<p>```javascript</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">car</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="nx">carViewshed</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">attribution</span><span class="p">:</span> <span class="nx">attribution</span><span class="p">,</span>
+  <span class="na">bounds</span><span class="p">:</span> <span class="nx">bounds</span><span class="p">,</span>
+  <span class="na">minZoom</span><span class="p">:</span> <span class="nx">global_min_zoom</span><span class="p">,</span>
+  <span class="na">maxZoom</span><span class="p">:</span> <span class="nx">global_max_zoom</span><span class="p">,</span>
+  <span class="na">tms</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">isBaseLayer</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="c1">//opacity: 0.7,</span>
+  <span class="c1">//transparent: true</span>
+<span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span> <span class="c1">//default layer, so add to map</span>
 
-<p>var car = L.tileLayer(carViewshed, {
-  attribution: attribution,
-  bounds: bounds,
-  minZoom: global_min_zoom,
-  maxZoom: global_max_zoom,
-  tms: true,
-  isBaseLayer: true,
-  //opacity: 0.7,
-  //transparent: true
-}).addTo(map); //default layer, so add to map</p>
-
-<p>var train = L.tileLayer(trainViewshed, {
-  attribution: attribution,
-  bounds: bounds,
-  minZoom: global_min_zoom,
-  maxZoom: global_max_zoom,
-  tms: true,
-  isBaseLayer: true,
-  //opacity: 0.7,
-  //transparent: true
-}); //non-default layer, so don’t add to map
-```</p>
+<span class="kd">var</span> <span class="nx">train</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="nx">trainViewshed</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">attribution</span><span class="p">:</span> <span class="nx">attribution</span><span class="p">,</span>
+  <span class="na">bounds</span><span class="p">:</span> <span class="nx">bounds</span><span class="p">,</span>
+  <span class="na">minZoom</span><span class="p">:</span> <span class="nx">global_min_zoom</span><span class="p">,</span>
+  <span class="na">maxZoom</span><span class="p">:</span> <span class="nx">global_max_zoom</span><span class="p">,</span>
+  <span class="na">tms</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">isBaseLayer</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="c1">//opacity: 0.7,</span>
+  <span class="c1">//transparent: true</span>
+<span class="p">});</span> <span class="c1">//non-default layer, so don't add to map</span></code></pre></figure>
 
 <p>I made two tile datasets, for the view from the car and from the train. The syntax for accessing them is naturally quite similar. There are more settings I didn’t play with, and I even commented out two that didn’t work very well after some experimentation.</p>
 
 <p>Without this next block of code, the map would function, but you would never be able to get to the <code class="highlighter-rouge">train</code> tiles. So we add a controller to allow a user to switch between our two sets of map tiles:</p>
 
-<p>```javascript</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">viewshedBasemaps</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"Car/bus view"</span><span class="p">:</span> <span class="nx">car</span><span class="p">,</span>
+    <span class="s2">"Overlander view"</span><span class="p">:</span> <span class="nx">train</span>
+<span class="p">};</span>
 
-<p>var viewshedBasemaps = {
-    “Car/bus view”: car,
-    “Overlander view”: train
-};</p>
-
-<p>L.control.layers(viewshedBasemaps).addTo(map); // Add the layer control to the map
-```</p>
+<span class="nx">L</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">layers</span><span class="p">(</span><span class="nx">viewshedBasemaps</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span> <span class="c1">// Add the layer control to the map</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">L</code> refers to Leaflet, and I nutted out this bit of code by reading their excellent documentation. Note that <code class="highlighter-rouge">car</code> and <code class="highlighter-rouge">train</code> here are the <code class="highlighter-rouge">L.tileLayer</code> variables we just defined. We tell Leaflet that we have two tile layers that we want to add to its set of <code class="highlighter-rouge">control.layers</code>.</p>
 
@@ -828,44 +737,41 @@ map.options.maxZoom = global_max_zoom;
   </li>
 </ol>
 
-<p>```css</p>
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nt">html</span><span class="o">,</span> <span class="nt">body</span> <span class="p">{</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>html, body {
-    height: 100%;
-}</p>
+<span class="nf">#title-text</span><span class="p">{</span>
+  <span class="nl">height</span><span class="p">:</span> <span class="m">8%</span><span class="p">;</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+  <span class="nl">font-family</span><span class="p">:</span> <span class="n">Helvetica</span><span class="p">;</span>
+  <span class="nl">text-align</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+<span class="p">}</span>
 
-<h1 id="title-text">title-text{</h1>
-<p>height: 8%;
-  width: 100%;
-  font-family: Helvetica;
-  text-align: center;
-}</p>
+<span class="nf">#map</span><span class="p">{</span>
+   <span class="nl">height</span><span class="p">:</span> <span class="m">89%</span><span class="p">;</span>
+   <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+   <span class="p">}</span>
 
-<h1 id="map">map{</h1>
-<p>height: 89%;
-   width: 100%;
-   }</p>
+<span class="c">/* background of leaflet container: transparent \*/</span>
+<span class="nc">.leaflet-container</span> <span class="p">{</span>
+    <span class="nl">background-color</span><span class="p">:</span><span class="n">rgba</span><span class="p">(</span><span class="m">255</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0.0</span><span class="p">);</span>
+<span class="p">}</span>
 
-<p>/* background of leaflet container: transparent */
-.leaflet-container {
-    background-color:rgba(255,0,0,0.0);
-}</p>
-
-<p>/* custom style for the layer control to make it a bit more obvious */
-.leaflet-control-layers-toggle:after{
-    content:”Toggle transport mode”;
-    color:#000 ;
-}
-.leaflet-control-layers-toggle{
-    width:auto;
-    background-position:10px 50% ;
-    padding:6px;
-    padding-left:40px;
-    padding-right:10px;
-    text-decoration:none;
-    line-height:36px;
-}
-```</p>
+<span class="c">/* custom style for the layer control to make it a bit more obvious \*/</span>
+<span class="nc">.leaflet-control-layers-toggle</span><span class="nd">:after</span><span class="p">{</span>
+    <span class="nl">content</span><span class="p">:</span><span class="s1">"Toggle transport mode"</span><span class="p">;</span>
+    <span class="nl">color</span><span class="p">:</span><span class="m">#000</span> <span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.leaflet-control-layers-toggle</span><span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span><span class="nb">auto</span><span class="p">;</span>
+    <span class="nl">background-position</span><span class="p">:</span><span class="m">10px</span> <span class="m">50%</span> <span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span><span class="m">6px</span><span class="p">;</span>
+    <span class="nl">padding-left</span><span class="p">:</span><span class="m">40px</span><span class="p">;</span>
+    <span class="nl">padding-right</span><span class="p">:</span><span class="m">10px</span><span class="p">;</span>
+    <span class="nl">text-decoration</span><span class="p">:</span><span class="nb">none</span><span class="p">;</span>
+    <span class="nl">line-height</span><span class="p">:</span><span class="m">36px</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
 <h1 id="getting-the-map-online">Getting the map online</h1>
 
@@ -884,10 +790,10 @@ map.options.maxZoom = global_max_zoom;
 <p>If you sign up for an AWS account and navigate to your console, you should be able to see where you can create a “bucket”. Once you’ve made your bucket, you can then create folders just like any other directory. Then, inside each folder, you can store your tiles.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/aws1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/aws1.png" /><figcaption></figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/aws2.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/aws2.png" /><figcaption></figcaption></figure>
 
 <p>There are two catches:</p>
 
@@ -906,33 +812,25 @@ map.options.maxZoom = global_max_zoom;
 
 <p>Now if you have set up your bucket and two folders “car” and “rail”, you can sync your local tiles generated with QTiles to Amazon CloudFront. This is also a relatively easy command, just be aware how much bandwidth you’re using.</p>
 
-<p>```bash</p>
-
-<p>s3cmd sync /path/to/car/tiles/ s3://bucket-name/car
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">s3cmd sync /path/to/car/tiles/ s3://bucket-name/car</code></pre></figure>
 
 <p>Repeat the above with your other tile dataset. Refer back to the Javascript to see how I the referred to the URLs where you can see these images. You can see an example tile <a href="https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/10/1007/381.png">here</a>, while it lasts.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/aws3.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/aws3.png" /><figcaption></figcaption></figure>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="//assets/aws4.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/aws4.png" /><figcaption></figcaption></figure>
 
 <h3 id="local-tiles">Local tiles</h3>
 
 <p>Obviously in order to put tiles on Amazon’s servers, you also need to have generated tiles locally. You can use these with Leaflet to preview your map offline. Simple substitute the URLs I used for carViewshed and trainViewshed with local paths, e.g.</p>
 
-<p>```javascript</p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">carViewshed</span> <span class="o">=</span> <span class="s1">'/data/tiles/rail/Mapnik/{z}/{x}/{y}.png'</span></code></pre></figure>
 
-<p>var carViewshed = ‘/data/tiles/rail/Mapnik/{z}/{x}/{y}.png’
-```
-Then you can use Python from your command line to serve up a webpage (Python 2.x):</p>
+<p>Then you can use Python from your command line to serve up a webpage (Python 2.x):</p>
 
-<p>```bash</p>
-
-<p>python -m SimpleHTTPServer
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python -m SimpleHTTPServer</code></pre></figure>
 
 <p>Check out <a href="http://localhost:8000/">http://localhost:8000/</a> once this server is running. (Press ctrl-c to get back in control of your command line.)</p>
 
