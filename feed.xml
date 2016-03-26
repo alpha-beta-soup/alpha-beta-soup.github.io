@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <description>Musings on spatial data, transportation, and spatial transportation data in New Zealand and beyond</description>
+    <link>http://www.nearimprov.com</link>
+    <atom:link href="http://www.nearimprov.com/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Geodata web services</title>
+        <description>&lt;p&gt;Bill Dollins has a &lt;a href=&quot;http://blog.geomusings.com/2013/12/11/building-a-simple-geodata-service-with-node-and-amazon-rds/&quot;&gt;downright useful tutorial&lt;/a&gt; over on his blog for building a straightforward geodata service with Node, Express, PostgreSQL and Amazon RDS.&lt;/p&gt;
+
+&lt;p&gt;I’m actually surprised at how few of these sorts of server applications actually exist, given that they’re reasonably straightforward to set up, and marvelous to use. A project I’ve been working on recently at work consists of a WebSocket server (using ws4py) that operates as an aggregator for real-time spatial data from a variety of sources (also implemented as WebSockets). Connecting to it is as simple as &lt;code class=&quot;highlighter-rouge&quot;&gt;wss://host:port/api-version/service&lt;/code&gt; and then valid GeoJSON gets pushed to the browser. I don’t think I can say much about the project, but I can say it has transformed how I see the delivery of spatial data over the Internet for time-critical applications. I’d love it if the NZTA got around to implementing something like this for its traffic alert APIs.&lt;/p&gt;
+
+&lt;p&gt;I also have the beginnings of a QGIS plugin that connects to a specified WebSocket and will render arriving messages, provided they come as GeoJSON.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 16 Jan 2016 21:04:51 +1300</pubDate>
+        <link>http://www.nearimprov.com//geodata-service</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//geodata-service</guid>
+      </item>
+    
+      <item>
+        <title>3D spatial indexes in PostGIS&lt;br&gt;&lt;small&gt;And even 4D spatio-teporal indexes!&lt;/small&gt;</title>
+        <description>&lt;p&gt;I have just watched Paul Ramsay’s (CartoDB) breakout presentation from &lt;em&gt;PGConf Silicon Valley 2015&lt;/em&gt;. I love watching these kinds of videos. They’re reasonably short (~40 minutes) so are good while you’re eating lunch or killing time. They also tend to have little nuggets of wisdom to solve “gotchas” that for some reason no one has ever told you about. This presentation in particular has lots of these for using PostGIS. One I did not know about was the ability to specify an n-dimensional index in PostGIS. The typical way to construct a two-dimensional GIST index in PostGIS is to do:&lt;/p&gt;
+
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE INDEX idx ON table USING gist(geom);
+```&lt;/p&gt;
+
+&lt;p&gt;However if you have XYZ or XYZT data and you want to issue queries that take advantage of these additional dimensions with a multidimensional index, you will need:&lt;/p&gt;
+
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE INDEX idx ON table USING gist(geom gist_geometry_ops_nd);
+```&lt;/p&gt;
+
+&lt;p&gt;The different operator, internally, means that the spatial functions use the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&amp;amp;&lt;/code&gt; operator, rather than the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;p&gt;I have been thinking recently about trying to get my hands on some LiDAR data. Acquiring this data is apparently very difficult at the moment. But if you use PostGIS, you’re now well-equipped to deal with it… if you can get your hands on it :information_desk_person:&lt;/p&gt;
+
+&lt;p&gt;In addition, PostGIS allows you to switch out the geometry library from the Geometry Engine Open Source (GEOS) to the SFCGAL (SF (?) Computational Geometry Algorithms Library). SFCGAL is not as broad as GEOS, so if you do make the switch, internally a lot of your functions will still use GEOS. However, as Paul Ramsay notes, SFCGAL has a bunch of additional functions that GEOS does not. These include some interesting 3D functions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_3DIntersection&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_Tesselate&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_3DArea&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_Extrude&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_ForceLHR&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_Orientation&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_Minkowski&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_StraightSkeleton&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ST_ApproximateMedialAxis&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;SFCGAL will need to be compiled, and then activated within PostgreSQL:&lt;/p&gt;
+
+&lt;p&gt;```sql&lt;/p&gt;
+
+&lt;p&gt;CREATE EXTENSION postgis_sfcgal;
+SET postgis.backend = ‘sfcgal’;
+```&lt;/p&gt;
+
+&lt;p&gt;There is also a dedicated PostgreSQL extension for storing point cloud data: &lt;a href=&quot;https://github.com/pgpointcloud/pointcloud&quot;&gt;https://github.com/pgpointcloud/pointcloud&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Also in the video, there is a tricky philosophical question, with important geometric implications (never thought I’d say that): &lt;em&gt;What is the intersection of two disjoint polygons?&lt;/em&gt; The sound of a tree falling in the woods? The sound of one hand clapping? Close. It’s a polygon representing the presence of nothing: &lt;code class=&quot;highlighter-rouge&quot;&gt;POLYGON EMPTY&lt;/code&gt;. And empty geometry is not &lt;code class=&quot;highlighter-rouge&quot;&gt;NULL&lt;/code&gt;. It’s actually more like &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; (something with no magnitude, but not exactly nothing).&lt;/p&gt;
+
+&lt;p&gt;Another way to get &lt;code class=&quot;highlighter-rouge&quot;&gt;GEOMETRY EMPTY&lt;/code&gt; is to use a negative buffer value that is larger than the geometry that is being buffered.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;&lt;iframe width=&quot;65%&quot; height=&quot;500&quot; src=&quot;http://www.youtube.com/embed/GSuZP89UdGs&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&lt;/center&gt;
+
+&lt;p&gt;What did you find useful from this presentation?&lt;/p&gt;
+
+&lt;p&gt;Incidentally, if someone can tell me what the “SF” in SFCGAL stands for, I’d really appreciate it. It’s driving me nuts. (Spatial Functions?)&lt;/p&gt;
+</description>
+        <pubDate>Sat, 19 Dec 2015 14:37:19 +1300</pubDate>
+        <link>http://www.nearimprov.com//nd-spatial-index-in-postgis</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//nd-spatial-index-in-postgis</guid>
+      </item>
+    
+      <item>
+        <title>Vector fields of population travel demand</title>
+        <description>&lt;p&gt;I just finished reading an interesting paper by Xintao Liu and colleauges entitled &lt;em&gt;Time-geographic relationships between vector fields of activity patterns and transport systems&lt;/em&gt;, in the Journal of Transport Geography.&lt;label for=&quot;sn-id-ref&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-ref&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Liu, Xintao, Wai Yeung Yan, and Joseph Y.J. Chow. &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/S0966692314002191&quot;&gt;‘Time-geographic relationships between vector fields of activity patterns and transport systems.’&lt;/a&gt; &lt;em&gt;Journal of Transport Geography&lt;/em&gt; 42 (2015): 22-33. &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/liu.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;I don’t really have much to say about it, but I’ll post a link to it anyway so I don’t forget about it: I’ve briefly explored this technique in the past, and hope to revisit it in the future. It’s pretty damn hard.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/commutecontours.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;Do you know of any similar examples?&lt;/p&gt;
+</description>
+        <pubDate>Sun, 06 Dec 2015 18:16:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//population-demand-vector-field</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//population-demand-vector-field</guid>
+      </item>
+    
+      <item>
+        <title>Algorithms Group at Eindhoven University of Technology</title>
+        <description>&lt;p&gt;I recently stumbled across &lt;a href=&quot;http://www.win.tue.nl/algo/&quot;&gt;the webpage&lt;/a&gt; for the (spatial/geometric/cartograhic) Algorithms Group at &lt;em&gt;Technische Universiteit Eindhoven&lt;/em&gt; (Eindhoven University of Technology). I highly recommend browsing through some of the manuscripts included on &lt;a href=&quot;http://www.win.tue.nl/~hermanh//doku.php?id=graduation_projects&quot;&gt;Herman Haverkort’s (and students’) projects page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In particular, I found one entitled &lt;a href=&quot;http://www.win.tue.nl/~hermanh//stack/Haverkort-cues-about-travel-time.pdf&quot;&gt;&lt;em&gt;Embedding cues about travel time in schematic maps&lt;/em&gt;&lt;/a&gt;. This is an interesting paper on schematic public transport maps, where it is first established that although excellent at allowing users to avoid unnecessary transfers, schematic maps of public transport pay the price of preventing people from determining how long a particular trips are, in both absolute and relative terms.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort1.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort2.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort3.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;Haverkort presents a range of ideas for getting the best of both worlds, leading to a portfolio of intriguing ideas about hybridised schematic maps with travel time. I’ve included three of them here, and really encourage you to read the full paper.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort4.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort5.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/Haverkort6.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;I think it’d be a brilliant challenge to employ some of these ideas for a local network. There are also some interesting papers on automated graph drawing on the TUE webpage; if you’re anything like me, while you can appreciate the necessity and beauty of a one-off piece of cartography, the true Holy Grail is in abstracting and automating the procedure, giving space for updating source information or changing the extent of your geographic focus with minimal to no additional work.&lt;/p&gt;
+
+&lt;p&gt;There are also a bunch of &lt;a href=&quot;http://www.win.tue.nl/algo/graduated-phd-students.php&quot;&gt;PhD theses&lt;/a&gt; that might make some good holiday reading… for uh, weird people like me.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you have any other interesting theses or manuscripts to read over the summer? Having completed mine in March this year, I feel I’m in a good space to really appreciate the hard work of others in producing one, so I’m looking to read a few.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;All images © Herman Haverkort, 2014&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 29 Nov 2015 12:55:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//algorithms-group-tue</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//algorithms-group-tue</guid>
+      </item>
+    
+      <item>
+        <title>New Zealand Spatial Excellence Awards&lt;br&gt;&lt;small&gt;Reflections following a PostGIS presentation&lt;/small&gt;</title>
+        <description>&lt;p&gt;I have just returned from the New Zealand Spatial Excellence Awards for 2015. I was awarded the Postgraduate Student of the Year Award. I’m very slightly tipsy. I also had a very interesting contrasting experience that I think people in the “spatial industry” in New Zealand might be interested in.&lt;/p&gt;
+
+&lt;p&gt;I had quite a tight schedule today, waking up in Raglan, popping into work in the morning, getting to the National Library in Wellington by early afternoon, meeting friends afterwards, attending a PostgreSQL/PostGIS user group meeting at 6, and then skipping out to go to the final NZSEA awards and dinner.&lt;/p&gt;
+
+&lt;p&gt;The PostgreSQL/PostGIS user meeting was great. I had no idea what to expect. Two geo-friends (they’re real friends, we just bond over maps, so therefore they need the geo- preffix, © ESRI) came with me to Catalyst IT on Willis St, Wellington. Inside there were a few couches, and Brent Wood hanging out in shorts and a t-shirt. Dressed up in dress shoes and a shirt (but no jacket and tie), I felt very over-dressed. Brent discussed PostgreSQL/PostGIS, the treatment of geometry primitives in databases, spatial indexes and limitations thereof, MapServer, WMS in QGIS, GEOS, Proj.4, GDAL, and the antimeridian and how PostGIS’s &lt;code class=&quot;highlighter-rouge&quot;&gt;geography&lt;/code&gt; type gets over many of the attendant problems of that irritating fecking line. Then, we had pizza and I had to skip off without much of a chance to talk to Brent.&lt;/p&gt;
+
+&lt;p&gt;I literally ran off to Te Papa, where a nibbles and networking event was going down. People were wearing frocks and tuxedos, and even kilts. Dressed up in dress shoes and a shirt (but no jacket and tie), I felt very under-dressed. Not to mention sweaty from running in a merino jumper. People talked “spatial enablement” and lots of buzzwords. A Minister ministered. Mark Sainsbury officiated. Lights flashed. Entrées were served. Awards were dished out. There was engaging discussion in my immediate neighbourhood, although lots of the surrounding attendees seemed to just be in attendance at a $180 dinner to… do something that I never quite worked out.&lt;/p&gt;
+
+&lt;p&gt;Apparently we were highlighting the spatial industry in New Zealand and how cool it is. It felt like a bunch of people patting themselves on the back.&lt;/p&gt;
+
+&lt;p&gt;Maybe it’s the wine talking, but to be honest, if the “spatial industry” had just spent that money funding PostGIS or GeoServer or Neo4j feature requests… more would have been done for the “spatial industry”.&lt;/p&gt;
+
+&lt;p&gt;Don’t get me wrong: the individuals and organisations represented tonight do amazing work. Special congratulations to Interpret Geospatial Solutions for their huge haul of awards, Dr Mairéad de Róiste for her enormously well-deserved award for her hard work establishing the Masters in GIS (of which I am a graduate, and she was my thesis supervisor), Hamish Kingsbury (undergraduate student of the year), and Kim Ollivier (celebrating 30 years of working with spatial information). I’m truly grateful for my award, and the event itself was lovely and well organised. I had a great time talking to interesting and very intelligent people. With delicious food (but not beer and pizza). They even paid for my flights, which had a lot of private benefit as I got to see my friends.&lt;/p&gt;
+
+&lt;p&gt;I don’t even think I deserve my award at all after talking to my category competition: superb PhD candidates Judy Rodda from Otago University, and Anton Marais from Waikato University. Judy has been modelling the distribution of the endangered Hector’s dolphins off the south coast of the South Island. Anton made a cellular automaton model of residents’ location and re-location decisions across the Waikato region, extending ten years’ into the future. (It annoys me that I’ve forgotten the name of open source software he used for this.)&lt;/p&gt;
+
+&lt;p&gt;I just think the “spatial industry” in NZ is more than a little… self-obsessed. I certainly noticed that tonight.&lt;/p&gt;
+
+&lt;p&gt;I wish I wasn’t the &lt;em&gt;only&lt;/em&gt; person who attempted to squeeze in attendance at both the awards and a brilliant session on PostGIS. Without any finger pointing, I think the industry can do better, if indeed there is such a thing as a “spatial industry”. For the record, I don’t even think there is such a thing. We are in a hardware, software and data industry, and that’s just fine.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 19 Nov 2015 03:00:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//nzsea</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//nzsea</guid>
+      </item>
+    
+      <item>
+        <title>GeoServer Quickstart with Docker</title>
+        <description>&lt;center&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/docker.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;//assets/geoserver.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I’ve been exploring &lt;a href=&quot;geoserver.org/&quot;&gt;GeoServer&lt;/a&gt; recently, while also doing the same with &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt;. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.&lt;/p&gt;
+
+&lt;p&gt;```dockerfile&lt;/p&gt;
+
+&lt;h1 id=&quot;dockerfile&quot;&gt;Dockerfile&lt;/h1&gt;
+&lt;p&gt;FROM debian:wheezy&lt;/p&gt;
+
+&lt;h1 id=&quot;update-the-sources-list&quot;&gt;Update the sources list&lt;/h1&gt;
+&lt;p&gt;RUN apt-get update
+RUN apt-get upgrade -y&lt;/p&gt;
+
+&lt;h1 id=&quot;install-basic-applications&quot;&gt;Install basic applications&lt;/h1&gt;
+&lt;p&gt;RUN apt-get install -y build-essential wget unzip&lt;/p&gt;
+
+&lt;h1 id=&quot;get-the-jrejdk-installation&quot;&gt;Get the JRE/JDK installation&lt;/h1&gt;
+&lt;p&gt;RUN apt-get install -y default-jre default-jdk
+RUN apt-get install -y openjdk-7-jre openjdk-7-jdk
+ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64&lt;/p&gt;
+
+&lt;h1 id=&quot;get-geoserver&quot;&gt;Get GeoServer&lt;/h1&gt;
+&lt;p&gt;ENV GEOSERVER_HOME=/usr/share/geoserver/
+RUN mkdir $GEOSERVER_HOME
+RUN wget http://ares.boundlessgeo.com/geoserver/master/geoserver-master-latest-bin.zip
+RUN cp geoserver-master-latest-bin.zip $GEOSERVER_HOME
+RUN unzip $GEOSERVER_HOME/geoserver-master-latest-bin.zip -d $GEOSERVER_HOME
+RUN rm $GEOSERVER_HOME/geoserver-master-latest-bin.zip
+ENV GEOSERVER_VER=2.9&lt;/p&gt;
+
+&lt;h1 id=&quot;a-plugin&quot;&gt;A plugin&lt;/h1&gt;
+&lt;p&gt;ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
+RUN wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/$A_PLUGIN.zip
+RUN cp $A_PLUGIN.zip $GEOSERVER_HOME
+RUN ls $GEOSERVER_HOME
+RUN ls $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
+RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip -d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
+RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip&lt;/p&gt;
+
+&lt;p&gt;ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
+WORKDIR $GEOSERVER_HOME/bin
+```&lt;/p&gt;
+
+&lt;p&gt;Then to build and run the Docker container:&lt;/p&gt;
+
+&lt;p&gt;```bash&lt;/p&gt;
+
+&lt;p&gt;docker build -t user/geoserver-master:test .
+docker run -it –net=”host” user/geoserver-master:test
+./startup.sh
+```&lt;/p&gt;
+
+&lt;p&gt;Now you have GeoServer running, so head to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:8080/geoserver&lt;/code&gt;, and login with the default user and password: &lt;code class=&quot;highlighter-rouge&quot;&gt;admin&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;geoserver&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want to try out GeoServer with data on your machine, you can just mount your data volume to the Docker container and point GeoServer to it in the admin panel. For instance, I mount &lt;code class=&quot;highlighter-rouge&quot;&gt;/home/data/sampledata&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;$GEOSERVER_HOME/data_dir/sampledata&lt;/code&gt; with &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;Docker Compose&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There. Now play around with GeoServer. I expect a cheque for 5% of what you would have spent on ArcGIS Server.&lt;/p&gt;
+
+&lt;h3 id=&quot;update&quot;&gt;Update&lt;/h3&gt;
+
+&lt;p&gt;Docker hygeine is important, although I’m still figuring it out. I’ve made the image use Debian Wheezy as a lightweight alternative to the Ubuntu 15.04 image I had before. It was also broken because I hadn’t added the command to install &lt;code class=&quot;highlighter-rouge&quot;&gt;wget&lt;/code&gt;, among a litany of other problems. It usually pays to test things, sorry if you tried it out earlier!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Nov 2015 21:06:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//geoserver-quickstart-with-docker</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//geoserver-quickstart-with-docker</guid>
+      </item>
+    
+      <item>
+        <title>Spatial isn&#39;t that special</title>
+        <description>&lt;p&gt;This may be a strange thing for me to say, given that my postgraduate qualification, and profession is in geographic information systems. But I don’t think that spatial is particularly special. People pretend it is, and then use that to justify the selling of ridiculous desktop software and “enterprise” solutions to problems that Paul Ramsey here shows can all be solved in a single (PostGIS) SQL query and some wrapper PHP script alongside a slippy map.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;div align=&quot;center&quot;&gt;
+&lt;iframe width=&quot;65%&quot; height=&quot;500px&quot; src=&quot;https://www.youtube.com/embed/PwVRi37qXn8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;Now this headline assertion is not without nuance. While I currently think that 90% of any GIS workflow can and ought to be automated with something like PostGIS-extended PostgreSQL tables, views, &lt;a href=&quot;https://gist.github.com/alpha-beta-soup/6f0fe6a219a014ca9d4d&quot;&gt;upse&lt;/a&gt;&lt;a href=&quot;https://wiki.postgresql.org/wiki/UPSERT&quot;&gt;rts&lt;/a&gt; and trigger functions, that last 10% is actually very, very important. It’s where GIS folk &lt;strong&gt;should&lt;/strong&gt; be focusing their attention, given the other problems have been solved by technology. Unfortunately, a lot of people seem to get so caught up inefficiently achieving the fundamental 90% of issues that they don’t actually pay attention to the remaining problems that are actually difficult and/or emerging:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Spatial autocorrelation&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Metadata&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Cartography&lt;/strong&gt;&lt;label for=&quot;sn-id-cartography&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-cartography&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Interactive and otherwise: bad defaults threaten to undo hundreds of years of cartographic experience. &lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Efficient, client-side implementations of &lt;strong&gt;geometric algorithms&lt;/strong&gt;&lt;label for=&quot;sn-id-turf&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-turf&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Read: &lt;a href=&quot;https://github.com/Turfjs/turf&quot;&gt;turf.js&lt;/a&gt; &lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Spatial accuracy&lt;/strong&gt;&lt;label for=&quot;sn-id-sa&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-sa&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;I’ve yet to see a geocoding implementation that even attempts to &lt;strong&gt;record&lt;/strong&gt; accuracy! &lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Spatial error&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Modifiable areal unit problem&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ecological fallacy&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Locational fallacy &lt;label for=&quot;sn-id-lf&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-lf&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;e.g. the reduction of an entity to a single point when it is more appropraitly modelled as existing over a mutlidimensional field. &lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Spatial sampling&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Stochastic processes&lt;/strong&gt;&lt;label for=&quot;sn-id-sp&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-sp&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;My own masters thesis considered this issue for measuring public transport accessibility: bus arrival time is a stochastic process, not a deterministic one. Further, spatial data is too often considered to be a random sample with many observations—I posit instead that it be viewed as a single realisation of a stochastic process. This should hardly be radical, but the gap in the literature for thinking like this is enormous. &lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Within the spatial profession (the Twittersphere, where I hear from most of these people), I also don’t feel like enough attention is being paid to emerging and not-so-emerging technologies and how they can revolutionise the way spatial questions are posed and answered, and hopefully assist in shifting some attention to the 10% of real spatial problems, either directly, or by making the 90% more readily accomplishable.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/neo4j-contrib/spatial&quot;&gt;Spatially-augmented graph databases&lt;/a&gt; are something that has been piquing my interest recently and I intend to write a blog post about some experiments shortly. Why is no one really talking about them?&lt;/p&gt;
+
+&lt;p&gt;I’m not going to hold my breath waiting for the self-delcared GIS commentators on the circle-jerk that is LinkedIn to discuss the relative merits of GeoDjango.&lt;/p&gt;
+
+&lt;p&gt;I didn’t even encounter a NetCDF dataset with an arbitrary number of dimensions, embedded metadata, sigma coordinate systems and irregular grid spacing until I started working around oceanographers and meteorologists.&lt;/p&gt;
+
+&lt;p&gt;Why is &lt;a href=&quot;http://geogig.org/&quot;&gt;GeoGig&lt;/a&gt; still in beta? Why is no one really using it?&lt;/p&gt;
+
+&lt;p&gt;Turf.js!&lt;/p&gt;
+
+&lt;p&gt;There are exceptions of course. But if you want to participate in these exceptions, I found some useful advice that builds on the argument that a desktop GIS is increasingly akin to word processing software:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;So if you’re considering a GIS career, you might want to reframe the question. Instead of learning ArcGIS and getting a GISP certificate, I would recommend that you choose one of 4 paths:
+1. geospatial or geostatistical analyst;
+2. cartographer or visualization design expert;
+3. software developer;
+4. Geographic Information Scientist;
+Or some combination of the four (and an application area of interest wouldn’t hurt either).  If you only train yourself to be a GIS user you’ll be in the same boat as a professional word processor before too long.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;— &lt;a href=&quot;http://www.justinholman.com/2012/03/20/spatial-is-indeed-special/&quot;&gt;Justin Holman&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;As Holman notes, the existence of Microsoft Word didn’t make good writers obsolete. In fact probably the opposite is true.&lt;/p&gt;
+
+&lt;p&gt;I recognise that this post actually comes across as quite condescending. Frankly, I hope it is a little, as that was completely my intention. I mean what I say and a I say what I mean. I know I’m not blameless, and I’m comfortable with that because I recognise it and frequently acquiesce to those who know a lot more than I do about what I make my living in. I know for a fact that a lot of other people aren’t blameless, either. I just worry that many don’t recognise it. As a profession, spatial people should be extolling the merits of the solutions to difficult problems that we have studied. We need less button-clicking, more actual problem solving, because I’m not seeing enough evidence of the latter actually happening.&lt;/p&gt;
+
+&lt;p&gt;We’re not typists, we’re fucking writers, &lt;em&gt;auteurs&lt;/em&gt;, creators, scientists, and problem solvers. We should be proud of it… and act like it.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Nov 2015 18:00:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//spatial-isnt-that-special</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//spatial-isnt-that-special</guid>
+      </item>
+    
+      <item>
+        <title>Parallel geocoding in Python with geopy</title>
+        <description>&lt;p&gt;Geocoding: the process of taking an address as a piece of semi-structured text, and returning a coordinate somewhere on the surface of the Earth. It’s very unlikely that you’re not going to use an online service to do this. This means a few things. Firstly, that you have to decide on a geocoding provider. Secondly, you’re going to have to sit tight while the geocoding takes place. Python can address both of these issues for you.&lt;/p&gt;
+
+&lt;h2 id=&quot;geopyhttpsgeopyreadthedocsorgen1110&quot;&gt;&lt;a href=&quot;https://geopy.readthedocs.org/en/1.11.0/&quot;&gt;GeoPy&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;GeoPy is a Python 2/3 module for accessing a whole suite of geocoding web services. As of version 1.10.0, these include: ArcGIS; Baidu; Bing; DataBC; GeocodeFarm; GoecoderDotUS; GeoNames; Google; IGN France; LiveAddress; NaviData; Nominatim (OSM); OpenCage; OpenMapQuest; Yahoo! BOSS Place Finder; What3Words; and Yandex.&lt;/p&gt;
+
+&lt;p&gt;Of these, I would recommend Google if you are OK with a reasonably low limit but high tolerance to poorly-formatted addresses, or otherwise Nominatim. Nominatim is free, requires no API token, and only uses OpenStreetMap data. However, OpenMapQuest is even better, as it is also based on OSM, but doesn’t restrict you to geocoding in multiple threads.&lt;/p&gt;
+
+&lt;h2 id=&quot;basic-usage&quot;&gt;Basic usage&lt;/h2&gt;
+
+&lt;p&gt;Using GeoPy is great, because it abstracts away all the details of which provider you’re connecting to. Although I’m yet to try it, it would be trivial to iterate over a set of providers and actually produce multiple geocoded locations per address, perhaps as part of a process to determine error, or to average the returned locations.&lt;/p&gt;
+
+&lt;p&gt;Here’s a short sample demonstrating the simplicity of the module:&lt;/p&gt;
+
+&lt;p&gt;```python&lt;/p&gt;
+
+&lt;p&gt;from geopy.geocoders import Nominatim
+geolocator = Nominatim(country_bias=’New Zealand’, timeout=4)
+geocoded = geolocator.geocode(‘Raglan, Waikato’, exactly_one=True)
+if geocoded is not None:
+    # success
+    lat = geocoded.latitude
+    lon = geocoder.longitude
+else:
+    # Here, perhaps you can run the geocoding function again,
+    # after cleaning your input a little bit
+    # Then you have recursion until you get a result!
+    pass
+```&lt;/p&gt;
+
+&lt;p&gt;If you want to use OpenMapQuest (for example), you just need to swap it out for Nominatim, and also remove the country bias (which OpenMapQuest doesn’t support).&lt;/p&gt;
+
+&lt;h2 id=&quot;multiprocessing&quot;&gt;Multiprocessing&lt;/h2&gt;
+
+&lt;p&gt;There’s still a problem, despite all this. Geocoding takes forever. All web services take some time, really. But geocoding is special, given what is actually going on behind the scenes. A list of roughly 500 addresses, most of which needed the recursion I alluded to above, took me about 15 minutes to resolve. Duane Wilkins &lt;a href=&quot;https://www.linkedin.com/pulse/easy-address-geocoding-duane-wilkins&quot;&gt;posted on LinkedIn recently&lt;/a&gt; that using the Google geocoding service via Google Sheets resulted in about 800 addresses done in about 5 minutes. I suspect that they were clean, but Google is damn fast at geocoding. You’d expect that relative speed difference though: Nominatim is sitting on donated hardware.&lt;/p&gt;
+
+&lt;p&gt;However both of these are very slow, in my opinion. Agonisingly so.&lt;/p&gt;
+
+&lt;p&gt;A good Python free lunch to speed this up is to launch mutliple geoprocessing calls asynchronously. In my case, I had a small number of very long and poorly-formatted adddresses that took forever to resolve because the geocoder had to be performed multiple times, most of which resulted in nothing as the string was progressively cleaned, or indeed stripped of information that the geocoder simply could not understand (“5 nm out to sea east of Tauranga” is the best example). What if I could get these slow processes running, and run others alongside, in parallel? This is totally possible! And because Python is batteries-included, it is very, very easy!&lt;/p&gt;
+
+&lt;p&gt;In my case, I had a list of objects (&lt;code class=&quot;highlighter-rouge&quot;&gt;sightings&lt;/code&gt;) which are members of a class that has a method called &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode&lt;/code&gt; that essentially launches the geocoding routine I showed you above. (In my case, the function doesn’t return anything, but has the side-effect of setting each Address object’s &lt;code class=&quot;highlighter-rouge&quot;&gt;latitude&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;longitude&lt;/code&gt;.)&lt;/p&gt;
+
+&lt;p&gt;```python&lt;/p&gt;
+
+&lt;p&gt;import multiprocessing&lt;/p&gt;
+
+&lt;p&gt;addresses = # Gather a list of Address objects with a &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;def geocode_worker(address):
+    address.geocode()
+    return address&lt;/p&gt;
+
+&lt;p&gt;def main():
+    # Start as many worker processes as you have cores
+    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    # Apply geocode worker to each address, asynchronously
+    addresses = pool.map(geocode_worker, addresses)&lt;/p&gt;
+
+&lt;p&gt;if &lt;strong&gt;name&lt;/strong&gt; == ‘&lt;strong&gt;main&lt;/strong&gt;’:
+    main()
+```&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;A quick gotcha&lt;/span&gt;  is that the worker function has to be &lt;a href=&quot;http://docs.python.org/library/pickle.html#what-can-be-pickled-and-unpickled&quot;&gt;able to be pickled&lt;/a&gt;. In simple terms, you have to have the worker function at the top level. The above snippet would not work if &lt;code class=&quot;highlighter-rouge&quot;&gt;geocode_worker&lt;/code&gt; were defined within &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;. In that case, you’d see this error:&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;cPickle.PicklingError: Can’t pickle &amp;lt;type ‘function’&amp;gt;: attribute lookup &lt;strong&gt;builtin&lt;/strong&gt;.function failed
+```&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;Don’t use Nominatim for this!&lt;/span&gt;  I made the mistake of &lt;em&gt;not&lt;/em&gt; reading &lt;a href=&quot;http://nominatim.openstreetmap.org/&quot;&gt;the usage restrictions&lt;/a&gt; of the geocoding service, and forgetting a debug switch, and then launched tens of requests at the same time, repeatedly, hundreds of times, and then had my IP address blocked. Currently I can’t even &lt;em&gt;visit&lt;/em&gt; &lt;a href=&quot;http://nominatim.openstreetmap.org/&quot;&gt;http://nominatim.openstreetmap.org/&lt;/a&gt;, let alone use the geocoder.&lt;/p&gt;
+
+&lt;p&gt;The restriction is that you must use a single thread. That is, you must not do what I just showed you using Nominatim as your geocoding service, or you will end-up thrashing their limited resources. You also should really cache the results as they come in.&lt;/p&gt;
+
+&lt;p&gt;However, OpenMapQuest uses Nominatim but does not have usage restrictions. You can launch some nice parallel processes with this geocoder… just be respectful.&lt;/p&gt;
+
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;p&gt;I achieved a speed-up of around 20x over the full set. The small number of dirty addresses that earlier caused the geocoder to hang still did so, but real work was going on around them; they were no longer blocking.&lt;/p&gt;
+
+&lt;p&gt;Looking at the logs, here’s what the difference in processing looks like for a sample of my addresses. When you see &lt;code class=&quot;highlighter-rouge&quot;&gt;fail&lt;/code&gt;, that is when my recursion kicks in that applies an algorithm to clean the address string before trying to geocode again.&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Tauranga, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
+‘Taupo, North Island’ ← geocoder starting up
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+Done in 16s
+```&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;‘Gluepot Road, Oropi, Tauranga, North Island’ ← geocoder starting up
+‘Maungaraki, Lower Hutt, North Island’ ← geocoder starting up
+‘Rimutaka Ranges, Wairarapa, North Island’ ← geocoder starting up
+‘Mourea, Rotorua, North Island’ ← geocoder starting up
+‘Waihopai Valley, Marlborough, South Island’ ← geocoder starting up
+‘Tauranga, North Island’ ← geocoder starting up
+‘At sea off the coast of the Bay of Plenty, North Island’ ← geocoder starting up
+‘Taupo, North Island’ ← geocoder starting up
+‘Tauranga, New Zealand’ -37.6867319 176.1673614 ← success
+‘Mourea, Rotorua, New Zealand’ -38.0442035 176.3261444 ← success
+‘Waihopai Valley, Marlborough, New Zealand’ -41.5149705 173.7897351 ← success
+‘Taupo, New Zealand’ -38.6883048 176.0755486 ← success
+‘Gluepot Road, Oropi, Tauranga, New Zealand’ ← fail
+‘Rimutaka Ranges, Wairarapa, New Zealand’ ← fail
+‘Maungaraki, Lower Hutt, New Zealand’ -41.2058337 174.8800422 ← success
+‘At sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Gluepot Road, Tauranga, New Zealand’ -37.8475939 176.1500778 ← success
+‘Rimutaka, Wairarapa, New Zealand’ -41.3573081 175.0005109 ← success
+‘At Bay Plenty, New Zealand’ ← fail
+‘sea off the coast of the Bay of Plenty, New Zealand’ ← fail
+‘Bay of Plenty, New Zealand’ -37.9503755 176.938287362 ← success
+Done in 4s
+```&lt;/p&gt;
+
+&lt;p&gt;Notice the difference? In the latter case, there are multiple processes: 8 addresses get geocoded at once. They don’t return in order because they’re all happening at the same time and take different lengths of time to complete depending on their complexity. Failing addresses don’t prevent others from getting underway, and the whole process is so much smoother.&lt;/p&gt;
+
+&lt;p&gt;The blocking geocoder ran in 16 seconds, while the second took only 4 seconds. Extrapolate that over hundreds of addresses, and before you declare that that is still not worth the effort, look how little code I had to write. It pays off even for very small, one-off jobs.&lt;/p&gt;
+
+&lt;p&gt;There is much more that can be done with Python’s builtin multiprocessing, particularly using queues. There are a bunch of third-party modules that also implement the idea. I encourage you to explore, perhaps by looking at tutorials for how to write a daemon, and then make something that polls mutliple related APIs at the same time, populating a common database in near real time.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 10 Sep 2015 10:24:00 +1200</pubDate>
+        <link>http://www.nearimprov.com//parallel-geocoding</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//parallel-geocoding</guid>
+      </item>
+    
+      <item>
+        <title>Mediawatch on the role of data journalism</title>
+        <description>&lt;p&gt;A very interesting interview with Harkanwal Singh, the New Zealand Herald Data Editor.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;iframe src=&quot;http://www.radionz.co.nz/audio/remote-player?id=201762824&quot; width=&quot;65%&quot; frameborder=&quot;0&quot; height=&quot;62px&quot;&gt;&lt;/iframe&gt;
+</description>
+        <pubDate>Sat, 04 Jul 2015 01:00:00 +1200</pubDate>
+        <link>http://www.nearimprov.com//mediawatch-data</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//mediawatch-data</guid>
+      </item>
+    
+      <item>
+        <title>Landsat 8 Mosaic</title>
+        <description>&lt;p&gt;I noticed this Tweet today, and thought it was such a great example of good a well-designed interface, and actually useful tool. I felt I needed to share it.&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot; lang=&quot;en&quot;&gt;&lt;p lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;Announcing Landsat 8 Mosaic: fast and easy mosaic creation of landsat data! &amp;#10;&lt;a href=&quot;http://t.co/Gd3DZjkBJJ&quot;&gt;http://t.co/Gd3DZjkBJJ&lt;/a&gt; &lt;a href=&quot;http://t.co/htzUcqveQ5&quot;&gt;pic.twitter.com/htzUcqveQ5&lt;/a&gt;&lt;/p&gt;&amp;mdash; Vincent Sarago (@_VincentS_) &lt;a href=&quot;https://twitter.com/_VincentS_/status/612923026678530049&quot;&gt;June 22, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async=&quot;&quot; src=&quot;//platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;There is a also link to a blog post about the tool in the Tweet.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 22 Jun 2015 22:23:49 +1200</pubDate>
+        <link>http://www.nearimprov.com//landsat-8-mosaic</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//landsat-8-mosaic</guid>
+      </item>
+    
+  </channel>
+</rss>
