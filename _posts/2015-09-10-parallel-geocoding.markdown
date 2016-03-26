@@ -21,8 +21,7 @@ Using GeoPy is great, because it abstracts away all the details of which provide
 
 Here's a short sample demonstrating the simplicity of the module:
 
-```python
-
+{% highlight python %}
 from geopy.geocoders import Nominatim
 geolocator = Nominatim(country_bias='New Zealand', timeout=4)
 geocoded = geolocator.geocode('Raglan, Waikato', exactly_one=True)
@@ -35,7 +34,7 @@ else:
     # after cleaning your input a little bit
     # Then you have recursion until you get a result!
     pass
-```
+{% endhighlight %}
 
 If you want to use OpenMapQuest (for example), you just need to swap it out for Nominatim, and also remove the country bias (which OpenMapQuest doesn't support).
 
@@ -49,8 +48,7 @@ A good Python free lunch to speed this up is to launch mutliple geoprocessing ca
 
 In my case, I had a list of objects (`sightings`) which are members of a class that has a method called `geocode` that essentially launches the geocoding routine I showed you above. (In my case, the function doesn't return anything, but has the side-effect of setting each Address object's `latitude` and `longitude`.)
 
-```python
-
+{% highlight python %}
 import multiprocessing
 
 addresses = # Gather a list of Address objects with a `geocode`
@@ -67,14 +65,13 @@ def main():
 
 if __name__ == '__main__':
     main()
-```
+{% endhighlight %}
 
 {% newthought "A quick gotcha" %} is that the worker function has to be [able to be pickled](http://docs.python.org/library/pickle.html#what-can-be-pickled-and-unpickled). In simple terms, you have to have the worker function at the top level. The above snippet would not work if `geocode_worker` were defined within `main`. In that case, you'd see this error:
 
-```
-
+{% highlight bash %}
 cPickle.PicklingError: Can't pickle <type 'function'>: attribute lookup __builtin__.function failed
-```
+{% endhighlight %}
 
 {% newthought "Don't use Nominatim for this!" %} I made the mistake of *not* reading [the usage restrictions](http://nominatim.openstreetmap.org/) of the geocoding service, and forgetting a debug switch, and then launched tens of requests at the same time, repeatedly, hundreds of times, and then had my IP address blocked. Currently I can't even *visit* [http://nominatim.openstreetmap.org/](http://nominatim.openstreetmap.org/), let alone use the geocoder.
 
@@ -88,8 +85,7 @@ I achieved a speed-up of around 20x over the full set. The small number of dirty
 
 Looking at the logs, here's what the difference in processing looks like for a sample of my addresses. When you see `fail`, that is when my recursion kicks in that applies an algorithm to clean the address string before trying to geocode again.
 
-```
-
+{% highlight bash %}
 'Gluepot Road, Oropi, Tauranga, North Island' ← geocoder starting up
 'Gluepot Road, Oropi, Tauranga, New Zealand' ← fail
 'Gluepot Road, Tauranga, New Zealand' -37.8475939 176.1500778 ← success
@@ -112,10 +108,9 @@ Looking at the logs, here's what the difference in processing looks like for a s
 'Taupo, North Island' ← geocoder starting up
 'Taupo, New Zealand' -38.6883048 176.0755486 ← success
 Done in 16s
-```
+{% endhighlight %}
 
-```
-
+{% highlight bash %}
 'Gluepot Road, Oropi, Tauranga, North Island' ← geocoder starting up
 'Maungaraki, Lower Hutt, North Island' ← geocoder starting up
 'Rimutaka Ranges, Wairarapa, North Island' ← geocoder starting up
@@ -138,7 +133,7 @@ Done in 16s
 'sea off the coast of the Bay of Plenty, New Zealand' ← fail
 'Bay of Plenty, New Zealand' -37.9503755 176.938287362 ← success
 Done in 4s
-```
+{% endhighlight %}
 
 Notice the difference? In the latter case, there are multiple processes: 8 addresses get geocoded at once. They don't return in order because they're all happening at the same time and take different lengths of time to complete depending on their complexity. Failing addresses don't prevent others from getting underway, and the whole process is so much smoother.
 

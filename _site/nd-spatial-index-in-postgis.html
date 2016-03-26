@@ -67,17 +67,11 @@
 
 <p>I have just watched Paul Ramsay’s (CartoDB) breakout presentation from <em>PGConf Silicon Valley 2015</em>. I love watching these kinds of videos. They’re reasonably short (~40 minutes) so are good while you’re eating lunch or killing time. They also tend to have little nuggets of wisdom to solve “gotchas” that for some reason no one has ever told you about. This presentation in particular has lots of these for using PostGIS. One I did not know about was the ability to specify an n-dimensional index in PostGIS. The typical way to construct a two-dimensional GIST index in PostGIS is to do:</p>
 
-<p>```sql</p>
-
-<p>CREATE INDEX idx ON table USING gist(geom);
-```</p>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx</span> <span class="k">ON</span> <span class="k">table</span> <span class="k">USING</span> <span class="n">gist</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span></code></pre></figure>
 
 <p>However if you have XYZ or XYZT data and you want to issue queries that take advantage of these additional dimensions with a multidimensional index, you will need:</p>
 
-<p>```sql</p>
-
-<p>CREATE INDEX idx ON table USING gist(geom gist_geometry_ops_nd);
-```</p>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx</span> <span class="k">ON</span> <span class="k">table</span> <span class="k">USING</span> <span class="n">gist</span><span class="p">(</span><span class="n">geom</span> <span class="n">gist_geometry_ops_nd</span><span class="p">);</span></code></pre></figure>
 
 <p>The different operator, internally, means that the spatial functions use the <code class="highlighter-rouge">&amp;&amp;&amp;</code> operator, rather than the <code class="highlighter-rouge">&amp;&amp;</code> operator.</p>
 
@@ -117,11 +111,8 @@
 
 <p>SFCGAL will need to be compiled, and then activated within PostgreSQL:</p>
 
-<p>```sql</p>
-
-<p>CREATE EXTENSION postgis_sfcgal;
-SET postgis.backend = ‘sfcgal’;
-```</p>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">postgis_sfcgal</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">postgis</span><span class="p">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s1">'sfcgal'</span><span class="p">;</span></code></pre></figure>
 
 <p>There is also a dedicated PostgreSQL extension for storing point cloud data: <a href="https://github.com/pgpointcloud/pointcloud">https://github.com/pgpointcloud/pointcloud</a></p>
 

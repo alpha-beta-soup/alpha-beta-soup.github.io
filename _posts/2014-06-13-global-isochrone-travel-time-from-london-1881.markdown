@@ -10,7 +10,7 @@ tags: [Historical Maps, Isochrones, Global, Travel Time, Static Maps]
 Here's an interesting historical map that turned up on [/r/MapPorn](http://www.reddit.com/r/MapPorn/comments/27yfn0/isochronic_passage_chart_for_travelers_global_map/ "Link to Reddit thread") today. Made by Francis Galton for the Proceedings of the Royal Geographic Society in 1881, I find it particularly interesting because it represents the state of international travel only a decade or so after my Scottish and Irish ancestors travelled to New Zealand (via way of Cape Town, where one of my great-great aunts was born *en route*).
 
 <br>
-{% fullwidth "/assets/global-isochrone-travel-time-from-london-1881.jpg" "Isochronic passage chart for travellers" %}
+{% fullwidth "./assets/global-isochrone-travel-time-from-london-1881.jpg" "Isochronic passage chart for travellers" %}
 
 The work of cartographers past is often so impressive on their own merits (although I suspect the chaff has been cut with time) yet when you also consider the technology that they *didn't* have to make their maps... the mind boggles and you realise that all of use currently practising the skill have it so easy. Really, if work of this calibre could be made then, there are no excuses for bad maps now.
 

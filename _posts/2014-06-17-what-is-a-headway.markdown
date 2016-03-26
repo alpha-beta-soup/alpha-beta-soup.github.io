@@ -98,9 +98,9 @@ calculation does not account for the scheduled arrivals, and I would not recomme
 I've been a little dishonest in my definition of what a headway is. Well, I've said a half-truth. The headway *is* the time between vehicle arrivals at a stop. However, all arrivals are not equivalent. What matters is **where they are going**. Let's say we have a network with stops A-E serviced by three different routes.
 
 <br>
-{% fullwidth "/assets/network-headway-diagram.png" "For the colourblind, red is solid, blue is dashed, and green is dotted."%}
+{% fullwidth "./assets/network-headway-diagram.png" %}
 
-If you're seeking to travel directly from A to D, you don't at all care that there is a blue line between A and E. So even if a blue line service arrived at A every minute of every day, it would do you no good to board it (we'll assume you can't walk between any of the stops). That is, if travelling A-D, your headway is defined only as the headway of the green route.
+If you're seeking to travel directly from A to D, you don't at all care that there is a blue line between A and E. So even if a blue line service arrived at A every minute of every day, it would do you no good to board it (we'll assume you can't walk between any of the stops). That is, if travelling A-D, your headway is defined only as the headway of the green route.{% sidenote "sn-id-cb" "For the colourblind, red is solid, blue is dashed, and green is dotted." %}
 
 Now if you're instead travelling A-C, you can choose between the red and the green routes. Unless these services arrive at A at the same time, your headway (and hence waiting time) is less than it would be if you were travelling A-D, even though you are waiting at the same stop. This path A-B-C is a public transport *corridor* of overlapping routes.
 
@@ -123,7 +123,7 @@ An issue here, from the perspective of someone who wants to calculate headways f
 Given this blog is ostensibly about transit visualisation, I'll make a diagram for this. This is the exact same sample network as we had before, but now shown in terms of the direct stop edges that exist. If you're to find the headway of travel A-C, you simply need to look at the two edges that progress uninterrupted from A to C, and ignore all others. This is convenient.
 
 <br>
-{% fullwidth "/assets/network-headway-diagram-logical.png" %}
+{% fullwidth "./assets/network-headway-diagram-logical.png" %}
 
 The problem with this is that the number of edges we have in the network has grown. Where before we had 7 edges all holding information in our database (route, time, mode, etc.), we now have 11. This increase of three doesn't sound big, but the only reason it is small is because I have drawn a very simple network. Despite being simple, this is still coming up against the limits of what I can reasonably convey in an diagram, what with its overlapping lines.
 

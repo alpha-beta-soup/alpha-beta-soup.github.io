@@ -141,21 +141,29 @@ blockquote footer { width: 45%;
 .sans { font-family: $sans-font;
         letter-spacing: .03em; }
 
-pre, pre code, { font-family: $code-font;  // removed .code 'class' since code is an actual html tag
+pre, pre code, {
+    font-family: $code-font;  // removed .code 'class' since code is an actual html tag
     font-size: 0.8rem;                   // also added p code, p pre code and pre selector to account for Markdown parsing
     line-height: 1.71428571;        // of triple backticks plus rationalized line-heights and margins
     margin-top: 1.71428571rem;
-    padding-bottom: 1rem;
 }
 
-p code, p pre code { font-family: $code-font;  // removed .code 'class' since code is an actual html tag
+p code, p pre code {
+    font-family: $code-font;  // removed .code 'class' since code is an actual html tag
     font-size: 1.2rem;                   // also added p code, p pre code and pre selector to account for Markdown parsing
     line-height: 1.71428571;        // of triple backticks plus rationalized line-heights and margins
     margin-top: 1.71428571rem;
+    background: #f0f0f0;
+    padding: 0px 0px;
+    margin: -0px -0px;
+    border-radius: 3px;
+    display:inline-block;
 }
 
 
-h1 code, h2 code, h3 code { font-size: 0.80em; } //left in for no real reason
+h1 code, h2 code, h3 code {
+    font-size: 0.80em;
+} //left in for no real reason
 
 /*-- Table styling section - For Tufte-Jekyll, booktabs style is default for Markdown tables  --*/
 
@@ -296,9 +304,13 @@ div.table-wrapper { overflow-x: auto; } //changed all overflow values to 'auto' 
 } //more .code class removal
 
 pre, pre code, p pre code {
-    width: 52.5%;
-    padding-left: 2.5%;
+    width: 100%;
+    // padding-left: 2.5%;
     overflow-x: auto;
+}
+
+.highlight {
+    padding-left: 1%;
 }
 
 .fullwidth, li.listing div{ max-width: 90%; }
@@ -604,3 +616,8 @@ hr.slender {
   content: "\e60e";
 }
 /*-- End of Icomoon icon font section --*/
+
+#disqus_thread {
+    margin-top: 50px;
+    width: 90%;
+}

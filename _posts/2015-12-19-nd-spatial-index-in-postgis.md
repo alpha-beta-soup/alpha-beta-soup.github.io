@@ -9,17 +9,15 @@ tags: ["PostGIS", "Spatial Indexes"]
 
 I have just watched Paul Ramsay's (CartoDB) breakout presentation from *PGConf Silicon Valley 2015*. I love watching these kinds of videos. They're reasonably short (~40 minutes) so are good while you're eating lunch or killing time. They also tend to have little nuggets of wisdom to solve "gotchas" that for some reason no one has ever told you about. This presentation in particular has lots of these for using PostGIS. One I did not know about was the ability to specify an n-dimensional index in PostGIS. The typical way to construct a two-dimensional GIST index in PostGIS is to do:
 
-```sql
-
+{% highlight sql %}
 CREATE INDEX idx ON table USING gist(geom);
-```
+{% endhighlight %}
 
 However if you have XYZ or XYZT data and you want to issue queries that take advantage of these additional dimensions with a multidimensional index, you will need:
 
-```sql
-
+{% highlight sql %}
 CREATE INDEX idx ON table USING gist(geom gist_geometry_ops_nd);
-```
+{% endhighlight %}
 
 The different operator, internally, means that the spatial functions use the `&&&` operator, rather than the `&&` operator.
 
@@ -48,11 +46,10 @@ In addition, PostGIS allows you to switch out the geometry library from the Geom
 
 SFCGAL will need to be compiled, and then activated within PostgreSQL:
 
-```sql
-
+{% highlight sql %}
 CREATE EXTENSION postgis_sfcgal;
 SET postgis.backend = 'sfcgal';
-```
+{% endhighlight %}
 
 There is also a dedicated PostgreSQL extension for storing point cloud data: [https://github.com/pgpointcloud/pointcloud](https://github.com/pgpointcloud/pointcloud)
 

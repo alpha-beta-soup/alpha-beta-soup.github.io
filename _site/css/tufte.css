@@ -293,14 +293,18 @@ pre, pre code {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 0.8rem;
   line-height: 1.71428571;
-  margin-top: 1.71428571rem;
-  padding-bottom: 1rem; }
+  margin-top: 1.71428571rem; }
 
 p code, p pre code {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 1.2rem;
   line-height: 1.71428571;
-  margin-top: 1.71428571rem; }
+  margin-top: 1.71428571rem;
+  background: #f0f0f0;
+  padding: 0px 0px;
+  margin: -0px -0px;
+  border-radius: 3px;
+  display: inline-block; }
 
 h1 code, h2 code, h3 code {
   font-size: 0.80em; }
@@ -478,9 +482,11 @@ div.table-wrapper {
   font-size: 1rem; }
 
 pre, pre code, p pre code {
-  width: 52.5%;
-  padding-left: 2.5%;
+  width: 100%;
   overflow-x: auto; }
+
+.highlight {
+  padding-left: 1%; }
 
 .fullwidth, li.listing div {
   max-width: 90%; }
@@ -765,3 +771,6 @@ hr.slender {
   content: "\e60e"; }
 
 /*-- End of Icomoon icon font section --*/
+#disqus_thread {
+  margin-top: 50px;
+  width: 90%; }

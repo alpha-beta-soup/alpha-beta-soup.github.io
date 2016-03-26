@@ -66,60 +66,55 @@
 
 
 <center>
-<figure class="fullwidth"><img src="//assets/docker.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/docker.png" /><figcaption></figcaption></figure>
 
-<figure class="fullwidth"><img src="//assets/geoserver.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/geoserver.png" /><figcaption></figcaption></figure>
 </center>
 
 <p>I’ve been exploring <a href="geoserver.org/">GeoServer</a> recently, while also doing the same with <a href="https://www.docker.com/">Docker</a>. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.</p>
 
-<p>```dockerfile</p>
+<figure class="highlight"><pre><code class="language-dockerfile" data-lang="dockerfile"># Dockerfile
+FROM debian:wheezy
 
-<h1 id="dockerfile">Dockerfile</h1>
-<p>FROM debian:wheezy</p>
+# Update the sources list
+RUN apt-get update
+RUN apt-get upgrade -y
 
-<h1 id="update-the-sources-list">Update the sources list</h1>
-<p>RUN apt-get update
-RUN apt-get upgrade -y</p>
+# Install basic applications
+RUN apt-get install -y build-essential wget unzip
 
-<h1 id="install-basic-applications">Install basic applications</h1>
-<p>RUN apt-get install -y build-essential wget unzip</p>
-
-<h1 id="get-the-jrejdk-installation">Get the JRE/JDK installation</h1>
-<p>RUN apt-get install -y default-jre default-jdk
+# Get the JRE/JDK installation
+RUN apt-get install -y default-jre default-jdk
 RUN apt-get install -y openjdk-7-jre openjdk-7-jdk
-ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64</p>
+ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
 
-<h1 id="get-geoserver">Get GeoServer</h1>
-<p>ENV GEOSERVER_HOME=/usr/share/geoserver/
+# Get GeoServer
+ENV GEOSERVER_HOME=/usr/share/geoserver/
 RUN mkdir $GEOSERVER_HOME
 RUN wget http://ares.boundlessgeo.com/geoserver/master/geoserver-master-latest-bin.zip
 RUN cp geoserver-master-latest-bin.zip $GEOSERVER_HOME
 RUN unzip $GEOSERVER_HOME/geoserver-master-latest-bin.zip -d $GEOSERVER_HOME
 RUN rm $GEOSERVER_HOME/geoserver-master-latest-bin.zip
-ENV GEOSERVER_VER=2.9</p>
+ENV GEOSERVER_VER=2.9
 
-<h1 id="a-plugin">A plugin</h1>
-<p>ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
+# A plugin
+ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
 RUN wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/$A_PLUGIN.zip
 RUN cp $A_PLUGIN.zip $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
-RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip -d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
-RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip</p>
+RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip \
+-d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
+RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip
 
-<p>ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
-WORKDIR $GEOSERVER_HOME/bin
-```</p>
+ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
+WORKDIR $GEOSERVER_HOME/bin</code></pre></figure>
 
 <p>Then to build and run the Docker container:</p>
 
-<p>```bash</p>
-
-<p>docker build -t user/geoserver-master:test .
-docker run -it –net=”host” user/geoserver-master:test
-./startup.sh
-```</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker build -t user/geoserver-master:test .
+docker run -it --net<span class="o">=</span><span class="s2">"host"</span> user/geoserver-master:test
+./startup.sh</code></pre></figure>
 
 <p>Now you have GeoServer running, so head to <code class="highlighter-rouge">localhost:8080/geoserver</code>, and login with the default user and password: <code class="highlighter-rouge">admin</code> and <code class="highlighter-rouge">geoserver</code>.</p>
 

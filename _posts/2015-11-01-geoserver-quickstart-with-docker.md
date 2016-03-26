@@ -8,15 +8,14 @@ tags: ["GeoServer", "Docker"]
 ---
 
 <center>
-{% fullwidth "/assets/docker.png" %}
+{% fullwidth "./assets/docker.png" %}
 
-{% fullwidth "/assets/geoserver.png" %}
+{% fullwidth "./assets/geoserver.png" %}
 </center>
 
 I've been exploring [GeoServer](geoserver.org/) recently, while also doing the same with [Docker](https://www.docker.com/). I figured I'd share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there's a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.
 
-```dockerfile
-
+{% highlight dockerfile %}
 # Dockerfile
 FROM debian:wheezy
 
@@ -47,21 +46,21 @@ RUN wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/$A_PLUGIN.zip
 RUN cp $A_PLUGIN.zip $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME
 RUN ls $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
-RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip -d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
+RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip \
+-d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
 RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip
 
 ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
 WORKDIR $GEOSERVER_HOME/bin
-```
+{% endhighlight %}
 
 Then to build and run the Docker container:
 
-```bash
-
+{% highlight bash %}
 docker build -t user/geoserver-master:test .
 docker run -it --net="host" user/geoserver-master:test
 ./startup.sh
-```
+{% endhighlight %}
 
 Now you have GeoServer running, so head to `localhost:8080/geoserver`, and login with the default user and password: `admin` and `geoserver`.
 

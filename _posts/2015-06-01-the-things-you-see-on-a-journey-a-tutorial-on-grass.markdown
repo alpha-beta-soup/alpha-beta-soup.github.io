@@ -8,7 +8,7 @@ tags: [Tutorials, GRASS, GIS, Leaflet, BASH, Amazon, Git, Github]
 ---
 
 <br>
-{% fullwidth "/assets/example.png" "What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand" %}
+{% fullwidth "./assets/example.png" "What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand" %}
 
 Some moons ago, I met Pierre Roudier, who works at [Landcare Research New Zealand](http://www.landcareresearch.co.nz/home), at a workshop on PostGIS being held at the National Institute for Water and Atmospheric Research ([NIWA](https://www.niwa.co.nz/)). I was just getting started on PostGIS at the time, having identified that I was probably going to need it for my masters thesis. The two-day session, led by Digital Mapping Solutions New Zealand ([DMS](http://www.mapsolutions.co.nz/)), was brilliant. It gave me just enough of an introduction to PostGIS to realise its capability, and a leg-up to explore the rest on my own. I ended up relying entirely on PostGIS for my masters thesis, and now I swear by PostGIS and PL/pgsql as the solution to most issues calling for a spatial database.
 
@@ -70,10 +70,9 @@ Launch your terminal, and navigate to somewhere where we can place a folder of i
 
 `git clone` my GitHub repository with the following command:
 
-```bash
-
+{% highlight bash %}
 git clone https://github.com/alpha-beta-soup/train-landscapes
-```
+{% endhighlight %}
 
 This creates a folder called `train-landscapes` in your current directory, within which the project is "cloned": duplicated for your local consumption.
 
@@ -81,13 +80,11 @@ If you browse my Github repository in your web browser via the link in the `git 
 
 After cloning, you'll see that there are a few files and folders, if you enter the `train-landscapes` directory. `.gitignore` is a text file with the following contents:
 
-```bash
-
+{% highlight bash %}
 data/
-*.qgs~
-```
+{% endhighlight %}
 
-This tells Git to not track files (or changes to files) with the extension `.qgs~` (which is an automatically-generated backup of a QGIS project file), or anything in the directory `data/` (which contains the source and output data, like the terrain DEM/hillshade model that I used as input).
+This tells Git to not track files (or changes to files) in the directory `data/` (which contains the source and output data, like the terrain DEM/hillshade model that I used as input).
 
 The hillshade and digital elevation model (DEM) I used for this project are several gigabytes in size; I haven't included them in the project to save you the bandwidth. Likewise, the tiles that actually constitute what you see on the map aren't on Github either (they're hosted by Amazon, more on that later). The `.gitignore` file is a handy way to manage issues like this one on excluding large datasets from source control when they don't need it. For following along with this tutorial, you can download any DEM of New Zealand (projected to NZTM NZGD2000) that you have the rights to use. (You can of course pick a region anywhere else in the world.)
 
@@ -99,8 +96,7 @@ The directory `data` contains the input vector features I used for this project:
 
 The directory `source` contains the real work: our project code. We can list its contents from the terminal with the `ls` command:
 
-```bash
-
+{% highlight bash %}
 ls source/*
 
   generate_los.sh
@@ -108,7 +104,7 @@ ls source/*
   make_map.js
   obtain_corners.py
   style.css
-```
+{% endhighlight %}
 
 The `generate_los` shell scripts (`.sh`) are files that contain a series of commands that will be understood by GRASS GIS, versions 6.4 and 7. Let's consider them now.
 
@@ -117,42 +113,37 @@ The `generate_los` shell scripts (`.sh`) are files that contain a series of comm
 
 If you have installed GRASS, you can start it up at the command line by running the appropriate command for your version of GRASS:
 
-```bash
-
+{% highlight bash %}
 grass64
-```
+{% endhighlight %}
 
 or
 
-```bash
-
+{% highlight bash %}
 grass70
-```
+{% endhighlight %}
 
 After a short moment, a two-window GUI will open up. GRASS uses some concepts and terminology that are pretty hard to get your head around becausr they are different to other GIS programs, particularly the idea of a "mapset". You should be able to use the default, "PERMANENT" mapset for this tutorial, but I encourage you to look for some other GRASS tutorials that consider making your own mapsets. For now, you can just close or ignore the GUI windows as we will not be using them.
 
 Let's consider the GRASS 6.4 code (a shell script written in bash). Open `generate_los.sh` in a text editor. To do this with Gedit from the command line:
 
-```bash
-
+{% highlight bash %}
 gedit source/generate_los.sh
-```
+{% endhighlight %}
 
 Browse through the file for a bit.
 
 The very first line is a "shebang" that just tells the program loader what kind of interpreter to use. Here, we are using bash, as opposed to an alternative UNIX shell, like dash.
 
-```bash
-
+{% highlight bash %}
 #!/bin/bash
-```
+{% endhighlight %}
 
 After that, we define a function called `usage`. Usage is called upon when checking inputs to the terminal when the code is executed. The function `usage` prints out a small bit of documentation for our code, telling a user that one of two possible arguments can be used: `-train` or `-road`. Choosing train will make sure the script uses some parameters that apply to traveling by train, and similarly for traveling by road.{% sidenote 'sn-id-disclaimer' "Disclaimer: I don't actually know if this is proper practice for writing what is essentially help documentation. I can't imagine it's too far from this." %}
 
 The `usage` function and argument parsing:
 
-```bash
-
+{% highlight bash %}
 usage() {
    cat << EOF
 Usage: generate_los.sh [-train | -road]
@@ -172,24 +163,22 @@ fi
 if [ "$1" != "-train" ] && [ "$1" != "-road" ]; then
   usage;
 fi
-```
+{% endhighlight %}
 
 `if [ $# -ne 1 ]; then` considers all of the arguments that a user enters alongside the command to execute the GRASS shell script. If the number of arguments is not equal to one (`-ne 1`), then the condition is reached: run the `usage` function.
 
 `usage` tells our naïve user that they have to run either (and only one of) these commands at the terminal to get things going:
 
-```bash
-
+{% highlight bash %}
 sh execute_los.sh -train
 sh execute_los.sh -road
-```
+{% endhighlight %}
 
 Failure to do so simply prints an instruction to the terminal, and causes the script to stop with exit code 1 (`exit 1`), a catch-all for general errors.
 
 If the number of provided arguments is equal to one, we then check if this argument is in the realms of expectation (argument `"$1"` is `-train` or `-road`). If the first argument is not equal to `train` (`"$1" != "-train"`) or `-road`, then `usage` is triggered again. Otherwise we go on our merry way: setting up some variables according to `train` or `road`:
 
-```bash
-
+{% highlight bash %}
 if [ $1 = "-road" ]
 then
     LINE_SHP='../data/road/roads.shp' # Roads shapefile
@@ -210,7 +199,7 @@ then
 else
     usage; # shouldn't need this
 fi
-```
+{% endhighlight %}
 
 We define a number of variables that have global scope for the remainder of the script:
 
@@ -224,13 +213,12 @@ We define a number of variables that have global scope for the remainder of the 
 
 Following the conditional variables, there are some variables that are considered constant regardless of our mode of transport:
 
-```bash
-
+{% highlight bash %}
 R_DEM='../data/hillshade/nidemreproj' # Elevation DEM
 R_RES=25 # The resolution of the DEM (metres)
 DIST_PTS=25 # Ideally the resolution of the DEM
 MAX_VIS_DIST=30000 # Maximum distance visible
-```
+{% endhighlight %}
 
 `DIST_PTS` is a really important parameter. It will be used to determine how far our source viewing locations may be from one another. There is no point in this value being smaller than `R_RES`, because two different points that lie within the same cell of our terrain model will have the same viewable cells.
 
@@ -250,8 +238,7 @@ The equivalent GRASS 7.0 command, not available in GRASS 6.4 is `r.viewshed`, an
 
 In order to keep the number of rows and columns in our calculation under 1000, we actually need to adjust the variable `MAX_VIS_DIST` while considering `R_RES`, as the two are actually tightly linked. The following commands create a new intermediate variable, `POS_VIS_DIST` (possible visibility distance), which determines the maximum distance we can possibly define as "visible" without exceeding the limit of 1000 rows or 1000 columns in our visibility calculation. If `POS_VIS_DIST` ends up exceeding `MAX_VIS_DIST`, then we opt for `POS_VIS_DIST` by setting `MAX_VIS_DIST` equal to `POS_VIS_DIST`; otherwise we keep on with our original value of `MAX_VIS_DIST`.
 
-```bash
-
+{% highlight bash %}
 # r.los takes a long time, and the manual says to keep
 # the number of rows and columns "under 1000". Here we
 # adjust MAX_VIS_DIST by considering the resolution of
@@ -271,7 +258,7 @@ then
   reasons."
   MAX_VIS_DIST=$POS_VIS_DIST
 fi
-```
+{% endhighlight %}
 
 To understand this, we should consider what each line is actually doing.
 
@@ -279,11 +266,10 @@ To understand this, we should consider what each line is actually doing.
 
 In the shell you could write:
 
-```bash
-
+{% highlight bash %}
 POS_VIS_DIST=$(echo "25 * 1000 /2" | bc -l)
 echo $POS_VIS_DIST
-```
+{% endhighlight %}
 
 And it would spit out the value of your calculation: 12500
 
@@ -295,11 +281,10 @@ if [ 1 -eq `echo "$POS_VIS_DIST < $MAX_VIS_DIST" | bc` ]
 
 Consider the following commands:
 
-```bash
-
+{% highlight bash %}
 v1=$(echo "10 < 20" | bc -l)
 v2=$(echo "20 < 10" | bc -l)
-```
+{% endhighlight %}
 
 Can you see that we're doing inequality checks? The value of `v1` is 1, true (10 is less than 20); the value of `v2` is 0, false (20 is not less than 10). `if [ 1 -eq result ]` then asks "if 1 is equal to result", or more fluidly, "if result is true". If it is, then you can see above that we reset `MAX_VIS_DIST` as it violates our 1000 rows and columns constraint.
 
@@ -353,8 +338,7 @@ In conjunction with the `--help` option and my comments, try and work out what e
 
 The general logic of the viewshed calculation is to take a series of points sampled along a line feature, find all places on the terrain model that a person standing on each point can see, and then mosaic each of these together into a final visibility surface. There are ways to make this smarter, such as using the fact that once a cell has been identified as visible from any point, to never bother querying whether it is visible again. I don't explore these, although I might if I ever need to re-use this code.
 
-```bash
-
+{% highlight bash %}
 echo -n "\nComputing viewsheds\n"
 
 COUNTER=0
@@ -383,17 +367,16 @@ while read -r line
   COUNTER=$((COUNTER+1))
 
 done < $PTS_FILE
-```
+{% endhighlight %}
 
 We begin by creating a variable, `COUNTER`, to store our progress through an iteration. Then we start looping. That's actually a bit hard to comprehend, so I'll explain it closely:
 
-```bash
-
+{% highlight bash %}
 while read -r line
   do
   # do something
 done < $PTS_FILE
-```
+{% endhighlight %}
 
 Notice that before this point, `line` didn't exist. `line` is actually being defined on the last line of the loop syntax: `done < $PTS_FILE` pipes the text file `$PTS_FILE`, representing a sequence of points along a line, into the for loop; each line of the file is then put into a variable called `$line` that we access during the execution of each loop.
 
@@ -403,40 +386,36 @@ The first thing that gets done in the body of the loop is to return some informa
 
 Next up, we use a bit of black magic to speed up the processing. GRASS uses the concept of "regions" when running calculations. Every command will consider the current region, and nothing will be done outside of that region. So if you're calculating a viewshed (a very expensive procedure), and you know the maximum distance that you consider viewable from any point, you can tell GRASS that its region can be as small as that area. Annotated code:
 
-```bash
-
+{% highlight bash %}
 # Set the region to a smaller subset around the current observer point to speed processing
 # Note that this assumes the source line feature is projected in metres
 x=$(echo $line | cut -f1 -d,) # Get the x coordinate value from line, the current observer point
 y=$(echo $line | cut -f2 -d,) # The corresponding y value
-```
+{% endhighlight %}
 
 Try `cut --help` coupled with the clue that `$line` is comma-delimited, if you don't understand this.
 
-```bash
-
+{% highlight bash %}
 W=$(echo "$x-$MAX_VIS_DIST" | bc -l) # x minus the maximum visible distance: the western reach of the region
 E=$(echo "$x+$MAX_VIS_DIST" | bc -l) # x + MAX_VIS_DIST: eastern reach
 N=$(echo "$y+$MAX_VIS_DIST" | bc -l) # y + MAX_VIS_DIST: northern reach
 S=$(echo "$y-$MAX_VIS_DIST" | bc -l) # y - MAX_VIS_DIST: southern reach
-```
+{% endhighlight %}
 
 Finally, we use this command to actually set the region in each iteration: `g.region n=$N s=$S e=$E w=$W`. I found that resetting the region each loop was remarkably faster than leaving the region equal to the union of all inputs.
 
 The final section of the loop performs the following:
 
-```bash
-
+{% highlight bash %}
 r.los input=dem output=tmp_los_${COUNTER} coordinate=$line obs_elev=$ELEV max_dist=$MAX_VIS_DIST --v
 COUNTER=$((COUNTER+1))
-```
+{% endhighlight %}
 
 `r.los` is the command that we're really here for. It takes an input DEM, outputs a raster named `tmp_los_` plus whatever the counter is up to, a point value (our `$line` variable), and the observer elevation... and it goes away and tells us what that observer can see. Well, not really *what* they can see, more *where* they can see. The "what" can come later with some more Spatial Science™. For now, we close the loop and give it its input to set it in motion: `done < $PTS_FILE`.
 
 ### One Viewshed To Rule Them All
 
-```bash
-
+{% highlight bash %}
 # Set computational region to full extent
 g.region -pm rast=dem --verbose
 
@@ -460,7 +439,7 @@ do
   fi
   r.series in=`g.mlist --q type=rast pattern=$PATT sep=,` out=$OUT method=sum --o --q
 done
-```
+{% endhighlight %}
 
 Now that we have created each of the viewsheds for each of the points we sampled along the road or train line, we want to combine these individual raster layers into a single raster layer.
 
@@ -494,36 +473,32 @@ What we're then left with is a series of 99 raster layers, each representing a s
 
 So, combine these up into our finished product with another pattern matching exercise:
 
-```bash
-
+{% highlight bash %}
 r.series in=`g.mlist --q type=rast pattern=total_los_* sep=,` out=total_los method=sum --o --q
-```
+{% endhighlight %}
 
 You could display the result now if you wanted the map to represent the number of times each cell has been determined as being "viewable". I actually like the idea of a binary (viewable/not viewable) surface, where shading can be used to indicate distance from the line feature. So that's what I'll do. However it may be a little misleading, as distance from the line feature used in the exercise is not technically synonymous with the minimum distance from which it can be seen!
 
-```bash
-
+{% highlight bash %}
 # Create distance to line_feature map
 echo "\nDetermining distance from features\n"
 v.to.rast in=line_feature out=line_feature use=val val=1 --o --q
 r.grow.distance -m input=line_feature distance=dist_from_line_feature --o --q
-```
+{% endhighlight %}
 
 This takes our line feature input and turns it into a raster; it then "grows" (raster buffers) this line... how far? To the same size as the entire GRASS region. There is no need to tell GRASS that; and it stores the output surface as a dataset specified by the rather misleading title of `distance`.
 
-```bash
-
+{% highlight bash %}
 # Use distance to line_feature instead of sum of times seen in the result map
 echo "\nSubstituting number of times seen for distance to cell from line\n"
 r.mapcalc "$OUTFILE = if(total_los, dist_from_line_feature, null())" --o --v
-```
+{% endhighlight %}
 
 Here we use a bit of raster calculation (otherwise known as image manipulation) to make a new layer. To put the if statement into human terms: "if there is a  non-null value of `total_los` (i.e. a cell has been identified as visible), substitute its value with the value of the equivalent cell from the layer `dist_from_line_feature` (a raster surface where each cell knows its minimum distance from the line feature), otherwise make its value null.
 
 The rest should be self-explanatory:
 
-```bash
-
+{% highlight bash %}
 # Write output (as geotiff)
 r.out.gdal input=$OUTFILE output=../data/output/$OUTFILE.tif format=GTiff --o --v
 
@@ -533,7 +508,7 @@ g.mremove -f "tmp_los_*" --q
 g.mremove -f "total_los_*" --q
 
 echo "\ngenerate_los.sh complete\n"
-```
+{% endhighlight %}
 
 The final output is simply a GeoTiff. Try opening it in QGIS if you have been playing along at home. If you're just reading, then in the [interactive map](http://www.nearimprov.com/train-landscapes), the output GeoTiff is the special coloured layer you see on top of the basemap.
 
@@ -558,10 +533,10 @@ The process for our purposes is rather simple.
 5. Once you've added this basemap, styled and ordered your layers and are happy with the appearance of your map, install QTiles and fire it up via the menu Plugins > QTiles > QTiles. See the second image below for example parameters. Just be cautious before going ahead with your settings: you are generating exponentially more tiles (i.e. PNG images) for each additional level of zoom (1 is the most zoomed out, 18 is the most zoomed in). I only generated tiles between zoom levels 7 and 13, because I knew I was going to restrict the user to these zoom levels in the end. Allow the tool to run, and you're ready to make a web map.
 
 <br>
-{% fullwidth "assets/LR-example.png" "Screenshot from QGIS 2.8, of the Landcare Research WMS." %}
+{% fullwidth "./assets/LR-example.png" "Screenshot from QGIS 2.8, of the Landcare Research WMS." %}
 
 <br>
-{% fullwidth "/assets/qtiles.png" "Screenshot from QGIS 2.8, QTiles plugin." %}
+{% fullwidth "./assets/qtiles.png" "Screenshot from QGIS 2.8, QTiles plugin." %}
 
 # Making a web-ready map with Leaflet
 
@@ -571,8 +546,7 @@ First, let's look at the HTML: the webpage that will contain our map. (The map i
 
 The head:
 
-```html
-
+{% highlight html %}
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -584,14 +558,13 @@ The head:
 
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 </head>
-```
+{% endhighlight %}
 
 This is all pretty standard, if you've ever hit "View Page Source" on a webpage. Can you see where we tell the page to read the Leaflet CSS (`leaflet.css`)? And a custom bit of CSS (`style.css`)?
 
 Now for the body:
 
-```html
-
+{% highlight html %}
 <body>
     <!-- header div -->
     <div id="title-text">
@@ -604,12 +577,11 @@ Now for the body:
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="./source/make_map.js" type="text/javascript"></script>
 </body>
-```
+{% endhighlight %}
 
 We have two `div` elements in the body, and two scripts. The first `div` contains the header text you see at the top of the map. The second `div`, with the ID of `"map"`, contains our map, although there is very little indication yet that it actually does anything. The clue lies in the two pieces of Javascript that get loaded next. The first is the standard Leaflet Javascript that brings along the functionality of every Leaflet slippy map you've ever seen. The second is a custom bit of code where we specify our own special map. This bit of code is in the Github repo, and is called `make_map.js`. Let's take a look at that next.
 
-```javascript
-
+{% highlight js %}
 var  carViewshed = 'https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/{z}/{x}/{y}.png',
     trainViewshed = 'https://s3-ap-southeast-2.amazonaws.com/train-landscapes/rail/Mapnik/{z}/{x}/{y}.png',
     southWest = [-41.722,171.748],
@@ -657,7 +629,7 @@ var viewshedBasemaps = {
 };
 
 L.control.layers(viewshedBasemaps).addTo(map); // Add the layer control to the map
-```
+{% endhighlight %}
 
 The first unbroken section of code above creates a bunch of variables. While the `var` keyword is only used once, it could be used on each line if the commas at the end were omitted. `carViewshed` and `trainViewshed` are the relative paths to the hosted folders that contain the tiles we made earlier with QTiles. (I'll explain the Amazon business soon.) `southWest` and `northEast` are global parameters that I use to constrain the user's ability to move: I only want them to be able to scroll around the North Island... mostly because that's the only place I've actually created any map. The variables `attribution`, if you're paying attention, is the bit of text you see at the bottom of the map. Leaflet is good about using that, and so should you be.
 
@@ -665,21 +637,19 @@ Notice that `global_max_zoom` and `global_min_zoom` correspond to the numbers I 
 
 I then make a very important variable, `map`, and set a few of its options:
 
-```javascript
-
+{% highlight js %}
 var map = new L.Map('map');
 map.setView([-38.6875, 176.0694], 7); //centre and zoom of map, initially
 map.setMaxBounds(bounds);
 map.options.minZoom = global_min_zoom;
 map.options.maxZoom = global_max_zoom;
-```
+{% endhighlight %}
 
 Later, we will call on this `map` to actually display (you guessed it) a map.
 
 But first, I need to tell it what it's allowed to display.
 
-```javascript
-
+{% highlight js %}
 var car = L.tileLayer(carViewshed, {
   attribution: attribution,
   bounds: bounds,
@@ -701,21 +671,20 @@ var train = L.tileLayer(trainViewshed, {
   //opacity: 0.7,
   //transparent: true
 }); //non-default layer, so don't add to map
-```
+{% endhighlight %}
 
 I made two tile datasets, for the view from the car and from the train. The syntax for accessing them is naturally quite similar. There are more settings I didn't play with, and I even commented out two that didn't work very well after some experimentation.
 
 Without this next block of code, the map would function, but you would never be able to get to the `train` tiles. So we add a controller to allow a user to switch between our two sets of map tiles:
 
-```javascript
-
+{% highlight js %}
 var viewshedBasemaps = {
     "Car/bus view": car,
     "Overlander view": train
 };
 
 L.control.layers(viewshedBasemaps).addTo(map); // Add the layer control to the map
-```
+{% endhighlight %}
 
 `L` refers to Leaflet, and I nutted out this bit of code by reading their excellent documentation. Note that `car` and `train` here are the `L.tileLayer` variables we just defined. We tell Leaflet that we have two tile layers that we want to add to its set of `control.layers`.
 
@@ -731,8 +700,7 @@ The final bit of work is to add some CSS. Stepping through the below code, we ha
 
 5. A style for the layer control so it pops more than the default. I wanted to emphasise the layer selector, as it is really the entire point of making contrasting viewsheds. This bit of CSS is a little complex; the best way to work it out is to fiddle with it.
 
-```css
-
+{% highlight css %}
 html, body {
     height: 100%;
 }
@@ -768,7 +736,7 @@ html, body {
     text-decoration:none;
     line-height:36px;
 }
-```
+{% endhighlight %}
 
 # Getting the map online
 
@@ -787,10 +755,10 @@ There's just one little problem left. The two sets of tiles, even though they ha
 If you sign up for an AWS account and navigate to your console, you should be able to see where you can create a "bucket". Once you've made your bucket, you can then create folders just like any other directory. Then, inside each folder, you can store your tiles.
 
 <br>
-{% fullwidth "/assets/aws1.png" %}
+{% fullwidth "./assets/aws1.png" %}
 
 <br>
-{% fullwidth "/assets/aws2.png" %}
+{% fullwidth "./assets/aws2.png" %}
 
 There are two catches:
 
@@ -804,33 +772,31 @@ If you've sorted your account through your web browser, you need to request your
 
 Now if you have set up your bucket and two folders "car" and "rail", you can sync your local tiles generated with QTiles to Amazon CloudFront. This is also a relatively easy command, just be aware how much bandwidth you're using.
 
-```bash
-
+{% highlight bash %}
 s3cmd sync /path/to/car/tiles/ s3://bucket-name/car
-```
+{% endhighlight %}
 
 Repeat the above with your other tile dataset. Refer back to the Javascript to see how I the referred to the URLs where you can see these images. You can see an example tile [here](https://s3-ap-southeast-2.amazonaws.com/train-landscapes/car/10/1007/381.png), while it lasts.
 
 <br>
-{% fullwidth "/assets/aws3.png" %}
+{% fullwidth "./assets/aws3.png" %}
 
 <br>
-{% fullwidth "/assets/aws4.png" %}
+{% fullwidth "./assets/aws4.png" %}
 
 ### Local tiles
 
 Obviously in order to put tiles on Amazon's servers, you also need to have generated tiles locally. You can use these with Leaflet to preview your map offline. Simple substitute the URLs I used for carViewshed and trainViewshed with local paths, e.g.
 
-```javascript
-
+{% highlight js %}
 var carViewshed = '/data/tiles/rail/Mapnik/{z}/{x}/{y}.png'
-```
+{% endhighlight %}
+
 Then you can use Python from your command line to serve up a webpage (Python 2.x):
 
-```bash
-
+{% highlight bash %}
 python -m SimpleHTTPServer
-```
+{% endhighlight %}
 
 Check out [http://localhost:8000/](http://localhost:8000/) once this server is running. (Press ctrl-c to get back in control of your command line.)
 
