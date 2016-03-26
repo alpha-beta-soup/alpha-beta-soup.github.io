@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-{% marginfigure 'mf-id-1' '/assets/profile.png' 'On Ngarunui Beach, Whaingaroa/Raglan' %}
+{% marginfigure 'mf-id-1' './assets/profile.png' 'On Ngarunui Beach, Whaingaroa/Raglan' %}
 
 This blog is run by Richard Law, a geographic information systems/science (GIS) developer from Wellington, New Zealand. I am currently based in Raglan, Waikato, where I work for MetOcean Solutions and have been infected with a small weather bug.
 
