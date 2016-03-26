@@ -11,7 +11,7 @@ An interactive web map of the New Zealand Transport Agency's (NZTA) Crash Analys
 This project was [featured](http://www.nzherald.co.nz/data-blog/news/article.cfm?c_id=1503710&objectid=11378832) in the New Zealand Herald on Christmas 2014, becoming the most read article on the website for that day.
 
 <br>
-{% fullwidth "/assets/crash-map.png" "New Zealand Crash Map interface." %}
+{% fullwidth "./assets/crash-map.png" "New Zealand Crash Map interface." %}
 
 # Videos of Wellington's public transport system
 
@@ -37,7 +37,7 @@ CartoDB is a great initiative, that for many is a first taste of the power of Po
 I am a member of the Hutt Cycle Network, a cycling advocacy group for Lower Hutt city. The group needed a way to share ideas for cycle-friendly routes, risks to cyclists, and other pertinent pieces of spatial information that the group has knowledge of, but had no means to record digitally. I suggested that the group try Google Maps Engine Lite, as a lightweight web GIS that most people find intuitive to use. [This is the result.](https://www.google.com/maps/d/edit?mid=zs0qRfa6-1hw.kYwo2V4cv3Pg) Non-technical members commented that they felt empowered to record their knowledge through the tool.
 
 <br>
-{% fullwidth "/assets/gme-sample.png" "Google Maps Engine lite, showing the layers maintained by the Hutt Cycle Network members." %}
+{% fullwidth "./assets/gme-sample.png" "Google Maps Engine lite, showing the layers maintained by the Hutt Cycle Network members." %}
 <br>
 
 Behind the scenes, I have a script running on a schedule to download the information, and upsert it into a PostGIS-enabled database. I combine this with other information to support the HCN's comments on matters relating to cycling in Lower Hutt. For instance, our response to an idea to develop protected cycle lanes was accompanied by information about how many students attend school within 500m of the protected cycle lanes.
@@ -47,7 +47,7 @@ Behind the scenes, I have a script running on a schedule to download the informa
 ## [NZ UFO Sightings](http://www.nearimprov.com/nz-ufo-sightings/)
 
 <br>
-{% fullwidth "/assets/ufos.png" "Interactive map of NZ UFO sightings." %}
+{% fullwidth "./assets/ufos.png" "Interactive map of NZ UFO sightings." %}
 
 Disclaimer: I don't believe aliens visit earth, though they probably exist in some form in the vastness of infinite space.
 
@@ -60,7 +60,7 @@ I'd like to do some analysis, trying to find reports of similar phenomena, repor
 Currently I am working to build a map tile server for weather data, which has a free tier, exposed via the linked API. I also wrote the API. Soon, you will be able to use it connect to a range of global weather forecasts, using Leaflet, OpenLayers, or Google Maps.
 
 <br>
-{% fullwidth "/assets/cloudburst.png" "Example tile map layer and interface constructed using the Cloudburst API." %}
+{% fullwidth "./assets/cloudburst.png" "Example tile map layer and interface constructed using the Cloudburst API." %}
 <br>
 
 ## Real-time lightning server
@@ -68,7 +68,7 @@ Currently I am working to build a map tile server for weather data, which has a 
 I wrote a web socket server for sending lightning strikes to client applications in real time: seconds after they are detected by physical instrumentation.
 
 <br>
-{% fullwidth "/assets/lightning.gif" "This is a GIF of ten seconds of lightning occurring in central Australia; watch carefully around the major cluster of strikes as new ones occur." %}
+{% fullwidth "./assets/lightning.gif" "This is a GIF of ten seconds of lightning occurring in central Australia; watch carefully around the major cluster of strikes as new ones occur." %}
 <br>
 
 I think there is massive underuse of web sockets in geographic applications; I have the beginnings of a QGIS plugin to connect to GeoJSON-serving web sockets to demonstrate their utility.
