@@ -7,6 +7,276 @@
     <atom:link href="http://www.nearimprov.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Crash Analysis System: The Narrative Arc</title>
+        <description>&lt;p&gt;For several years, up until at least June 2015, the New Zealand Transport Agency (NZTA) published the data underlying their Crash Analysis System (CAS). This included information on every Police-attended road crash or accident in New Zealand, with attendant information on the environment it occurred in, and what was deemed to have contributed to the accident. While the method of publishing this data was primitive,&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;It consisted of one CSV file for each calendar year, with each record in the file heavily encoded. Decoding required automation and a lot of sifting through several PDFs, and a tool to get machine-readable tables from them. An example record is &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;Ashburton District&#39;,&#39;MOORE ST&#39;,&#39;100&#39;,&#39;N&#39;,&#39; &#39;,&#39;WILLIAM ST&#39;,&#39;201531749&#39;,&#39;07/02/2015&#39;,&#39;Sat&#39;,&#39;2335&#39;,&#39;EA&#39;,&#39;CN1V&#39;,&#39;103A 129A &#39;,&#39;M&#39;,&#39;R&#39;,&#39;D&#39;,&#39;DO&#39;,&#39;F &#39;,&#39; &#39;,&#39; &#39;,&#39;C&#39;,&#39;050&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;&#39;,&#39;&#39;,&#39;1499510&#39;,&#39;5137544&#39;,&lt;/code&gt; and yes that whitespace in &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;F &#39;&lt;/code&gt; is actually meaningful. &lt;/span&gt; it was sufficient for people with a little bit of time to spare (me) and an unhealthy obsession with transportation issues (me) to make use of it. While in many ways it was a good example of how not to do open data, at the very least it existed, so &lt;a href=&quot;http://www.statschat.org.nz/?s=foreign+drivers&quot;&gt;other&lt;/a&gt; &lt;a href=&quot;http://www.mixnmashentry.blogspot.co.nz/&quot;&gt;people&lt;/a&gt; could take it and run with it. All the NZTA had to do was sit back and watch, massage new data, and upload a new file every three months.&lt;/p&gt;
+
+&lt;h1 id=&quot;rising-action&quot;&gt;Rising Action&lt;/h1&gt;
+
+&lt;p&gt;When I found this dataset one afternoon in 2014, I set to work making a prototype &lt;a href=&quot;http://www.nearimprov.com/national-crash-statistics/&quot;&gt;map visualisation&lt;/a&gt;. My initial concern at the time was just trying to see the frequency of different type of accidents involving cyclists along my commute home between Wellington and Petone. I wanted to know this for my own curiousity and safety, but I also wanted to share it with members of the &lt;a href=&quot;https://www.facebook.com/groups/166036183455868/&quot;&gt;Cycle Aware Wellington Facebook group&lt;/a&gt;, because I thought it would be useful to them.&lt;/p&gt;
+
+&lt;p&gt;The raw CAS data is useless by itself, so interested people in this group would not be able to use it. If I had to write some code to decode a portion of the CAS data for consumption by people, then I would have to be able to do it for every accident in the system. &lt;a href=&quot;https://github.com/alpha-beta-soup/national-crash-statistics&quot;&gt;So that’s what I did&lt;/a&gt;, very slowly, iteratively, while procrastinating from my university work, with the help of a friend.&lt;/p&gt;
+
+&lt;p&gt;Here’s the first time I sent people to it:&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/nzcm-v0-fb.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;It was buggy as Hell but seemed well-received, and I was inspired to keep working on it.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/nzcm-v0-db-comments.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Here’s how I first decoded the CAS records:&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/nzcm-v0.jpg&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Here’s how it’s done &lt;a href=&quot;http://www.nearimprov.com/national-crash-statistics/&quot;&gt;now&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Astute readers will notice that this is the decoded visual summary of the raw data pasted in the margin further up the page. Would you ever have worked that out?&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/asburton-example.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;To get a sense of the utility of this kind of visualisation, note that the only other way to see this data decoded is to sign up for what I call the “NZTA Experience”. Apparently the NZTA has heard of the Internet, but they make you download an additional program in order to use it… and ask that you please forward all queries to your hand-dandy in-house IT team.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/./assets/cas-saga/actual-cas-wtf.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;The &lt;a href=&quot;./assets/cas-saga/cas9-video.wmv&quot;&gt;training&lt;/a&gt; &lt;a href=&quot;./assets/cas-saga/cas12-video.wmv&quot;&gt;videos&lt;/a&gt; are a little bit sad/funny. They give an insight into the &lt;em&gt;awesome UI&lt;/em&gt; I was missing out on by not signing a license agreement and using their system to view a text file.&lt;label for=&quot;sn-id-2&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-2&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Credit where it’s due: there’s a lot in that bloated interface that I wouldn’t even attempt to implement. I’m sure it’s useful for a number of use cases. It just would be great if it was possible to use it. &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;I took one look at this option before deciding it wasn’t for me. I don’t even know what a “Citrix Receiver 3.1” is, but apparently it’s a Windows thing… NZTA, if you require people to have licenses for proprietary software to access open data, the data is not open.&lt;/p&gt;
+
+&lt;p&gt;I took the liberty of downloading the linked documents, for posterity. Here are links to them:&lt;/p&gt;
+
+&lt;h3 id=&quot;cas-privacy-agreement-v1docxassetscas-sagacas-privacy-agreement-v1docx&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CAS-Privacy-Agreement-v1.docx&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CAS-Privacy-Agreement-v1.docx&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;An MS Word privacy agreement that must be signed to use the NZTA’s CAS viewer. (&lt;a href=&quot;./assets/cas-saga/CAS-Privacy-Agreement-v1.pdf&quot;&gt;PDF&lt;/a&gt;.) In particular, it stipulates that no-one can access or use CAS data unless they have been entitled to do so by the NZTA in writing. I figured that providing the data for download absolved me from this, and these statements were only to be found in relation to accessing the Citrix system. I was never told otherwise. There was no fee associated with using CAS.&lt;/p&gt;
+
+&lt;p&gt;This agreement includes this following &lt;em&gt;Purpose of collection of infomation&lt;/em&gt; (emphasis added):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;All information collected for use in CAS is collected in order to obtain and analyse accurate data in respect of traffic crashes in New Zealand.  Analysis of the information allows &lt;strong&gt;the NZTA&lt;/strong&gt;, &lt;strong&gt;other government agencies&lt;/strong&gt;, and &lt;strong&gt;agencies engaged in activities that contribute to the furtherance of road safety in New Zealand&lt;/strong&gt; to make significant contributions to crash prevention and wider road safety in New Zealand.  This includes contributing to the achievement of the Government policy objectives recorded in New Zealand’s Road Safety Strategy 2010-2020, Safer Journeys.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So it seems pretty clear that the CAS data is designed from the outset to exclude the wider public from being able to interpret the data.&lt;/p&gt;
+
+&lt;p&gt;It is also abundantly clear that the NZTA is preoccupied with the privacy risks associated with this data:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;14.3&lt;/strong&gt;	In particular the customer must do everything reasonably within its power to prevent any access, use or disclosure of the information other than that which is expressly provided for in this agreement, and will not, or allow a user to, further disclose any information unless the information is in a form in which individuals cannot be identified.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I can see why my map may have ruffled some feathers. I just hope they can see how unreasonable their access to CAS-the-system is, given how useful and important CAS-the-data is.&lt;/p&gt;
+
+&lt;p&gt;To my informal and naïve tastes, there’s a considerable amount of legalse in this document, so I’d really appreciate any interpretations of it (leave a comment).&lt;/p&gt;
+
+&lt;p&gt;Finally, here’s a gem:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;13.1&lt;/strong&gt;	The NZTA will make all reasonable endeavours to provide a secure and reliable system allowing the customer and user to use CAS at all times other than between 5pm and midnight each Saturday, such time being set aside for CAS maintenance.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;guide-to-coded-crash-reportspdfassetscas-sagaguide-to-coded-crash-reportspdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/guide-to-coded-crash-reports.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;guide-to-coded-crash-reports.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;My program uses the information in this PDF to decode the raw CSV data to a more meaningful GeoJSON structure, which then gets rendered in your browser. Go to page 15 to see the breakdown of the several hundred possible contributions to a crash. One crash can have as many of these explanations as needed; most explanations are additionally assigned to one of the parties to the crash, keyed by the type of vehicle, even working around the case where there are multiple vehicles of the same type in a crash. That’s a pretty complex structure, and &lt;em&gt;kudos&lt;/em&gt; for the NZTA for managing to cram that into a CSV!&lt;/p&gt;
+
+&lt;h3 id=&quot;casp24pdfassetscas-sagacasp24pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp24.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp24.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;A report prepared by Beca on some cycling project that includes images showing the NZTA’s CAS interface as it stood.&lt;/p&gt;
+
+&lt;h3 id=&quot;casp27pdfassetscas-sagacasp27pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp27.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp27.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;A report prepared by OPUS on a cycling project in Wellington that includes an Appendix showing the use of CAS data, including an almost hieroglyphic map of the movements of parties involved in accidents in their case study area.&lt;label for=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/./assets/cas-saga/heiroglyphics.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;confrontation&quot;&gt;Confrontation&lt;/h1&gt;
+
+&lt;p&gt;Then, in 2015, the data stopped being updated. The last update was for the first three months of 2015, which was published in June that year. The next three months’ of data was due in September, but never came. Then, the links to the old data—all 15.25 years of it—disappeared from the NZTA website in silence. Now, if you wanted to see the CAS data, you had no choice but to sign up for the NZTA Experience. Once there, you would not be able to tell people about any of the disaggregate information you have access to, per the terms of the agreement you have to sign.&lt;/p&gt;
+
+&lt;p&gt;Does that make sense to anyone? Let’s run through what I make of the NZTA’s thought process.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We are worried about the privacy implications of people looking at details of individual crashes.&lt;/li&gt;
+  &lt;li&gt;To protect privacy while balancing the need for organisations to actually use this information, the NZTA Experience (&lt;em&gt;SecureCAS&lt;/em&gt;) exists to allow people access to CAS only after signing an agreement that stipulates that you can’t show other people disaggregate information.&lt;/li&gt;
+  &lt;li&gt;Third party applications using the raw data that are not subject to the license agreement should be discouraged through the non-publication of the raw data, in order to protect privacy.&lt;/li&gt;
+  &lt;li&gt;The data is still open; anyone can access the raw data, it just has to be through the NZTA Experience.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Right. So I (as a third-party developer) can’t make a web application that displays the details of individual accidents to the public, but any individual member of the public can sign up for &lt;em&gt;SecureCAS&lt;/em&gt;. &lt;strong&gt;If privacy is the motivating force for the decision to not publish the raw data, what difference does it make if the public uses my application, or SecureCAS?&lt;/strong&gt; Ultimately, if someone wants disaggregate information, they can get it. I just made it easier. I made it so people attending a meeting of the Hutt Cycle Network can pull out a laptop and zoom to an area being discussed, and start using facts instead of perception.&lt;label for=&quot;sn-id-3&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-3&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;When I was a member of this group, I was really happy to see people using it, and finding it easy to access information they didn’t even know existed. I see the publication of the raw data as potentially addressing a power imbalance between the road controlling authorities, who have had knowledge of and access to SecureCAS for years, and Joe Public, who didn’t even know this data was collected. &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;When I noticed that the data had not been updated, I sent the following email to the Statistical Analysis team at the NZTA asking for an explanation:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Richard&lt;/strong&gt;: I was looking to update my record of the CAS data, but the page I have used in the past no longer exists: &lt;a href=&quot;https://www.nzta.govt.nz/resources/crash-analysis-system-data/&quot;&gt;https://www.nzta.govt.nz/resources/crash-analysis-system-data/&lt;/a&gt;&lt;br /&gt;
+I noticed a few weeks ago that although it was up, the available data only went as far as March this year. Is this data still available for download?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NZTA&lt;/strong&gt;: Apologies for the delay in replying to your email. We are currently reviewing the CAS information we have available on our website to make sure it meets our privacy and security standards. As &lt;strong&gt;the new on line data will be summarised information&lt;/strong&gt; and I understand you work with geospatial co-ordinates, would you like to apply for CAS access? This will give you access to the same level of information as was previously on the web.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Richard&lt;/strong&gt;: Yes I suppose I would like to apply for access, provided that the access will not cost me as I’m only using it as a hobbyist.&lt;br /&gt;
+However I’m using the CAS data to make a public web map (&lt;a href=&quot;http://www.nearimprov.com/national-crash-statistics/&quot;&gt;http://www.nearimprov.com/national-crash-statistics/&lt;/a&gt;) in collaboration with some others. &lt;strong&gt;Will this review mean that my application will not be able to present the disaggregate information to the public?&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Richard&lt;/strong&gt; (after a week without a response): Is there any information on this review available? I have some free time available over this summer I am planning to spend developing my mapping application, but I first need to know if the data will still be able to be made public via my application.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NZTA&lt;/strong&gt;: Thanks for your email. There is no cost associated with access to CAS, but you will be required to sign a data agreement. &lt;strong&gt;Under this agreement you will only be able to make aggregated information (totals of 4 or more) available through your app. Would you like to proceed with getting CAS access?&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I got very confused at this point, by the definition of “access to CAS”. I didn’t want to touch &lt;em&gt;SecureCAS&lt;/em&gt; with a ten-foot barge pole. I just wanted the raw data to work with on my own. There was still no explanation as to why it had been removed. To date, there appears to be no information on the NZTA website about any review into CAS, including whether any users of CAS data were consulted.&lt;/p&gt;
+
+&lt;p&gt;I had no plans to sign up to a restrictive license that would make my crash map next to useless for the applications I originally intended it for. &lt;strong&gt;If I have to aggregate accidents to a minimum of four… I… how do you even do that?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;No, seriously&lt;/em&gt;. Take four accidents at random. One caused by a drunk driver at one in the morning, who hit a pole and was injured severely. One a year earlier at a nearby pedestrian crossing where a driver failed to yield and injured a pedestrian. Another involving a driver reversing from their driveway and hitting a child riding their bike, who later died from their injuries. Another a nose-to-tail caused by a driver actually stopping at a stop sign when the following driver expected them to treat it like a give way sign, but with no one injured. &lt;strong&gt;How do you aggregate these?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You could perhaps say how many accidents there were, and how many people were injured or killed in this area. But you can’t even say which type of accident is most prevalent, because they’re all different and you’re not allowed to discuss them in isolation. What if the council is proposing to remove the pedestrian crossing because (they argue) it is dangerous? What use is the aggregate data now? If only you could drill down into the raw data and extract that one accident that occurred on a pedestrian crossing and see why it happened!&lt;/p&gt;
+
+&lt;p&gt;What if fewer than four accidents even occurred in your suburb or town? Is it even possible to draw this on a map? Can the NZTA actually provide a concrete précis of what this aggregation is supposed to look like?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The requirement for aggregation of CAS data in third-party applications completely shuts down the utility of the CAS data, and is extremely difficult to comply with.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Continuing the email chain, after I essentially told them the above:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NZTA&lt;/strong&gt;:  Thanks for your interest in safety data. We are in the process of making a new aggregated CAS data set freely available using the Government’s Open Data initiative. This is the data set that will be publically available from now on without the signing of an agreement. This is the data set you could use for your personal mapping tool.
+&lt;br /&gt;
+&lt;strong&gt;If someone wishes to obtain data in addition to that made available to the general public via the open data initiative, they will be required to sign a data agreement to place some conditions on how the data may be used, in order to ensure data is kept appropriately secure and to protect the privacy of those individuals represented in the data set. For example, you would be able to use the data for research purposes and publish the results in an aggregated form.&lt;/strong&gt;
+&lt;br /&gt;
+I understand, however, that you would like data variables over and above the data that we will be making available via the government open data initiative or that has been published in the past. The way in which we can make certain additional variables available to you is by providing you with CAS access so that you can extract the additional data yourself, however, you will be required to sign a data agreement which places certain conditions on how you may use the data.
+&lt;br /&gt;
+There is no cost associated with access to the CAS data base.
+&lt;br /&gt;
+Please let me know if you wish to discuss.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Here’s my take on the embigged section of that quote:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Third party applications cannot show disaggregate information because privacy. If someone wants to see the apparently private information, they sure can, they just have to use SecureCAS.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Frankly, this makes no sense whatsoever. All it achieves is putting up a barrier to people making use of the data. I replied to the email:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Richard&lt;/strong&gt;: Thank you so much for the clarification about accessing the CAS data.
+&lt;br /&gt;
+Is there any documentation about the review into CAS that I may read? My application is predicated on disaggregated data. I’d like to contest that there are valid privacy concerns with the use of the data as it currently stands, and also note that if aggregated, the data is not going to be useful for most of the applications I see for it.
+&lt;br /&gt;
+For example, if required to aggregate to at least four accidents (as previously stated), after I apply multiple filters (e.g. accidents involving pedestrians at a particular pedestrian crossing in Petone 2000-2015 — as I did recently for the Hutt Cycle Network), the number of relevant accidents falls below this number and my map is then no longer useful as an advocacy tool for commenting on highly-local road network changes (a proposed change to the location of the crossing). I can imagine hundreds of possible permutations of the data just like this. If I am only able to show aggregate information, the function of the map will be restricted to commenting on general trends only (e.g. there were x accidents on pedestrian crossings across all of Lower Hutt… but I can’t say where or why exactly). I believe this to be a considerable regression in the utility of the data.
+&lt;br /&gt;
+I disagree that there are major privacy concerns that justify changing the service in this way. To the extent that I may be wrong or overruled, I propose that there are better ways of addressing these concerns than requiring aggregation (for example, only specifying an approximate date, or randomising the location slightly, or suppressing the reporting of specific accident codes).
+&lt;br /&gt;
+Has there been consultation with the users of the data before these changes were proposed? Myself and others have put considerable volunteer time into my application and I would have made my comments earlier had I known there were going to be changes.
+&lt;br /&gt;
+I’m happy to discuss this issue further.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;At this point the manager of the Statistical Information team contacted me to arrange a time to discuss in person the issues I was raising. Ultimately this had to be a phone conference between the manager, myself, and James Burgess (Chair, Cycle Aware Wellington).&lt;/p&gt;
+
+&lt;p&gt;I took the call from the rooftop carpark of JB Hi-Fi in central Hamilton, amidst construction noise. During the hour-long phone call James and I felt we were given a fair hearing of our concerns. In particular, we stressed that the requirement to aggregate information is difficult to comply with, and severely diminishes the utility of the data.&lt;/p&gt;
+
+&lt;p&gt;I argued that the privacy concerns are unfounded, because the only way the CAS data is personally identifying is if you already hold additional information about an accident. I also pointed out that news articles already reveal more information than CAS does about serious accidents, but we assured them that my application would never try and link CAS data to any form of media. I conceded that the CAS data did not need to reveal the age of the youngest child involved in an accident,&lt;label for=&quot;sn-id-4&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-4&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;If a child or children are involved in an accident, the age of the youngest child is reported in the raw CAS data. Age is not reported otherwise. Gender is never given. &lt;/span&gt; but otherwise CAS data should not be changed at all. We provided concrete use cases for disaggregate data in an easy-to-consume web map format, from the perspective of cycling advocacy. We were assured that our concerns would be taken on board.&lt;/p&gt;
+
+&lt;p&gt;The level of aggregation they were considering was regional, which was worse than I had imagined. The proposed confidentiality agreement would mean only this same level of aggregation would be possible for dissemination.&lt;/p&gt;
+
+&lt;p&gt;There would be a follow-up call in two weeks. It felt good.&lt;/p&gt;
+
+&lt;h1 id=&quot;falling-action&quot;&gt;Falling Action&lt;/h1&gt;
+
+&lt;!-- Lack of information about the decision; unsure how to progress and get decision reviewed --&gt;
+
+&lt;p&gt;There was no follow-up call.&lt;/p&gt;
+
+&lt;p&gt;The person behind the &lt;a href=&quot;https://twitter.com/IBCycleWay&quot;&gt;@IBCycleWay&lt;/a&gt; Twitter handle asked for access to disaggregate CAS data and recieved this response (emphasis added):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NZTA&lt;/strong&gt;: Information from our Crash Analysis System (CAS) is no longer available for download directly from this website. We have recently revised our privacy and confidentiality standards, and the crash information did not meet those new standards. &lt;strong&gt;In some cases, the data included information that, by deduction, meant the person involved could be identified&lt;/strong&gt;. The Privacy Act 1993 is about protecting personal information and it is our duty as an Agency to ensure that personal information is protected and confidentiality of output is maintained. That is why we are now required to aggregate or &lt;strong&gt;suppress values under four.&lt;/strong&gt;
+&lt;br /&gt;
+Over the coming weeks, we are working to make aggregated information available for download from this website. Would you like us to email you when this becomes available?
+&lt;br /&gt;
+You are also able to apply for free access to the data via CAS. Please contact &lt;a href=&quot;cas.administrator@nzta.govt.nz&quot;&gt;cas.administrator@nzta.govt.nz&lt;/a&gt; if you would like to apply for access to CAS.
+&lt;br /&gt;
+I hope this is of assistance.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I have no idea what “suppress values under four” means.&lt;/p&gt;
+
+&lt;p&gt;Realising that they were not going to seriously consider my perspective despite all the pestering I’d already put in, I tried another email salvo:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Richard&lt;/strong&gt;: Is there any word on the CAS data review? It has now been over a year since disaggregate data on road crashes and accidents has been been made available to the public, which is affecting the ability of safety advocates to comment on road network changes from the local to the national scale. I have heard through Twitter that a decision has been made with respect to this data, but I have not heard anything official and I still cannot find any information on the NZTA website.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I think I’m pissing them off now, because the response didn’t even attempt to address me:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Thanks for your email.
+&lt;br /&gt;
+As previously discussed, people can apply for free access to CAS for the following purposes:
+&lt;br /&gt;
+1. Informing transport policy and regulations
+&lt;br /&gt;
+2. Designing and prioritising a range of network user behaviour and road safety initiatives
+&lt;br /&gt;
+3. Supporting funding applications for network and road safety improvements
+&lt;br /&gt;
+4. Monitoring and evaluating the effectiveness of road safety initiatives
+&lt;br /&gt;
+5. Providing information for research purposes connected with road network user behaviour, road safety and transport policy.
+&lt;br /&gt;
+Please do let us know if you would like to apply for access.
+&lt;br /&gt;
+We are currently working to provide as much aggregated data as possible on our website while maintaining our obligations under the Privacy Act. We will be making this information available over the coming weeks, and will also be providing information as to why the csv files are no longer available. Would you like me to send you a link to the aggregated information when it becomes available?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That last bit of communication is now two weeks’ old. I thank all those who have reached out to me via &lt;a href=&quot;https://twitter.com/alphabeta_soup&quot;&gt;Twitter&lt;/a&gt;, email and other channels to offer advice and information about this situation; it has all been taken on board. I’m trying to use this blog post to get all the information and my thoughts into one place, before taking the next step.&lt;/p&gt;
+
+&lt;h1 id=&quot;character-growth-and-resolution&quot;&gt;Character Growth and Resolution&lt;/h1&gt;
+
+&lt;p&gt;There is yet to be a satisfactory resolution for this narrative arc. The aggregate data for download still isn’t ready so I can’t comment on it, and my hand still isn’t ready to agree to the terms of their license agreement. My Linux OS can’t even use Citrix. I think. I still don’t know what Citrix is.&lt;/p&gt;
+
+&lt;p&gt;I do have some questions for the NZTA:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;How many privacy issues have actually been encountered to justify this change to operational data?&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Why is there no available information about this review?&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Can you provide a concrete demonstration of how your proposed aggregation of no fewer than four accidents is supposed to work?&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Are you open to alternative suggestions about how to protect the privacy of people who have had the misfortune to be involved in an accident, that do not involve aggregation?&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I have some plans my &lt;a href=&quot;http://www.nearimprov.com/national-crash-statistics/&quot;&gt;crash map&lt;/a&gt;, but they’re mostly shelved until I know that the raw CAS data will be available again:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Make and expose a public RESTful API to the decoded CAS data, so it’s super easy for even more client applications to proliferate.&lt;/li&gt;
+  &lt;li&gt;Improve my web map interface, including the ability to search crash causes and filter on those, instead of being limited to the filters that I have baked in.&lt;/li&gt;
+  &lt;li&gt;Improve my web map with some server-side code, probably the same API I’m willing to write, so that it can display more than 3 months of data without destroying your browser.&lt;/li&gt;
+  &lt;li&gt;Add some cool smarts to the web map: e.g. draw an irregular shape on the map and get some summary charts reflecting the crashes inside the shape that meet your non-spatial criteria.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I also have one question for you, the reader. &lt;strong&gt;What can be done?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;supplementary-links&quot;&gt;Supplementary links&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A &lt;a href=&quot;http://groups.open.org.nz/groups/ninja-talk/messages/topic/4s6b4LltkXJeQaGEmg4fMi#post-4s6b4LltkXJeQaGEmg4fMi&quot;&gt;thread&lt;/a&gt; on the Open Data Ninjas about the issue.&lt;/li&gt;
+  &lt;li&gt;My &lt;a href=&quot;https://github.com/alpha-beta-soup/national-crash-statistics/issues/53&quot;&gt;Github issue&lt;/a&gt; about signing the data agreement, which I do not want to do.&lt;/li&gt;
+  &lt;li&gt;The NZTA’s &lt;a href=&quot;https://www.nzta.govt.nz/resources/crash-analysis-system/cas.html&quot;&gt;CAS FAQ&lt;/a&gt;, which as of writing seems unchanged, with the exception that the raw data download is missing. Here’s &lt;a href=&quot;https://www.nzta.govt.nz/resources/crash-analysis-system/&quot;&gt;another, similar link&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;The NZTA’s &lt;a href=&quot;http://www.nzta.govt.nz/resources/crash-analysis-reports/index.html&quot;&gt;pre-aggregated &lt;em&gt;crash analysis reports&lt;/em&gt;&lt;/a&gt; which summarise CAS data on a regional basis. They’re neat, but personally I want to know about very particular circumstances: I don’t want a summary report, I want data.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;a-note-on-the-snark&quot;&gt;A note on the snark&lt;/h2&gt;
+
+&lt;p&gt;I do apologise for the level of snark you have just endured. I truly appreciate all the hard work that has gone in to CAS and will continue to go into it. In turn, I hope that those at the NZTA appreciate the frustration that I’ve felt after putting in effort into this application, only for the rug to have been pulled out from underneath it without much explanation. Ultimately we both have similar goals: public safety, and factual information.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 28 Apr 2016 20:02:00 +1200</pubDate>
+        <link>http://www.nearimprov.com//cas-saga</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//cas-saga</guid>
+      </item>
+    
+      <item>
         <title>Geodata web services</title>
         <description>&lt;p&gt;Bill Dollins has a &lt;a href=&quot;http://blog.geomusings.com/2013/12/11/building-a-simple-geodata-service-with-node-and-amazon-rds/&quot;&gt;downright useful tutorial&lt;/a&gt; over on his blog for building a straightforward geodata service with Node, Express, PostgreSQL and Amazon RDS.&lt;/p&gt;
 
@@ -466,20 +736,6 @@ Done &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;4s&lt;/code&gt;&lt;/pre&gt;
         <pubDate>Sat, 04 Jul 2015 01:00:00 +1200</pubDate>
         <link>http://www.nearimprov.com//mediawatch-data</link>
         <guid isPermaLink="true">http://www.nearimprov.com//mediawatch-data</guid>
-      </item>
-    
-      <item>
-        <title>Landsat 8 Mosaic</title>
-        <description>&lt;p&gt;I noticed this Tweet today, and thought it was such a great example of good a well-designed interface, and actually useful tool. I felt I needed to share it.&lt;/p&gt;
-
-&lt;blockquote class=&quot;twitter-tweet&quot; lang=&quot;en&quot;&gt;&lt;p lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;Announcing Landsat 8 Mosaic: fast and easy mosaic creation of landsat data! &amp;#10;&lt;a href=&quot;http://t.co/Gd3DZjkBJJ&quot;&gt;http://t.co/Gd3DZjkBJJ&lt;/a&gt; &lt;a href=&quot;http://t.co/htzUcqveQ5&quot;&gt;pic.twitter.com/htzUcqveQ5&lt;/a&gt;&lt;/p&gt;&amp;mdash; Vincent Sarago (@_VincentS_) &lt;a href=&quot;https://twitter.com/_VincentS_/status/612923026678530049&quot;&gt;June 22, 2015&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async=&quot;&quot; src=&quot;//platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;There is a also link to a blog post about the tool in the Tweet.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 22 Jun 2015 22:23:49 +1200</pubDate>
-        <link>http://www.nearimprov.com//landsat-8-mosaic</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//landsat-8-mosaic</guid>
       </item>
     
   </channel>
