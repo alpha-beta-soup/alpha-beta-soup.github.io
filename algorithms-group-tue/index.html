@@ -5,8 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Global Isochrone Travel Time from London (1881)</title>
-  <meta name="description" content="Here’s an interesting historical map that turned up on /r/MapPorn today. Made by Francis Galton for the Proceedings of the Royal Geographic Society in 1881, ...">
+  <title>Algorithms Group at Eindhoven University of Technology</title>
+  <meta name="description" content="I recently stumbled across the webpage for the (spatial/geometric/cartograhic) Algorithms Group at Technische Universiteit Eindhoven (Eindhoven University of...">
 
 
   <link rel="stylesheet" href="/css/tufte.css">	
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
-  <link rel="canonical" href="http://www.nearimprov.com/global-isochrone-travel-time-from-london-1881">
+  <link rel="canonical" href="http://www.nearimprov.com/algorithms-group-tue/">
   <link rel="alternate" type="application/rss+xml" title="nearimprov" href="http://www.nearimprov.com/feed.xml" />
 </head>
 
@@ -61,30 +61,41 @@
 </header>
 
     <article class="group">
-      <h1>Global Isochrone Travel Time from London (1881)</h1>
-<p class="subtitle">June 13, 2014</p>
+      <h1>Algorithms Group at Eindhoven University of Technology</h1>
+<p class="subtitle">November 29, 2015</p>
 
 
-<p>Here’s an interesting historical map that turned up on <a href="http://www.reddit.com/r/MapPorn/comments/27yfn0/isochronic_passage_chart_for_travelers_global_map/" title="Link to Reddit thread">/r/MapPorn</a> today. Made by Francis Galton for the Proceedings of the Royal Geographic Society in 1881, I find it particularly interesting because it represents the state of international travel only a decade or so after my Scottish and Irish ancestors travelled to New Zealand (via way of Cape Town, where one of my great-great aunts was born <em>en route</em>).</p>
+<p>I recently stumbled across <a href="http://www.win.tue.nl/algo/">the webpage</a> for the (spatial/geometric/cartograhic) Algorithms Group at <em>Technische Universiteit Eindhoven</em> (Eindhoven University of Technology). I highly recommend browsing through some of the manuscripts included on <a href="http://www.win.tue.nl/~hermanh//doku.php?id=graduation_projects">Herman Haverkort’s (and students’) projects page</a>.</p>
+
+<p>In particular, I found one entitled <a href="http://www.win.tue.nl/~hermanh//stack/Haverkort-cues-about-travel-time.pdf"><em>Embedding cues about travel time in schematic maps</em></a>. This is an interesting paper on schematic public transport maps, where it is first established that although excellent at allowing users to avoid unnecessary transfers, schematic maps of public transport pay the price of preventing people from determining how long a particular trips are, in both absolute and relative terms.</p>
 
 <p><br /></p>
-<figure class="fullwidth"><img src="/./assets/global-isochrone-travel-time-from-london-1881.jpg" /><figcaption>Isochronic passage chart for travellers</figcaption></figure>
+<figure class="fullwidth"><img src="/./assets/Haverkort1.png" /><figcaption></figcaption></figure>
 
-<p>The work of cartographers past is often so impressive on their own merits (although I suspect the chaff has been cut with time) yet when you also consider the technology that they <em>didn’t</em> have to make their maps… the mind boggles and you realise that all of use currently practising the skill have it so easy. Really, if work of this calibre could be made then, there are no excuses for bad maps now.</p>
+<p><br /></p>
+<figure class="fullwidth"><img src="/./assets/Haverkort2.png" /><figcaption></figcaption></figure>
 
-<p>One particular technique I’d like to draw attention to is the shape of the coastlines. They’re <em>really wobbly</em>. I suspect this is probably because nice little shapefiles didn’t exist for downloading—but the effect that this has is to express that coastlines are complex features even if that complexity isn’t well known. Rather than generalise coastlines to rather round shapes (which would be fine at this scale, really), they have been deliberately given additional complexity: it’s anti-generalisation.</p>
+<p><br /></p>
+<figure class="fullwidth"><img src="/./assets/Haverkort3.png" /><figcaption></figcaption></figure>
 
-<p>As far as I am aware, this would be quite hard to achieve with modern software. You would have to first add vertices to existing shapes at not-quite-regular intervals, and then shift the vertices about to get that head-beach in-out effect.</p>
+<p>Haverkort presents a range of ideas for getting the best of both worlds, leading to a portfolio of intriguing ideas about hybridised schematic maps with travel time. I’ve included three of them here, and really encourage you to read the full paper.</p>
 
-<p>I also really think the colour distinction between land and water with the same category value is really nifty, and of course is crucial when the main form of intercontinental travel is by sea (steam ship). It wouldn’t really make sense for travel <em>par avion</em>, or any other mode.</p>
+<p><br /></p>
+<figure class="fullwidth"><img src="/./assets/Haverkort4.png" /><figcaption></figcaption></figure>
 
-<p>Finally:</p>
+<p><br /></p>
+<figure class="fullwidth"><img src="/./assets/Haverkort5.png" /><figcaption></figcaption></figure>
 
-<blockquote>
-  <p>It is supposed that local preparations have been made and that other circumstances are favourable.</p>
-</blockquote>
+<p><br /></p>
+<figure class="fullwidth"><img src="/./assets/Haverkort6.png" /><figcaption></figcaption></figure>
 
-<p>I love this. These kind of assumptions have been made for over a hundred years in transportation analysis and cartography. I wonder if it will ever be possible to completely overcome them.</p>
+<p>I think it’d be a brilliant challenge to employ some of these ideas for a local network. There are also some interesting papers on automated graph drawing on the TUE webpage; if you’re anything like me, while you can appreciate the necessity and beauty of a one-off piece of cartography, the true Holy Grail is in abstracting and automating the procedure, giving space for updating source information or changing the extent of your geographic focus with minimal to no additional work.</p>
+
+<p>There are also a bunch of <a href="http://www.win.tue.nl/algo/graduated-phd-students.php">PhD theses</a> that might make some good holiday reading… for uh, weird people like me.</p>
+
+<p><strong>Do you have any other interesting theses or manuscripts to read over the summer? Having completed mine in March this year, I feel I’m in a good space to really appreciate the hard work of others in producing one, so I’m looking to read a few.</strong></p>
+
+<p><strong><em>All images © Herman Haverkort, 2014</em></strong></p>
 
 
 
@@ -120,7 +131,7 @@
 -->
 
     </article>
-    <span class="print-footer">Global Isochrone Travel Time from London (1881) - June 13, 2014 - Richard Law</span>
+    <span class="print-footer">Algorithms Group at Eindhoven University of Technology - November 29, 2015 - Richard Law</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">
