@@ -272,8 +272,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;I do apologise for the level of snark you have just endured. I truly appreciate all the hard work that has gone in to CAS and will continue to go into it. In turn, I hope that those at the NZTA appreciate the frustration that I’ve felt after putting in effort into this application, only for the rug to have been pulled out from underneath it without much explanation. Ultimately we both have similar goals: public safety, and factual information.&lt;/p&gt;
 </description>
         <pubDate>Thu, 28 Apr 2016 20:02:00 +1200</pubDate>
-        <link>http://www.nearimprov.com//cas-saga</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//cas-saga</guid>
+        <link>http://www.nearimprov.com//cas-saga/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//cas-saga/</guid>
       </item>
     
       <item>
@@ -285,8 +285,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;I also have the beginnings of a QGIS plugin that connects to a specified WebSocket and will render arriving messages, provided they come as GeoJSON.&lt;/p&gt;
 </description>
         <pubDate>Sat, 16 Jan 2016 21:04:51 +1300</pubDate>
-        <link>http://www.nearimprov.com//geodata-service</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//geodata-service</guid>
+        <link>http://www.nearimprov.com//geodata-service/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//geodata-service/</guid>
       </item>
     
       <item>
@@ -354,8 +354,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;Incidentally, if someone can tell me what the “SF” in SFCGAL stands for, I’d really appreciate it. It’s driving me nuts. (Spatial Functions?)&lt;/p&gt;
 </description>
         <pubDate>Sat, 19 Dec 2015 14:37:19 +1300</pubDate>
-        <link>http://www.nearimprov.com//nd-spatial-index-in-postgis</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//nd-spatial-index-in-postgis</guid>
+        <link>http://www.nearimprov.com//nd-spatial-index-in-postgis/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//nd-spatial-index-in-postgis/</guid>
       </item>
     
       <item>
@@ -373,8 +373,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;Do you know of any similar examples?&lt;/p&gt;
 </description>
         <pubDate>Sun, 06 Dec 2015 18:16:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//population-demand-vector-field</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//population-demand-vector-field</guid>
+        <link>http://www.nearimprov.com//population-demand-vector-field/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//population-demand-vector-field/</guid>
       </item>
     
       <item>
@@ -412,8 +412,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;All images © Herman Haverkort, 2014&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 29 Nov 2015 12:55:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//algorithms-group-tue</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//algorithms-group-tue</guid>
+        <link>http://www.nearimprov.com//algorithms-group-tue/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//algorithms-group-tue/</guid>
       </item>
     
       <item>
@@ -439,8 +439,8 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;I wish I wasn’t the &lt;em&gt;only&lt;/em&gt; person who attempted to squeeze in attendance at both the awards and a brilliant session on PostGIS. Without any finger pointing, I think the industry can do better, if indeed there is such a thing as a “spatial industry”. For the record, I don’t even think there is such a thing. We are in a hardware, software and data industry, and that’s just fine.&lt;/p&gt;
 </description>
         <pubDate>Thu, 19 Nov 2015 03:00:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//nzsea</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//nzsea</guid>
+        <link>http://www.nearimprov.com//nzsea/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//nzsea/</guid>
       </item>
     
       <item>
@@ -507,8 +507,8 @@ docker run -it --net&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class
 &lt;p&gt;Docker hygeine is important, although I’m still figuring it out. I’ve made the image use Debian Wheezy as a lightweight alternative to the Ubuntu 15.04 image I had before. It was also broken because I hadn’t added the command to install &lt;code class=&quot;highlighter-rouge&quot;&gt;wget&lt;/code&gt;, among a litany of other problems. It usually pays to test things, sorry if you tried it out earlier!&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Nov 2015 21:06:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//geoserver-quickstart-with-docker</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//geoserver-quickstart-with-docker</guid>
+        <link>http://www.nearimprov.com//geoserver-quickstart-with-docker/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//geoserver-quickstart-with-docker/</guid>
       </item>
     
       <item>
@@ -591,8 +591,8 @@ Or some combination of the four (and an application area of interest wouldn’t 
 &lt;p&gt;We’re not typists, we’re fucking writers, &lt;em&gt;auteurs&lt;/em&gt;, creators, scientists, and problem solvers. We should be proud of it… and act like it.&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Nov 2015 18:00:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//spatial-isnt-that-special</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//spatial-isnt-that-special</guid>
+        <link>http://www.nearimprov.com//spatial-isnt-that-special/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//spatial-isnt-that-special/</guid>
       </item>
     
       <item>
@@ -722,8 +722,8 @@ Done &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;4s&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;There is much more that can be done with Python’s builtin multiprocessing, particularly using queues. There are a bunch of third-party modules that also implement the idea. I encourage you to explore, perhaps by looking at tutorials for how to write a daemon, and then make something that polls mutliple related APIs at the same time, populating a common database in near real time.&lt;/p&gt;
 </description>
         <pubDate>Thu, 10 Sep 2015 10:24:00 +1200</pubDate>
-        <link>http://www.nearimprov.com//parallel-geocoding</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//parallel-geocoding</guid>
+        <link>http://www.nearimprov.com//parallel-geocoding/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//parallel-geocoding/</guid>
       </item>
     
       <item>
@@ -734,8 +734,8 @@ Done &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;4s&lt;/code&gt;&lt;/pre&gt;
 &lt;iframe src=&quot;http://www.radionz.co.nz/audio/remote-player?id=201762824&quot; width=&quot;65%&quot; frameborder=&quot;0&quot; height=&quot;62px&quot;&gt;&lt;/iframe&gt;
 </description>
         <pubDate>Sat, 04 Jul 2015 01:00:00 +1200</pubDate>
-        <link>http://www.nearimprov.com//mediawatch-data</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//mediawatch-data</guid>
+        <link>http://www.nearimprov.com//mediawatch-data/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//mediawatch-data/</guid>
       </item>
     
   </channel>
