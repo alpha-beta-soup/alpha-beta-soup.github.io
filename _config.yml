@@ -7,7 +7,7 @@ simple_search: http://google.com/search
 description: Musings on spatial data, transportation, and spatial transportation data in New Zealand and beyond
 # name: tufte
 # markdown_ext: "markdown,mkdown,mkdn,mkd,md"
-permalink: /:title
+permalink: /:title/
 timezone: Pacific/Auckland
 # excerpt_separator: <!--more-->  # you can specify your own separator, of course.
 exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md']
