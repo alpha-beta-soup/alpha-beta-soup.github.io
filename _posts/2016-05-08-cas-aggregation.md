@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Crash Analysis System: Aggregation Wizardary"
+title: "Crash Analysis System: Aggregation Wizardry"
 date: 2016-05-08 20:22:00 +1300
 comments: true
 category:
