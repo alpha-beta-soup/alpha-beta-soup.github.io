@@ -1,0 +1,166 @@
+---
+layout: post
+title: "Modelling traffic noise with laundered data"
+date: 2016-09-01 22:48:00 +1300
+comments: true
+category:
+tags: ["Open Data", "NZTA", "mobileroad", "noise", "modelling", "traffic"]
+---
+
+<!-- TODO summarise Nick's work -->
+I had hoped to have here outputs of traffic/road noise for New Zealands major urban centres, but unfortunately my plans with a volunteering acoustic engineer have fallen through. (If you're reading this, I'm still interested!) The engineer in question noticed my previous post on scraping data from [MobileRoad](https://mobileroad.org/). He explained to me that the data has great potential for producing city-wide road noise surfaces.
+
+Noise maps on the scale of entire cities is "commonplace" in Europe, and has been performed in some Australian cities, but to their knowledge no-one has attempted to do it in New Zealand. They would be useful for everyone from planners down to indvividuals deciding where to live, and also just make neat visualisations. The software that the engineer was planning to use is called [SoundPLAN Acoustics](http://www.soundplan.eu/english/soundplan-acoustics/). I don't know much about this software or about the existence of open source equivalents. However it unfortunately works with shapefiles and doesn't understand null data—null data has to be converted to 0.
+
+The engineer told me that State Highway traffic volume has been available for years, but only in the [form of a PDF](https://www.nzta.govt.nz/assets/resources/state-highway-traffic-volumes/docs/SHTV-2010-2014.pdf). (Download from me [here](./assets/mobile-road/HTV-2010-2014.pdf) if that link dies.) There's some additional information in the data in there that doesn't seem to have percolated into MobileRoad, including the direction of a count (super important). This is now more-or-less permanently fossilised in the PDF strata. If anyone reading this would like some feedback on this data and its distribution, please reach out to me, I'd actually love to help get this data out to a wider, public audience.
+
+<br>
+{% maincolumn "./assets/mobile-road/pdf-fuuu.png" "Published March 2015, and data is still being distributed from our government agencies like it's 2003." %}
+
+Rather interesting is the apparently increasingly widespread use of telemeters, going back as far as 2010. It would be neat to start getting at this real-time source of data for various purposes. Route planning apps would love it.
+
+Anyway, so after some back-and-forth discussion between the acoustic engineer and I, I managed to get to the bottom of my data scraping issues. The final extraction scripts, instructions, and last-scraped data is avilable for use here. The engineer did a test run on a small area of downtown Auckland. Running on a "spare computer at work", this small area took an entire hour to compute, so an area the size of the central isthmus could take anywhere from a few days to over a week. That's some pretty heavy calculation, but check out the result!
+
+<br>
+{% maincolumn "./assets/mobile-road/noise-test.png" "I'd give credit to my unnamed acoustic engineer for this map, but he's gone below the radar of my emails for a few weeks now." %}
+
+# Data & Data Quality
+
+<!-- TODO summarise Mobileroad extraction -->
+
+In order to support this application, we need several pieces of data that one might expects from RAMM/MobileRoad: road geometry, traffic volume, road surface, speed, and the percentage of traffic classed as "heavy". MobileRoad offers four out of five, but comes with some caveats.
+
+### Road network geometry
+This does not need to be as fully-featured as a network dataset used for routing applications.{% sidenote "sn-id-1" "Although it would be great if it was easy to combine with some other national road network dataset, e.g. LINZ's topographic network. Perhaps then you could make a pedestrian routing application that explicitly avoided busy roads. This would be a great tool for planning walking school bus routes." %} The more accurate the network geometry, the better, and topological connections are important for various kinds of analyses: just as correctly associating streams to their rivers is important for hydrological modelling. Unfortunately MobileRoad road geometries are severely limited in this regard.
+
+<br>
+{% maincolumn "./assets/mobile-road/mobileroad-topology.png" "MobileRoad appears to have poor concordance with OpenStreetMap. Topologically, it's rubbish. It concerns me that we appear to be managing our nation's road assets with a dataset that is worse than what you can get for free with an open license." %}
+
+The attributes are associated with the road segments via a system of linear referencing. I've made a diagram to try to demonstrate:
+
+<br>
+{% maincolumn "./assets/mobile-road/mobile-road-process.png" "Imagine that each of these four lines is a road in MobileRoad. Visually, they represent the road geometry. They each have attributes related to the geometry via <a href=\"https://en.wikipedia.org/wiki/Linear_referencing\">linear referencing</a>." %}
+
+There are two methods to obtain the length of a line: first, from its geometry; and secondly, from its attributes. You can obtain the length from the attributes because each attribute is associated with a segment denoted by its start and end position. For example, one attribute may apply from 0 metres to 100 metres. The end position of the final attribute is therefore equal to the total length of the feature.
+
+The simplest case is a simple geometry with agreement between the two definitions of length, and only one attribute that applies to the line. This is the first line in the diagram.
+
+The second line is an attempt to show a road with two attributes that apply to different segments of the line. However it's still a trivial case because there is agreement between the length of the line in geometrical and attribute terms.
+
+The first tricky case is the third line. Here, the red section indicates a mismatch between the lengths given in the attributes (shown in grey) and the geometry, with the "excess" geometric length shown in red. Strictly speaking, the red section of road has no data. However I think this is contrary to the "spirit" of MobileRoad, especially because the linear segments have integer values while geometric lengths are unfairly precise floating point values. Therefore, this third case is exceedingly common. My method of working around it is to scale the linear segments by determining how much larger or smaller the attribute-determined length is compared to the length determined from the feature geometry. It's probably not perfect, but without this almost every road would have a dangling segment of no data.
+
+The final line in the above diagram represents a rather pernicious case where a `LINESTRING` feature (in GIS terms) is actually a `MULTILINESTRING`: that is, a *multi-part feature*. In reality, such road geometries should be rare, but not impossible. I first noticed this in my trusty testing town of Gore. Work-arounds for this include closing small gaps, or just carrying on, ignoring the spaces. I take the latter approach, but it means my code must assume that every feature comprises an arbitrary number of simple features, rather than just working with simple `LINESTRING` features throughout. I'm still not clear if my interpretation of the attributes of such geometries is the correct one.
+
+<br>
+{% maincolumn "./assets/mobile-road/gore-line.png" "Follow Ardwick St along top to bottom. Notice that at the intersection of Ardwick and Crewe Streets, there is a slight break in the geometry. However both ends of Ardwick Street are actually the same feature, and share attributes. What should happen if the break occurs at the 50th metre, but an attribute nominally spans metres 0–75? Is the space included? How can it be?" %}
+
+Finally, there are also some hilariously incorrect geometries that have wormed their way into MobileRoad.
+
+<br>
+{% maincolumn "./assets/mobile-road/thames.png" "Like this enormous pier in the Firth of Thames." %}
+
+### Traffic volume
+This is the primary product of MobileRoad, and almost every road has a count.
+
+An important caveat that I will return to is that the count associated with road has a particular date associated with it. I actually really love this, as it is quite an important piece of information. Most similar kinds of data that I have worked with often only have a single creation or last-updated date associated with the entire dataset. Clearly data is collected over time. That the actual date is stated even supports the investigation into the cause of any outliers. Well done MobileRoad.
+
+Although this is ostensibly the primary reason for the existence of MobileRoad, I have some serious reservations with the traffic volume data. For example, I would assume that if you proceed down a street that only leads to culs-de-sac, that the volumes on each of the "leaves" would approximately sum to the single entry point, just as the water contained in a river is a strict function of the water in its tributaries (in the majority of cases). If you thought this, you would be wrong. I want to know why my intuition is wrong. I want to know whether the data is wrong. Part of the issue may be mismatching timestamps, with different segments' attributes relating to different measurement dates. However this didn't hold on the handful of test cases I inspected.
+
+On occasion, volume estimates for the same road are inconsistent, even where there is no apparent reason for this inconsistency to exist. An example is a traffic estimate that only exists for half of a road that has no intersections. There is some attrition along the length of a road as people turn in and out of driveways, but that happens on every road, yet only some seem to possibly be accounting for it.
+
+### Heavy traffic
+
+Heavy traffic is expressed as a percentage of traffic volume within mobile road, although this is rounded to an integer value for some reason, possibly because the identification of heavy vehicles might be a bit uncertain. Showing heavy vehicle volumes on a map results in some interesting patterns, including the identification of arterials for heavy vehicles, industrial areas, and new housing subdivisions (where apparently there are lots of trucks and limited through-traffic). In Christchuch the red zone is also obvious. This is one reason I'd really like a more complete time-series component to this data, to see how geographic patterns of industrial traffic are changing.
+
+### Road surface
+Road surface information is an important input into noise modelling. If you've spent time walking alongside arterial roads when cars are moving at full speed, you might've noticed the difference the road seal can make to vehicle noise.
+
+I walk to work most mornings, and have to turn up my podcast when I walk next to a chipseal road, but I can quite comfortably listen at a low volume when walking along the nice section of smooth asphalt. Beyond this, I don't really know much about the different types of road seal nor their implications. Unfortunately MobileRoad doesn't give me an opportunity to learn more, because there is no metadata associated with the road seal information. I trust that someone must know what `AC Reseal 05/2013 Grade 15 width 9.80m` (a section of Adelaide Road, Wellington) or `RACK Reseal 04/2004 Grade 4/6 with 7.40m` (Walters Street, Lower Hutt) really mean.
+
+One difficulty working with these string representations of widths is that although ~90% of the roads follow what looks to be a consistent pattern, not all follow the same rules. In particular, the standard used by the State Highways is considerably different from district data. The only real work my parsing code does is read these strings into objects with properties, *while gracefully handling corner cases*. If this were a real API, we could perhaps be dealing in named JSON properties. But alas: parsing a road width string works like this:
+
+{% highlight python %}
+import re
+
+def get_seal(d):
+    m = re.search(
+        '(\d?\w+)\s{1}(.*)\s(\d{0,2})\/?(\d{2})\/(\d{4})\sGrade\s([\d\/]*)\swidth\s([\d|.]*)m',
+        d
+    )
+    if not m:
+        # Maybe write to an error log
+        return None
+    return {
+        'seal': m.group(1),
+        'coating': m.group(2) if not 'not applicable' in m.group(2).lower() else None,
+        'seal_date': '{y}-{m}-{d}'.format(
+            d=m.group(3), m=m.group(4), y=m.group(5)
+        ),
+        'seal_grade': m.group(6),
+        'seal_width': float(m.group(7)),
+        'seal_display': d
+    }
+{% endhighlight %}
+
+One example of a slightly crummy input is `INBLK Not applicable 02/2000 Grade 12 width 8.00m`. The code has to search for the string "not applicable" and cast that to an actual null value. My testing code literally consists of one example that covers most cases, and then all of the corner cases I found when parsing. Maybe a few slipped through my regex fingers. They probably did. I would like to be more confident than that. Sharp readers may notice that the moment non-metre units are used, things fall to shit.
+
+I shouldn't have to do this. This pattern in open (well, *semi-open*) data occurs too frequently. The MobileRoad application should be composing those strings in the client from objects that have named properties. Then my code wouldn't exist. As a programmer, I like not writing code.
+
+{% highlight python %}
+import json
+json.loads(d)
+{% endhighlight %}
+
+Maybe one day.
+
+### What's missing?
+
+{% marginnote "mn-id-1" "I recently asked my local council for data from a traffic count that occurred about 150 metres from my house. I was primarily interested in the speed information. My house abuts a 100 km/h speed sign marking the beginning of State Highway 23, so I wanted to know what speed people were doing 150m from the sign. I assumed lots of people would still be decelerating at this point, and that others travelling in the oppsite direction would be prematurely accelerating. My hunch was right: the *median* speed at the monitoring point was 55 km/h—and it's right by a pedestrian refuge where I watch kids scooter to school in the morning." %}
+
+**Speed limits** and measurements of actual **vehicle speed** are not included in MobileRoad. Speed limits can be sourced from other official (LINZ) and unofficial (OSM, Google Maps, etc.) sources although getting a perfect match is difficult, and getting an automated estimate of any mismatch error is a hard problem.
+
+The absence of speed information is a bit glaring because speed limits do not seem difficult to include given everything else that's being achieved, and as far as I know (which isn't far) vehicle speeds are also recorded when a traffic count is performed. I really don't have a good explanation for the absence of speed data. Except a cynical one that would show just how often drivers exceed speed limits.
+
+<br>
+{% maincolumn "./assets/mobile-road/propublica-speed.png" "Because of the profile of this what-I-call \"speed-death curve\", slight reductions in speed can massively improve the outcomes of crashes for pedestrians. Speed on the horizontal axis is in miles per hour. <a href=\"https://www.propublica.org/article/unsafe-at-many-speeds\">Interactive version</a>. It would be great to have access to speed data at a single source; and it would be good to level the playing field in terms of the data accessible to councils/council contractors and interested individuals, community groups and lobbyists." %}
+
+### Other issues
+
+**Replication and conflicting information**. Because MobileRoad data is divided up by district council, and the state highways by major island, there is some replication across the authorities supplying data. This seems to most often occur at the boundary between districts, and with state highways. The state highway outside my house is included twice: once in the North Island State Highway set, and once in my district council set. They have conflicting information about the traffic volumes, as well as inconsistent geometries. There are surely other examples, but I currently have no automated method to discover these.
+
+**Change over time**. New counts entirely supplant old counts, so we have no idea if the volume on a particular road is changing over time, or its sampling variability. Counts are not done on weekends (I believe) which also limits the applications of the data, and may understate the maximum volume of many roads (e.g. counts on roads near suburban rugby fields are conceivably going to be understated.) I have the ability, but am searching for the time, to download the data on a regular schedule and develop [diffs](https://en.wikipedia.org/wiki/Diff_utility) that will firstly allow incremental changes to be detected and recorded, and secondly allow time-series analysis, or at least allow some form of analysis that is explicit with its model time. You wouldn't make a weather forecast with model inputs from different points in time. Why should your traffic model be different?
+
+**Building footprints**. Buildings reflect and refract noise in three dimensions. In New Zealand we have one experimental building footprint geographic data service, which is a great start, but to add some true realism we need to get into the real third dimension. I can't imagine that this data is freely available, so I haven't really considered it here.
+
+**Gradient**. Topography is another issue I've glossed over here as it's a little incidental to MobileRoad. Vehicles make more noise going uphill as the engines have to work harder. Apparently this more than outweighs the noise reduction from cars working less hard to go downhill. Trucks probably make more noise going downhill, due to engine braking. Just getting a digital elevation model isn't quite adequate though, because bridges and tunnels are not at all well-represented by most general-prupose DEMs. You can see this quite obviously in this second map made by the acoustic engineer:
+
+<br>
+{% maincolumn "./assets/mobile-road/noise-test2.png" "Motorway bidges to the northeast of the Wellington CBD are being modelled as roads on sharp hillsides, when in reality they aren't quite as steep as that would suggest. (They are pretty damn strep though.)" %}
+
+Because the algorithm used by the acoustic modelling software is known to be unreliable for roads with less than 2000 AADT, such roads were excluded from the above analysis. Roads with fewer vehicles than that are rather quiet in any case.
+
+# Finally
+
+### What can this data be used for?
+
+You can use MobileRoad data for quite a few applications, but I implore you to keep the caveats I've discussed in mind, and to also critically assess other forms of data you might need for your analysis, especially elevation models. Tunnels are pretty good at absorbing and funnelling noise, but DEMs are entirely incapable of modelling them.
+
+### Who is using it?
+
+Apparently not a lot of people, if an acoustic engineer didn't already have their hands on it outside of a project basis.
+
+### Is it fit for purpose?
+
+Frankly, no, not until there is a lot more metadata, and there is a promise not to change the data model so that the data remains consumable by any downstream applications. But, it's a immesurably better than a PDF. So for any custodians of this data: please take what you have as a headstart, and get this data published properly, so New Zealand can benefit from it.
+
+### What decisions are being made on the basis of it?
+
+I don't really know! But I hope they are aware of the limitations, and aren't planning to spend billions of tax payer dollars on the information without assessing it critically...
+
+### How can it be improved?
+
+Open it up. People using the data will notice irregularities, and can report back.
+
+# Footnote
+
+The term **"data laundering"** is one I've seen used second-hand, apparently coined by Keith Ng at OS//OS NZ, 2016. It refers to scraping someone else's data and republishing it. That's a pretty apt term for what you've just heard about.
