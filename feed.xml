@@ -7,6 +7,167 @@
     <atom:link href="http://www.nearimprov.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Modelling traffic noise with laundered data</title>
+        <description>&lt;!-- TODO summarise Nick&#39;s work --&gt;
+&lt;p&gt;I had hoped to have here outputs of traffic/road noise for New Zealands major urban centres, but unfortunately my plans with a volunteering acoustic engineer have fallen through. (If you’re reading this, I’m still interested!) The engineer in question noticed my previous post on scraping data from &lt;a href=&quot;https://mobileroad.org/&quot;&gt;MobileRoad&lt;/a&gt;. He explained to me that the data has great potential for producing city-wide road noise surfaces.&lt;/p&gt;
+
+&lt;p&gt;Noise maps on the scale of entire cities is “commonplace” in Europe, and has been performed in some Australian cities, but to their knowledge no-one has attempted to do it in New Zealand. They would be useful for everyone from planners down to indvividuals deciding where to live, and also just make neat visualisations. The software that the engineer was planning to use is called &lt;a href=&quot;http://www.soundplan.eu/english/soundplan-acoustics/&quot;&gt;SoundPLAN Acoustics&lt;/a&gt;. I don’t know much about this software or about the existence of open source equivalents. However it unfortunately works with shapefiles and doesn’t understand null data—null data has to be converted to 0.&lt;/p&gt;
+
+&lt;p&gt;The engineer told me that State Highway traffic volume has been available for years, but only in the &lt;a href=&quot;https://www.nzta.govt.nz/assets/resources/state-highway-traffic-volumes/docs/SHTV-2010-2014.pdf&quot;&gt;form of a PDF&lt;/a&gt;. (Download from me &lt;a href=&quot;./assets/mobile-road/HTV-2010-2014.pdf&quot;&gt;here&lt;/a&gt; if that link dies.) There’s some additional information in the data in there that doesn’t seem to have percolated into MobileRoad, including the direction of a count (super important). This is now more-or-less permanently fossilised in the PDF strata. If anyone reading this would like some feedback on this data and its distribution, please reach out to me, I’d actually love to help get this data out to a wider, public audience.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Published March 2015, and data is still being distributed from our government agencies like it&#39;s 2003.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/pdf-fuuu.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Rather interesting is the apparently increasingly widespread use of telemeters, going back as far as 2010. It would be neat to start getting at this real-time source of data for various purposes. Route planning apps would love it.&lt;/p&gt;
+
+&lt;p&gt;Anyway, so after some back-and-forth discussion between the acoustic engineer and I, I managed to get to the bottom of my data scraping issues. The final extraction scripts, instructions, and last-scraped data is avilable for use here. The engineer did a test run on a small area of downtown Auckland. Running on a “spare computer at work”, this small area took an entire hour to compute, so an area the size of the central isthmus could take anywhere from a few days to over a week. That’s some pretty heavy calculation, but check out the result!&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;I&#39;d give credit to my unnamed acoustic engineer for this map, but he&#39;s gone below the radar of my emails for a few weeks now.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;data--data-quality&quot;&gt;Data &amp;amp; Data Quality&lt;/h1&gt;
+
+&lt;!-- TODO summarise Mobileroad extraction --&gt;
+
+&lt;p&gt;In order to support this application, we need several pieces of data that one might expects from RAMM/MobileRoad: road geometry, traffic volume, road surface, speed, and the percentage of traffic classed as “heavy”. MobileRoad offers four out of five, but comes with some caveats.&lt;/p&gt;
+
+&lt;h3 id=&quot;road-network-geometry&quot;&gt;Road network geometry&lt;/h3&gt;
+&lt;p&gt;This does not need to be as fully-featured as a network dataset used for routing applications.&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Although it would be great if it was easy to combine with some other national road network dataset, e.g. LINZ’s topographic network. Perhaps then you could make a pedestrian routing application that explicitly avoided busy roads. This would be a great tool for planning walking school bus routes. &lt;/span&gt; The more accurate the network geometry, the better, and topological connections are important for various kinds of analyses: just as correctly associating streams to their rivers is important for hydrological modelling. Unfortunately MobileRoad road geometries are severely limited in this regard.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;MobileRoad appears to have poor concordance with OpenStreetMap. Topologically, it&#39;s rubbish. It concerns me that we appear to be managing our nation&#39;s road assets with a dataset that is worse than what you can get for free with an open license.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/mobileroad-topology.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;The attributes are associated with the road segments via a system of linear referencing. I’ve made a diagram to try to demonstrate:&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Imagine that each of these four lines is a road in MobileRoad. Visually, they represent the road geometry. They each have attributes related to the geometry via &lt;a href=&quot;https://en.wikipedia.org/wiki/Linear_referencing&quot;&gt;linear referencing&lt;/a&gt;.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/mobile-road-process.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;There are two methods to obtain the length of a line: first, from its geometry; and secondly, from its attributes. You can obtain the length from the attributes because each attribute is associated with a segment denoted by its start and end position. For example, one attribute may apply from 0 metres to 100 metres. The end position of the final attribute is therefore equal to the total length of the feature.&lt;/p&gt;
+
+&lt;p&gt;The simplest case is a simple geometry with agreement between the two definitions of length, and only one attribute that applies to the line. This is the first line in the diagram.&lt;/p&gt;
+
+&lt;p&gt;The second line is an attempt to show a road with two attributes that apply to different segments of the line. However it’s still a trivial case because there is agreement between the length of the line in geometrical and attribute terms.&lt;/p&gt;
+
+&lt;p&gt;The first tricky case is the third line. Here, the red section indicates a mismatch between the lengths given in the attributes (shown in grey) and the geometry, with the “excess” geometric length shown in red. Strictly speaking, the red section of road has no data. However I think this is contrary to the “spirit” of MobileRoad, especially because the linear segments have integer values while geometric lengths are unfairly precise floating point values. Therefore, this third case is exceedingly common. My method of working around it is to scale the linear segments by determining how much larger or smaller the attribute-determined length is compared to the length determined from the feature geometry. It’s probably not perfect, but without this almost every road would have a dangling segment of no data.&lt;/p&gt;
+
+&lt;p&gt;The final line in the above diagram represents a rather pernicious case where a &lt;code class=&quot;highlighter-rouge&quot;&gt;LINESTRING&lt;/code&gt; feature (in GIS terms) is actually a &lt;code class=&quot;highlighter-rouge&quot;&gt;MULTILINESTRING&lt;/code&gt;: that is, a &lt;em&gt;multi-part feature&lt;/em&gt;. In reality, such road geometries should be rare, but not impossible. I first noticed this in my trusty testing town of Gore. Work-arounds for this include closing small gaps, or just carrying on, ignoring the spaces. I take the latter approach, but it means my code must assume that every feature comprises an arbitrary number of simple features, rather than just working with simple &lt;code class=&quot;highlighter-rouge&quot;&gt;LINESTRING&lt;/code&gt; features throughout. I’m still not clear if my interpretation of the attributes of such geometries is the correct one.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Follow Ardwick St along top to bottom. Notice that at the intersection of Ardwick and Crewe Streets, there is a slight break in the geometry. However both ends of Ardwick Street are actually the same feature, and share attributes. What should happen if the break occurs at the 50th metre, but an attribute nominally spans metres 0–75? Is the space included? How can it be?&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/gore-line.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Finally, there are also some hilariously incorrect geometries that have wormed their way into MobileRoad.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Like this enormous pier in the Firth of Thames.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/thames.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;traffic-volume&quot;&gt;Traffic volume&lt;/h3&gt;
+&lt;p&gt;This is the primary product of MobileRoad, and almost every road has a count.&lt;/p&gt;
+
+&lt;p&gt;An important caveat that I will return to is that the count associated with road has a particular date associated with it. I actually really love this, as it is quite an important piece of information. Most similar kinds of data that I have worked with often only have a single creation or last-updated date associated with the entire dataset. Clearly data is collected over time. That the actual date is stated even supports the investigation into the cause of any outliers. Well done MobileRoad.&lt;/p&gt;
+
+&lt;p&gt;Although this is ostensibly the primary reason for the existence of MobileRoad, I have some serious reservations with the traffic volume data. For example, I would assume that if you proceed down a street that only leads to culs-de-sac, that the volumes on each of the “leaves” would approximately sum to the single entry point, just as the water contained in a river is a strict function of the water in its tributaries (in the majority of cases). If you thought this, you would be wrong. I want to know why my intuition is wrong. I want to know whether the data is wrong. Part of the issue may be mismatching timestamps, with different segments’ attributes relating to different measurement dates. However this didn’t hold on the handful of test cases I inspected.&lt;/p&gt;
+
+&lt;p&gt;On occasion, volume estimates for the same road are inconsistent, even where there is no apparent reason for this inconsistency to exist. An example is a traffic estimate that only exists for half of a road that has no intersections. There is some attrition along the length of a road as people turn in and out of driveways, but that happens on every road, yet only some seem to possibly be accounting for it.&lt;/p&gt;
+
+&lt;h3 id=&quot;heavy-traffic&quot;&gt;Heavy traffic&lt;/h3&gt;
+
+&lt;p&gt;Heavy traffic is expressed as a percentage of traffic volume within mobile road, although this is rounded to an integer value for some reason, possibly because the identification of heavy vehicles might be a bit uncertain. Showing heavy vehicle volumes on a map results in some interesting patterns, including the identification of arterials for heavy vehicles, industrial areas, and new housing subdivisions (where apparently there are lots of trucks and limited through-traffic). In Christchuch the red zone is also obvious. This is one reason I’d really like a more complete time-series component to this data, to see how geographic patterns of industrial traffic are changing.&lt;/p&gt;
+
+&lt;h3 id=&quot;road-surface&quot;&gt;Road surface&lt;/h3&gt;
+&lt;p&gt;Road surface information is an important input into noise modelling. If you’ve spent time walking alongside arterial roads when cars are moving at full speed, you might’ve noticed the difference the road seal can make to vehicle noise.&lt;/p&gt;
+
+&lt;p&gt;I walk to work most mornings, and have to turn up my podcast when I walk next to a chipseal road, but I can quite comfortably listen at a low volume when walking along the nice section of smooth asphalt. Beyond this, I don’t really know much about the different types of road seal nor their implications. Unfortunately MobileRoad doesn’t give me an opportunity to learn more, because there is no metadata associated with the road seal information. I trust that someone must know what &lt;code class=&quot;highlighter-rouge&quot;&gt;AC Reseal 05/2013 Grade 15 width 9.80m&lt;/code&gt; (a section of Adelaide Road, Wellington) or &lt;code class=&quot;highlighter-rouge&quot;&gt;RACK Reseal 04/2004 Grade 4/6 with 7.40m&lt;/code&gt; (Walters Street, Lower Hutt) really mean.&lt;/p&gt;
+
+&lt;p&gt;One difficulty working with these string representations of widths is that although ~90% of the roads follow what looks to be a consistent pattern, not all follow the same rules. In particular, the standard used by the State Highways is considerably different from district data. The only real work my parsing code does is read these strings into objects with properties, &lt;em&gt;while gracefully handling corner cases&lt;/em&gt;. If this were a real API, we could perhaps be dealing in named JSON properties. But alas: parsing a road width string works like this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;re&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_seal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d?&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;w+)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s{1}(.*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{0,2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/?(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{4})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sGrade&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/]*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;swidth&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d|.]*)m&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# Maybe write to an error log&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;seal&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;coating&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;not applicable&#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;seal_date&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{y}-{m}-{d}&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;seal_grade&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;seal_width&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;seal_display&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;One example of a slightly crummy input is &lt;code class=&quot;highlighter-rouge&quot;&gt;INBLK Not applicable 02/2000 Grade 12 width 8.00m&lt;/code&gt;. The code has to search for the string “not applicable” and cast that to an actual null value. My testing code literally consists of one example that covers most cases, and then all of the corner cases I found when parsing. Maybe a few slipped through my regex fingers. They probably did. I would like to be more confident than that. Sharp readers may notice that the moment non-metre units are used, things fall to shit.&lt;/p&gt;
+
+&lt;p&gt;I shouldn’t have to do this. This pattern in open (well, &lt;em&gt;semi-open&lt;/em&gt;) data occurs too frequently. The MobileRoad application should be composing those strings in the client from objects that have named properties. Then my code wouldn’t exist. As a programmer, I like not writing code.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Maybe one day.&lt;/p&gt;
+
+&lt;h3 id=&quot;whats-missing&quot;&gt;What’s missing?&lt;/h3&gt;
+
+&lt;p&gt;&lt;label for=&quot;mn-id-1&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;I recently asked my local council for data from a traffic count that occurred about 150 metres from my house. I was primarily interested in the speed information. My house abuts a 100 km/h speed sign marking the beginning of State Highway 23, so I wanted to know what speed people were doing 150m from the sign. I assumed lots of people would still be decelerating at this point, and that others travelling in the oppsite direction would be prematurely accelerating. My hunch was right: the &lt;em&gt;median&lt;/em&gt; speed at the monitoring point was 55 km/h—and it’s right by a pedestrian refuge where I watch kids scooter to school in the morning. &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Speed limits&lt;/strong&gt; and measurements of actual &lt;strong&gt;vehicle speed&lt;/strong&gt; are not included in MobileRoad. Speed limits can be sourced from other official (LINZ) and unofficial (OSM, Google Maps, etc.) sources although getting a perfect match is difficult, and getting an automated estimate of any mismatch error is a hard problem.&lt;/p&gt;
+
+&lt;p&gt;The absence of speed information is a bit glaring because speed limits do not seem difficult to include given everything else that’s being achieved, and as far as I know (which isn’t far) vehicle speeds are also recorded when a traffic count is performed. I really don’t have a good explanation for the absence of speed data. Except a cynical one that would show just how often drivers exceed speed limits.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Because of the profile of this what-I-call &quot;speed-death curve&quot;, slight reductions in speed can massively improve the outcomes of crashes for pedestrians. Speed on the horizontal axis is in miles per hour. &lt;a href=&quot;https://www.propublica.org/article/unsafe-at-many-speeds&quot;&gt;Interactive version&lt;/a&gt;. It would be great to have access to speed data at a single source; and it would be good to level the playing field in terms of the data accessible to councils/council contractors and interested individuals, community groups and lobbyists.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/propublica-speed.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;other-issues&quot;&gt;Other issues&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Replication and conflicting information&lt;/strong&gt;. Because MobileRoad data is divided up by district council, and the state highways by major island, there is some replication across the authorities supplying data. This seems to most often occur at the boundary between districts, and with state highways. The state highway outside my house is included twice: once in the North Island State Highway set, and once in my district council set. They have conflicting information about the traffic volumes, as well as inconsistent geometries. There are surely other examples, but I currently have no automated method to discover these.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Change over time&lt;/strong&gt;. New counts entirely supplant old counts, so we have no idea if the volume on a particular road is changing over time, or its sampling variability. Counts are not done on weekends (I believe) which also limits the applications of the data, and may understate the maximum volume of many roads (e.g. counts on roads near suburban rugby fields are conceivably going to be understated.) I have the ability, but am searching for the time, to download the data on a regular schedule and develop &lt;a href=&quot;https://en.wikipedia.org/wiki/Diff_utility&quot;&gt;diffs&lt;/a&gt; that will firstly allow incremental changes to be detected and recorded, and secondly allow time-series analysis, or at least allow some form of analysis that is explicit with its model time. You wouldn’t make a weather forecast with model inputs from different points in time. Why should your traffic model be different?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Building footprints&lt;/strong&gt;. Buildings reflect and refract noise in three dimensions. In New Zealand we have one experimental building footprint geographic data service, which is a great start, but to add some true realism we need to get into the real third dimension. I can’t imagine that this data is freely available, so I haven’t really considered it here.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Gradient&lt;/strong&gt;. Topography is another issue I’ve glossed over here as it’s a little incidental to MobileRoad. Vehicles make more noise going uphill as the engines have to work harder. Apparently this more than outweighs the noise reduction from cars working less hard to go downhill. Trucks probably make more noise going downhill, due to engine braking. Just getting a digital elevation model isn’t quite adequate though, because bridges and tunnels are not at all well-represented by most general-prupose DEMs. You can see this quite obviously in this second map made by the acoustic engineer:&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;Motorway bidges to the northeast of the Wellington CBD are being modelled as roads on sharp hillsides, when in reality they aren&#39;t quite as steep as that would suggest. (They are pretty damn strep though.)&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test2.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Because the algorithm used by the acoustic modelling software is known to be unreliable for roads with less than 2000 AADT, such roads were excluded from the above analysis. Roads with fewer vehicles than that are rather quiet in any case.&lt;/p&gt;
+
+&lt;h1 id=&quot;finally&quot;&gt;Finally&lt;/h1&gt;
+
+&lt;h3 id=&quot;what-can-this-data-be-used-for&quot;&gt;What can this data be used for?&lt;/h3&gt;
+
+&lt;p&gt;You can use MobileRoad data for quite a few applications, but I implore you to keep the caveats I’ve discussed in mind, and to also critically assess other forms of data you might need for your analysis, especially elevation models. Tunnels are pretty good at absorbing and funnelling noise, but DEMs are entirely incapable of modelling them.&lt;/p&gt;
+
+&lt;h3 id=&quot;who-is-using-it&quot;&gt;Who is using it?&lt;/h3&gt;
+
+&lt;p&gt;Apparently not a lot of people, if an acoustic engineer didn’t already have their hands on it outside of a project basis.&lt;/p&gt;
+
+&lt;h3 id=&quot;is-it-fit-for-purpose&quot;&gt;Is it fit for purpose?&lt;/h3&gt;
+
+&lt;p&gt;Frankly, no, not until there is a lot more metadata, and there is a promise not to change the data model so that the data remains consumable by any downstream applications. But, it’s a immesurably better than a PDF. So for any custodians of this data: please take what you have as a headstart, and get this data published properly, so New Zealand can benefit from it.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-decisions-are-being-made-on-the-basis-of-it&quot;&gt;What decisions are being made on the basis of it?&lt;/h3&gt;
+
+&lt;p&gt;I don’t really know! But I hope they are aware of the limitations, and aren’t planning to spend billions of tax payer dollars on the information without assessing it critically…&lt;/p&gt;
+
+&lt;h3 id=&quot;how-can-it-be-improved&quot;&gt;How can it be improved?&lt;/h3&gt;
+
+&lt;p&gt;Open it up. People using the data will notice irregularities, and can report back.&lt;/p&gt;
+
+&lt;h1 id=&quot;footnote&quot;&gt;Footnote&lt;/h1&gt;
+
+&lt;p&gt;The term &lt;strong&gt;“data laundering”&lt;/strong&gt; is one I’ve seen used second-hand, apparently coined by Keith Ng at OS//OS NZ, 2016. It refers to scraping someone else’s data and republishing it. That’s a pretty apt term for what you’ve just heard about.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 01 Sep 2016 21:48:00 +1200</pubDate>
+        <link>http://www.nearimprov.com//laundering-noise/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//laundering-noise/</guid>
+      </item>
+    
+      <item>
         <title>Mobile Road: Valuable Data Hiding in Plain Sight</title>
         <description>&lt;p&gt;I’ve spent a lot of time recently testing the waters of open transport data in New Zealand. The summary is that there is actually quite a lot of data available, but it’s not easy to find, it’s not readily interoperable, it’s heavily coupled to the NZTA’s own applications, and generally there are severe uncertainties about the rights to use some of it.&lt;/p&gt;
 
@@ -706,90 +867,6 @@ docker run -it --net&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class
         <pubDate>Sun, 01 Nov 2015 21:06:00 +1300</pubDate>
         <link>http://www.nearimprov.com//geoserver-quickstart-with-docker/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//geoserver-quickstart-with-docker/</guid>
-      </item>
-    
-      <item>
-        <title>Spatial isn&#39;t that special</title>
-        <description>&lt;p&gt;This may be a strange thing for me to say, given that my postgraduate qualification, and profession is in geographic information systems. But I don’t think that spatial is particularly special. People pretend it is, and then use that to justify the selling of ridiculous desktop software and “enterprise” solutions to problems that Paul Ramsey here shows can all be solved in a single (PostGIS) SQL query and some wrapper PHP script alongside a slippy map.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;div align=&quot;center&quot;&gt;
-&lt;iframe width=&quot;65%&quot; height=&quot;500px&quot; src=&quot;https://www.youtube.com/embed/PwVRi37qXn8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-&lt;p&gt; &lt;/p&gt;
-
-&lt;p&gt;Now this headline assertion is not without nuance. While I currently think that 90% of any GIS workflow can and ought to be automated with something like PostGIS-extended PostgreSQL tables, views, &lt;a href=&quot;https://gist.github.com/alpha-beta-soup/6f0fe6a219a014ca9d4d&quot;&gt;upse&lt;/a&gt;&lt;a href=&quot;https://wiki.postgresql.org/wiki/UPSERT&quot;&gt;rts&lt;/a&gt; and trigger functions, that last 10% is actually very, very important. It’s where GIS folk &lt;strong&gt;should&lt;/strong&gt; be focusing their attention, given the other problems have been solved by technology. Unfortunately, a lot of people seem to get so caught up inefficiently achieving the fundamental 90% of issues that they don’t actually pay attention to the remaining problems that are actually difficult and/or emerging:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Spatial autocorrelation&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Metadata&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Cartography&lt;/strong&gt;&lt;label for=&quot;sn-id-cartography&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-cartography&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Interactive and otherwise: bad defaults threaten to undo hundreds of years of cartographic experience. &lt;/span&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Efficient, client-side implementations of &lt;strong&gt;geometric algorithms&lt;/strong&gt;&lt;label for=&quot;sn-id-turf&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-turf&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Read: &lt;a href=&quot;https://github.com/Turfjs/turf&quot;&gt;turf.js&lt;/a&gt; &lt;/span&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Spatial accuracy&lt;/strong&gt;&lt;label for=&quot;sn-id-sa&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-sa&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;I’ve yet to see a geocoding implementation that even attempts to &lt;strong&gt;record&lt;/strong&gt; accuracy! &lt;/span&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Spatial error&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Modifiable areal unit problem&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Ecological fallacy&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Locational fallacy &lt;label for=&quot;sn-id-lf&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-lf&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;e.g. the reduction of an entity to a single point when it is more appropraitly modelled as existing over a mutlidimensional field. &lt;/span&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Spatial sampling&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Stochastic processes&lt;/strong&gt;&lt;label for=&quot;sn-id-sp&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-sp&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;My own masters thesis considered this issue for measuring public transport accessibility: bus arrival time is a stochastic process, not a deterministic one. Further, spatial data is too often considered to be a random sample with many observations—I posit instead that it be viewed as a single realisation of a stochastic process. This should hardly be radical, but the gap in the literature for thinking like this is enormous. &lt;/span&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Within the spatial profession (the Twittersphere, where I hear from most of these people), I also don’t feel like enough attention is being paid to emerging and not-so-emerging technologies and how they can revolutionise the way spatial questions are posed and answered, and hopefully assist in shifting some attention to the 10% of real spatial problems, either directly, or by making the 90% more readily accomplishable.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/neo4j-contrib/spatial&quot;&gt;Spatially-augmented graph databases&lt;/a&gt; are something that has been piquing my interest recently and I intend to write a blog post about some experiments shortly. Why is no one really talking about them?&lt;/p&gt;
-
-&lt;p&gt;I’m not going to hold my breath waiting for the self-delcared GIS commentators on the circle-jerk that is LinkedIn to discuss the relative merits of GeoDjango.&lt;/p&gt;
-
-&lt;p&gt;I didn’t even encounter a NetCDF dataset with an arbitrary number of dimensions, embedded metadata, sigma coordinate systems and irregular grid spacing until I started working around oceanographers and meteorologists.&lt;/p&gt;
-
-&lt;p&gt;Why is &lt;a href=&quot;http://geogig.org/&quot;&gt;GeoGig&lt;/a&gt; still in beta? Why is no one really using it?&lt;/p&gt;
-
-&lt;p&gt;Turf.js!&lt;/p&gt;
-
-&lt;p&gt;There are exceptions of course. But if you want to participate in these exceptions, I found some useful advice that builds on the argument that a desktop GIS is increasingly akin to word processing software:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;So if you’re considering a GIS career, you might want to reframe the question. Instead of learning ArcGIS and getting a GISP certificate, I would recommend that you choose one of 4 paths:
-1. geospatial or geostatistical analyst;
-2. cartographer or visualization design expert;
-3. software developer;
-4. Geographic Information Scientist;
-Or some combination of the four (and an application area of interest wouldn’t hurt either).  If you only train yourself to be a GIS user you’ll be in the same boat as a professional word processor before too long.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;— &lt;a href=&quot;http://www.justinholman.com/2012/03/20/spatial-is-indeed-special/&quot;&gt;Justin Holman&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;As Holman notes, the existence of Microsoft Word didn’t make good writers obsolete. In fact probably the opposite is true.&lt;/p&gt;
-
-&lt;p&gt;I recognise that this post actually comes across as quite condescending. Frankly, I hope it is a little, as that was completely my intention. I mean what I say and a I say what I mean. I know I’m not blameless, and I’m comfortable with that because I recognise it and frequently acquiesce to those who know a lot more than I do about what I make my living in. I know for a fact that a lot of other people aren’t blameless, either. I just worry that many don’t recognise it. As a profession, spatial people should be extolling the merits of the solutions to difficult problems that we have studied. We need less button-clicking, more actual problem solving, because I’m not seeing enough evidence of the latter actually happening.&lt;/p&gt;
-
-&lt;p&gt;We’re not typists, we’re fucking writers, &lt;em&gt;auteurs&lt;/em&gt;, creators, scientists, and problem solvers. We should be proud of it… and act like it.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 01 Nov 2015 18:00:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//spatial-isnt-that-special/</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//spatial-isnt-that-special/</guid>
       </item>
     
   </channel>
