@@ -19,7 +19,7 @@ The engineer told me that State Highway traffic volume has been available for ye
 
 Rather interesting is the apparently increasingly widespread use of telemeters, going back as far as 2010. It would be neat to start getting at this real-time source of data for various purposes. Route planning apps would love it.
 
-Anyway, so after some back-and-forth discussion between the acoustic engineer and I, I managed to get to the bottom of my data scraping issues. The final extraction scripts, instructions, and last-scraped data is avilable for use here. The engineer did a test run on a small area of downtown Auckland. Running on a "spare computer at work", this small area took an entire hour to compute, so an area the size of the central isthmus could take anywhere from a few days to over a week. That's some pretty heavy calculation, but check out the result!
+Anyway, so after some back-and-forth discussion between the acoustic engineer and I, I managed to get to the bottom of my data scraping issues. The final extraction scripts, instructions, and the most recently scraped data is avilable for use [here](https://github.com/alpha-beta-soup/mobile-road-extraction). The engineer did a test run on a small area of downtown Auckland. Running on a "spare computer at work", this small area took an entire hour to compute, so an area the size of the central isthmus could take anywhere from a few days to over a week. That's some pretty heavy calculation, but check out the result!
 
 <br>
 {% maincolumn "./assets/mobile-road/noise-test.png" "I'd give credit to my unnamed acoustic engineer for this map, but he's gone below the radar of my emails for a few weeks now." %}
