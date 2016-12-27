@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Found maps of the Wiakato"
+title: "Found maps of the Waikato"
 date: 2016-12-27 14:24:19 +1300
 comments: true
 category:
@@ -13,14 +13,14 @@ To wrap things up here I'm clearing my desk of stuff that has been accumulating,
 
 ## Illustrated map of downtown Hamilton
 
-I found this one while getting a coffee in Metropolis Caffe in the Hamilton City CBD. Hamilton gets a bum rap. I used to talk it down, repeating the jokes about holding your breath as you drive through so that you don't get chlamydia. However I can hardly diss it; I grew up in Lower Hutt, a few hundred metres from the forlon CBD with exactly zero interesting shops or places that are worth taking visitors to. In fact when I tell people where I'm from, I either say "Wellington" (where I've never actually lived but of course where I have spent a lot of time) or, to be more specific, "Petone" (where I lived most recently for a year, and which I love dearly). That's despite the fact that Petone is part of Lower Hutt, not Wellington.
+I found this one while getting a coffee in Metropolis Caffe in the Hamilton City CBD. Hamilton gets a bum rap. I used to talk it down, repeating the jokes about holding your breath as you drive through so that you don't get chlamydia. However I can hardly diss it; I grew up in Lower Hutt, a few hundred metres from the forlorn CBD with exactly zero interesting shops or places that are worth taking visitors to. In fact when I tell people where I'm from, I either say "Wellington" (where I've never actually lived but of course where I have spent a lot of time) or, to be more specific, "Petone" (where I lived most recently for a year, and which I love dearly). That's despite the fact that Petone is part of Lower Hutt, not Wellington.
 
-Hamilton has a lot of hidden treasures, and is rapidly transforming for the better. The plaza in Centre Place is like nowhere else on a summer's day. Shops like Browsers and Auteur House honour the arts. Late at night you'll get an unbeatable albeit pricy alcholoic drink at Wonder Horse, made by a bartender who is actually concentrating on his craft. Frankton is remarkably similar to Petone, I'd be more than happy to live there permanently.
+Hamilton has a lot of hidden treasures, and is rapidly transforming for the better. The plaza in Centre Place is like nowhere else on a summer's day. Shops like Browsers and Auteur House honour the arts. Late at night you'll get an unbeatable albeit pricey alcoholic drink at Wonder Horse, made by a bartender who is actually concentrating on his craft. Frankton is remarkably similar to Petone, I'd be more than happy to live there permanently.
 
 Anyway, I love this vivid map: you can tell the artist who drew it is passionate about Hamilton, and is great at capturing the different feelings you get from wandering about different places in the Hamilton CBD.
 
 <br>
-{% maincolumn "./assets/waikato-found-maps/map1.jpg" "I didn't notice the atribution at the bottom left until just now, so I can't tell you whose work this is." %}
+{% maincolumn "./assets/waikato-found-maps/map1.jpg" "I didn't notice the attribution at the bottom left until just now, so I can't tell you whose work this is." %}
 
 <br>
 {% fullwidth "./assets/waikato-found-maps/map1-detail.jpg" "A detail from the above, right in the centre of Hamilton." %}
@@ -36,7 +36,7 @@ I have had Maungatautari on my list of places to see in the Waikato for nearly t
 
 ## Pukemiro Line
 
-The Pukemiro Line is a heritage bush tramway hidden away between Raglan/Ngauruwahia and Huntly. It has a remarkable set of railway stock that is still functional, and once a month for most of the year, they open the doors and allow the public to ride. I was so impressed with the restorative work being done that I made an additional donation of $60 after paying for my tickets and food. This is well worth your visit.
+The Pukemiro Line is a heritage bush tramway hidden away between Raglan/Ngaruawahia and Huntly. It has a remarkable set of railway stock that is still functional, and once a month for most of the year, they open the doors and allow the public to ride. I was so impressed with the restorative work being done that I made an additional donation of $60 after paying for my tickets and food. This is well worth your visit.
 
 <br>
 {% maincolumn "./assets/waikato-found-maps/map3.jpg" %}
