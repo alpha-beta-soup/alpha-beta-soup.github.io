@@ -156,7 +156,7 @@
 
 <p>The directory <code class="highlighter-rouge">source</code> contains the real work: our project code. We can list its contents from the terminal with the <code class="highlighter-rouge">ls</code> command:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ls <span class="nb">source</span>/<span class="k">*</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">ls source</span>/<span class="k">*</span>
 
   generate_los.sh
   generate_los_70.sh
@@ -193,31 +193,31 @@
 <p>The <code class="highlighter-rouge">usage</code> function and argument parsing:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">usage<span class="o">()</span> <span class="o">{</span>
-   cat <span class="sh">&lt;&lt; EOF
+   <span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
 Usage: generate_los.sh [-train | -road]
 
 -train    perform the viewshed analysis for the train journey
 -road     perform the viewshed analysis for the road journey
-EOF
+</span><span class="no">EOF
 </span>   <span class="nb">exit </span>1
 <span class="o">}</span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-ne 1 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span><span class="nt">-ne</span> 1 <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
    <span class="c"># Number of arguments</span>
    <span class="c"># If there is more or less than one, do usage()</span>
-   usage;
+   usage<span class="p">;</span>
 <span class="k">fi
 
-if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"-train"</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"-road"</span> <span class="o">]</span>; <span class="k">then
-  </span>usage;
+if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"-train"</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"-road"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span>usage<span class="p">;</span>
 <span class="k">fi</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">if [ $# -ne 1 ]; then</code> considers all of the arguments that a user enters alongside the command to execute the GRASS shell script. If the number of arguments is not equal to one (<code class="highlighter-rouge">-ne 1</code>), then the condition is reached: run the <code class="highlighter-rouge">usage</code> function.</p>
 
 <p><code class="highlighter-rouge">usage</code> tells our naïve user that they have to run either (and only one of) these commands at the terminal to get things going:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sh execute_los.sh -train
-sh execute_los.sh -road</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sh execute_los.sh <span class="nt">-train</span>
+sh execute_los.sh <span class="nt">-road</span></code></pre></figure>
 
 <p>Failure to do so simply prints an instruction to the terminal, and causes the script to stop with exit code 1 (<code class="highlighter-rouge">exit 1</code>), a catch-all for general errors.</p>
 
@@ -241,7 +241,7 @@ sh execute_los.sh -road</code></pre></figure>
     <span class="c"># ^ just a guess (note, try include the vehicle, too)</span>
     <span class="nv">OUTFILE</span><span class="o">=</span><span class="s2">"dist_los_rail"</span> <span class="c"># Name of final output raster</span>
 <span class="k">else
-    </span>usage; <span class="c"># shouldn't need this</span>
+    </span>usage<span class="p">;</span> <span class="c"># shouldn't need this</span>
 <span class="k">fi</span></code></pre></figure>
 
 <p>We define a number of variables that have global scope for the remainder of the script:</p>
@@ -289,9 +289,9 @@ sh execute_los.sh -road</code></pre></figure>
 
 <span class="c"># The maximum possible vis dist to use and still have</span>
 <span class="c"># 1000 rows and cols</span>
-<span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$R_RES</span><span class="s2"> * 1000 / 2"</span> | bc -l<span class="k">)</span>
+<span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$R_RES</span><span class="s2"> * 1000 / 2"</span> | bc <span class="nt">-l</span><span class="k">)</span>
 
-<span class="k">if</span> <span class="o">[</span> 1 -eq <span class="sb">`</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$POS_VIS_DIST</span><span class="s2"> &lt; </span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc<span class="sb">`</span> <span class="o">]</span>
+<span class="k">if</span> <span class="o">[</span> 1 <span class="nt">-eq</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$POS_VIS_DIST</span><span class="s2"> &lt; </span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc<span class="sb">`</span> <span class="o">]</span>
 <span class="k">then</span>
   <span class="c"># If the maximum distance r.los can sustain exceeds the</span>
   <span class="c"># user-selected value, override it</span>
@@ -307,19 +307,19 @@ sh execute_los.sh -road</code></pre></figure>
 
 <p>In the shell you could write:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"25 * 1000 /2"</span> | bc -l<span class="k">)</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">POS_VIS_DIST</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"25 * 1000 /2"</span> | bc <span class="nt">-l</span><span class="k">)</span>
 <span class="nb">echo</span> <span class="nv">$POS_VIS_DIST</span></code></pre></figure>
 
 <p>And it would spit out the value of your calculation: 12500</p>
 
 <p>The next piece of logic is to compare this number to our <code class="highlighter-rouge">MAX_VIS_DIST</code> to see if it is larger:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">if</span> <span class="o">[</span> 1 -eq <span class="sb">`</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$POS_VIS_DIST</span><span class="s2"> &lt; </span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc<span class="sb">`</span> <span class="o">]</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">if</span> <span class="o">[</span> 1 <span class="nt">-eq</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$POS_VIS_DIST</span><span class="s2"> &lt; </span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc<span class="sb">`</span> <span class="o">]</span></code></pre></figure>
 
 <p>Consider the following commands:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">v1</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"10 &lt; 20"</span> | bc -l<span class="k">)</span>
-<span class="nv">v2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"20 &lt; 10"</span> | bc -l<span class="k">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">v1</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"10 &lt; 20"</span> | bc <span class="nt">-l</span><span class="k">)</span>
+<span class="nv">v2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"20 &lt; 10"</span> | bc <span class="nt">-l</span><span class="k">)</span></code></pre></figure>
 
 <p>Can you see that we’re doing inequality checks? The value of <code class="highlighter-rouge">v1</code> is 1, true (10 is less than 20); the value of <code class="highlighter-rouge">v2</code> is 0, false (20 is not less than 10). <code class="highlighter-rouge">if [ 1 -eq result ]</code> then asks “if 1 is equal to result”, or more fluidly, “if result is true”. If it is, then you can see above that we reset <code class="highlighter-rouge">MAX_VIS_DIST</code> as it violates our 1000 rows and columns constraint.</p>
 
@@ -344,18 +344,18 @@ sh execute_los.sh -road</code></pre></figure>
 <h3 id="further-preparation-for-the-line-of-sight-calculation">Further preparation for the line of sight calculation</h3>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Load shapefile into GRASS</span>
-v.in.ogr <span class="nv">dsn</span><span class="o">=</span><span class="nv">$LINE_SHP</span> <span class="nv">output</span><span class="o">=</span>line_feature --o --v
+v.in.ogr <span class="nv">dsn</span><span class="o">=</span><span class="nv">$LINE_SHP</span> <span class="nv">output</span><span class="o">=</span>line_feature <span class="nt">--o</span> <span class="nt">--v</span>
 
 <span class="c"># Load elevation raster into GRASS and set it as the computational region</span>
-r.in.gdal --o <span class="nv">input</span><span class="o">=</span><span class="nv">$R_DEM</span> <span class="nv">output</span><span class="o">=</span>dem --verbose
+r.in.gdal <span class="nt">--o</span> <span class="nv">input</span><span class="o">=</span><span class="nv">$R_DEM</span> <span class="nv">output</span><span class="o">=</span>dem <span class="nt">--verbose</span>
 
 <span class="c"># Sample points along line</span>
-v.to.points -ivt <span class="k">in</span><span class="o">=</span>line_feature <span class="nv">out</span><span class="o">=</span>line_feature_points <span class="nv">dmax</span><span class="o">=</span><span class="nv">$DIST_PTS</span> --o --q
+v.to.points <span class="nt">-ivt</span> <span class="k">in</span><span class="o">=</span>line_feature <span class="nv">out</span><span class="o">=</span>line_feature_points <span class="nv">dmax</span><span class="o">=</span><span class="nv">$DIST_PTS</span> <span class="nt">--o</span> <span class="nt">--q</span>
 
 <span class="c"># Put point coordinates in text file</span>
-v.out.ascii -r <span class="k">in</span><span class="o">=</span>line_feature_points <span class="nv">fs</span><span class="o">=</span>, --quiet | awk -F <span class="s2">"</span><span class="se">\"</span><span class="s2">*,</span><span class="se">\"</span><span class="s2">*"</span> <span class="s1">'{print $1","$2}'</span> &gt; <span class="nv">$PTS_FILE</span>
+v.out.ascii <span class="nt">-r</span> <span class="k">in</span><span class="o">=</span>line_feature_points <span class="nv">fs</span><span class="o">=</span>, <span class="nt">--quiet</span> | awk <span class="nt">-F</span> <span class="s2">"</span><span class="se">\"</span><span class="s2">*,</span><span class="se">\"</span><span class="s2">*"</span> <span class="s1">'{print $1","$2}'</span> <span class="o">&gt;</span> <span class="nv">$PTS_FILE</span>
 
-<span class="nv">NPTS</span><span class="o">=</span><span class="sb">`</span>cat <span class="nv">$PTS_FILE</span> | wc -l<span class="sb">`</span></code></pre></figure>
+<span class="nv">NPTS</span><span class="o">=</span><span class="sb">`</span><span class="nb">cat</span> <span class="nv">$PTS_FILE</span> | wc <span class="nt">-l</span><span class="sb">`</span></code></pre></figure>
 
 <p>Try and see if you can work out what this section of code does. If you have GRASS running in your terminal, you can find out what any given GRASS command does with the following pattern: <code class="highlighter-rouge">r.command --help</code>, which is the same pattern for most commands at a UNIX terminal. You can also consult the online help.</p>
 
@@ -382,38 +382,38 @@ v.out.ascii -r <span class="k">in</span><span class="o">=</span>line_feature_poi
 
 <p>The general logic of the viewshed calculation is to take a series of points sampled along a line feature, find all places on the terrain model that a person standing on each point can see, and then mosaic each of these together into a final visibility surface. There are ways to make this smarter, such as using the fact that once a cell has been identified as visible from any point, to never bother querying whether it is visible again. I don’t explore these, although I might if I ever need to re-use this code.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -n <span class="s2">"</span><span class="se">\n</span><span class="s2">Computing viewsheds</span><span class="se">\n</span><span class="s2">"</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Computing viewsheds</span><span class="se">\n</span><span class="s2">"</span>
 
 <span class="nv">COUNTER</span><span class="o">=</span>0
-<span class="k">while </span><span class="nb">read</span> -r line
+<span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line
   <span class="k">do
 
-  </span><span class="nv">PCT_FLOAT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"100*</span><span class="k">$((</span>COUNTER+1<span class="k">))</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  </span><span class="nv">PCT_FLOAT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"100*</span><span class="k">$((</span>COUNTER+1<span class="k">))</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span>
   <span class="nv">PCT</span><span class="o">=</span><span class="sb">`</span><span class="nb">printf</span> <span class="s2">"%0.1f</span><span class="se">\n</span><span class="s2">"</span> <span class="nv">$PCT_FLOAT</span><span class="sb">`</span>
 
-  <span class="nb">echo</span> -ne <span class="s2">"Processing </span><span class="nv">$NPTS</span><span class="s2"> viewshed instances: </span><span class="se">\t</span><span class="s2"> </span><span class="nv">$PCT</span><span class="s2"> % (</span><span class="nv">$COUNTER</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">) </span><span class="se">\r</span><span class="s2">"</span>
+  <span class="nb">echo</span> <span class="nt">-ne</span> <span class="s2">"Processing </span><span class="nv">$NPTS</span><span class="s2"> viewshed instances: </span><span class="se">\t</span><span class="s2"> </span><span class="nv">$PCT</span><span class="s2"> % (</span><span class="nv">$COUNTER</span><span class="s2">/</span><span class="nv">$NPTS</span><span class="s2">) </span><span class="se">\r</span><span class="s2">"</span>
 
   <span class="c"># Set the region to a smaller subset around the current observer point</span>
   <span class="c">#   to speed processing</span>
-  <span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f1 -d,<span class="k">)</span>
-  <span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f2 -d,<span class="k">)</span>
-  <span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
-  <span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
-  <span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
-  <span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span>
+  <span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut <span class="nt">-f1</span> <span class="nt">-d</span>,<span class="k">)</span>
+  <span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut <span class="nt">-f2</span> <span class="nt">-d</span>,<span class="k">)</span>
+  <span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span>
+  <span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span>
+  <span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span>
+  <span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span>
   g.region <span class="nv">n</span><span class="o">=</span><span class="nv">$N</span> <span class="nv">s</span><span class="o">=</span><span class="nv">$S</span> <span class="nv">e</span><span class="o">=</span><span class="nv">$E</span> <span class="nv">w</span><span class="o">=</span><span class="nv">$W</span>
 
   <span class="c"># Does not overwrite, so SIGINT (Ctrl+C) can be used to interrupt a</span>
   <span class="c">#  long-running process, to be resumed later</span>
   <span class="c">#  (keep parameters constant between runs)</span>
-  r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> --v
+  r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> <span class="nt">--v</span>
   <span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span>COUNTER+1<span class="k">))</span>
 
 <span class="k">done</span> &lt; <span class="nv">$PTS_FILE</span></code></pre></figure>
 
 <p>We begin by creating a variable, <code class="highlighter-rouge">COUNTER</code>, to store our progress through an iteration. Then we start looping. That’s actually a bit hard to comprehend, so I’ll explain it closely:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">while </span><span class="nb">read</span> -r line
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line
   <span class="k">do</span>
   <span class="c"># do something</span>
 <span class="k">done</span> &lt; <span class="nv">$PTS_FILE</span></code></pre></figure>
@@ -428,21 +428,21 @@ v.out.ascii -r <span class="k">in</span><span class="o">=</span>line_feature_poi
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Set the region to a smaller subset around the current observer point to speed processing</span>
 <span class="c"># Note that this assumes the source line feature is projected in metres</span>
-<span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f1 -d,<span class="k">)</span> <span class="c"># Get the x coordinate value from line, the current observer point</span>
-<span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut -f2 -d,<span class="k">)</span> <span class="c"># The corresponding y value</span></code></pre></figure>
+<span class="nv">x</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut <span class="nt">-f1</span> <span class="nt">-d</span>,<span class="k">)</span> <span class="c"># Get the x coordinate value from line, the current observer point</span>
+<span class="nv">y</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$line</span> | cut <span class="nt">-f2</span> <span class="nt">-d</span>,<span class="k">)</span> <span class="c"># The corresponding y value</span></code></pre></figure>
 
 <p>Try <code class="highlighter-rouge">cut --help</code> coupled with the clue that <code class="highlighter-rouge">$line</code> is comma-delimited, if you don’t understand this.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># x minus the maximum visible distance: the western reach of the region</span>
-<span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># x + MAX_VIS_DIST: eastern reach</span>
-<span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># y + MAX_VIS_DIST: northern reach</span>
-<span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc -l<span class="k">)</span> <span class="c"># y - MAX_VIS_DIST: southern reach</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">W</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span> <span class="c"># x minus the maximum visible distance: the western reach of the region</span>
+<span class="nv">E</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$x</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span> <span class="c"># x + MAX_VIS_DIST: eastern reach</span>
+<span class="nv">N</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">+</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span> <span class="c"># y + MAX_VIS_DIST: northern reach</span>
+<span class="nv">S</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$y</span><span class="s2">-</span><span class="nv">$MAX_VIS_DIST</span><span class="s2">"</span> | bc <span class="nt">-l</span><span class="k">)</span> <span class="c"># y - MAX_VIS_DIST: southern reach</span></code></pre></figure>
 
 <p>Finally, we use this command to actually set the region in each iteration: <code class="highlighter-rouge">g.region n=$N s=$S e=$E w=$W</code>. I found that resetting the region each loop was remarkably faster than leaving the region equal to the union of all inputs.</p>
 
 <p>The final section of the loop performs the following:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> --v
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.los <span class="nv">input</span><span class="o">=</span>dem <span class="nv">output</span><span class="o">=</span>tmp_los_<span class="k">${</span><span class="nv">COUNTER</span><span class="k">}</span> <span class="nv">coordinate</span><span class="o">=</span><span class="nv">$line</span> <span class="nv">obs_elev</span><span class="o">=</span><span class="nv">$ELEV</span> <span class="nv">max_dist</span><span class="o">=</span><span class="nv">$MAX_VIS_DIST</span> <span class="nt">--v</span>
 <span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span>COUNTER+1<span class="k">))</span></code></pre></figure>
 
 <p><code class="highlighter-rouge">r.los</code> is the command that we’re really here for. It takes an input DEM, outputs a raster named <code class="highlighter-rouge">tmp_los_</code> plus whatever the counter is up to, a point value (our <code class="highlighter-rouge">$line</code> variable), and the observer elevation… and it goes away and tells us what that observer can see. Well, not really <em>what</em> they can see, more <em>where</em> they can see. The “what” can come later with some more Spatial Science™. For now, we close the loop and give it its input to set it in motion: <code class="highlighter-rouge">done &lt; $PTS_FILE</code>.</p>
@@ -450,7 +450,7 @@ v.out.ascii -r <span class="k">in</span><span class="o">=</span>line_feature_poi
 <h3 id="one-viewshed-to-rule-them-all">One Viewshed To Rule Them All</h3>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Set computational region to full extent</span>
-g.region -pm <span class="nv">rast</span><span class="o">=</span>dem --verbose
+g.region <span class="nt">-pm</span> <span class="nv">rast</span><span class="o">=</span>dem <span class="nt">--verbose</span>
 
 <span class="c"># Combine results in a single map</span>
 <span class="c">#   (aggregation method doesn't matter as we use</span>
@@ -458,11 +458,11 @@ g.region -pm <span class="nv">rast</span><span class="o">=</span>dem --verbose
 <span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Combining component viewsheds</span><span class="se">\n</span><span class="s2">"</span>
 <span class="c"># Loops because otherwise can easily exceed default hard limit of number of</span>
 <span class="c">#   rasters that can be open at once (1024)</span>
-<span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 0 99<span class="sb">`</span>;
+<span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 0 99<span class="sb">`</span><span class="p">;</span>
 <span class="k">do</span>
   <span class="c"># Combine a subset of all the viewsheds</span>
   <span class="c"># * is a wildcard for zero or more characters</span>
-  <span class="k">if</span> <span class="o">[</span> <span class="nv">$i</span> -le 9 <span class="o">]</span> <span class="c"># If i &lt;= 9</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$i</span> <span class="nt">-le</span> 9 <span class="o">]</span> <span class="c"># If i &lt;= 9</span>
   <span class="k">then</span> <span class="c"># append a 0 to the start of $i</span>
     <span class="nv">PATT</span><span class="o">=</span>tmp_los_<span class="k">*</span>0<span class="nv">$i</span>
     <span class="nv">OUT</span><span class="o">=</span>total_los_0<span class="nv">$i</span>
@@ -470,7 +470,7 @@ g.region -pm <span class="nv">rast</span><span class="o">=</span>dem --verbose
     <span class="nv">PATT</span><span class="o">=</span>tmp_los_<span class="k">*</span><span class="nv">$i</span>
     <span class="nv">OUT</span><span class="o">=</span>total_los_<span class="nv">$i</span>
   <span class="k">fi
-  </span>r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist --q <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span><span class="nv">$PATT</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span><span class="nv">$OUT</span> <span class="nv">method</span><span class="o">=</span>sum --o --q
+  </span>r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist <span class="nt">--q</span> <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span><span class="nv">$PATT</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span><span class="nv">$OUT</span> <span class="nv">method</span><span class="o">=</span>sum <span class="nt">--o</span> <span class="nt">--q</span>
 <span class="k">done</span></code></pre></figure>
 
 <p>Now that we have created each of the viewsheds for each of the points we sampled along the road or train line, we want to combine these individual raster layers into a single raster layer.</p>
@@ -514,32 +514,32 @@ g.region -pm <span class="nv">rast</span><span class="o">=</span>dem --verbose
 
 <p>So, combine these up into our finished product with another pattern matching exercise:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist --q <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span>total_los_<span class="k">*</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span>total_los <span class="nv">method</span><span class="o">=</span>sum --o --q</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">r.series <span class="k">in</span><span class="o">=</span><span class="sb">`</span>g.mlist <span class="nt">--q</span> <span class="nb">type</span><span class="o">=</span>rast <span class="nv">pattern</span><span class="o">=</span>total_los_<span class="k">*</span> <span class="nv">sep</span><span class="o">=</span>,<span class="sb">`</span> <span class="nv">out</span><span class="o">=</span>total_los <span class="nv">method</span><span class="o">=</span>sum <span class="nt">--o</span> <span class="nt">--q</span></code></pre></figure>
 
 <p>You could display the result now if you wanted the map to represent the number of times each cell has been determined as being “viewable”. I actually like the idea of a binary (viewable/not viewable) surface, where shading can be used to indicate distance from the line feature. So that’s what I’ll do. However it may be a little misleading, as distance from the line feature used in the exercise is not technically synonymous with the minimum distance from which it can be seen!</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Create distance to line_feature map</span>
 <span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Determining distance from features</span><span class="se">\n</span><span class="s2">"</span>
-v.to.rast <span class="k">in</span><span class="o">=</span>line_feature <span class="nv">out</span><span class="o">=</span>line_feature <span class="nv">use</span><span class="o">=</span>val <span class="nv">val</span><span class="o">=</span>1 --o --q
-r.grow.distance -m <span class="nv">input</span><span class="o">=</span>line_feature <span class="nv">distance</span><span class="o">=</span>dist_from_line_feature --o --q</code></pre></figure>
+v.to.rast <span class="k">in</span><span class="o">=</span>line_feature <span class="nv">out</span><span class="o">=</span>line_feature <span class="nv">use</span><span class="o">=</span>val <span class="nv">val</span><span class="o">=</span>1 <span class="nt">--o</span> <span class="nt">--q</span>
+r.grow.distance <span class="nt">-m</span> <span class="nv">input</span><span class="o">=</span>line_feature <span class="nv">distance</span><span class="o">=</span>dist_from_line_feature <span class="nt">--o</span> <span class="nt">--q</span></code></pre></figure>
 
 <p>This takes our line feature input and turns it into a raster; it then “grows” (raster buffers) this line… how far? To the same size as the entire GRASS region. There is no need to tell GRASS that; and it stores the output surface as a dataset specified by the rather misleading title of <code class="highlighter-rouge">distance</code>.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Use distance to line_feature instead of sum of times seen in the result map</span>
 <span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Substituting number of times seen for distance to cell from line</span><span class="se">\n</span><span class="s2">"</span>
-r.mapcalc <span class="s2">"</span><span class="nv">$OUTFILE</span><span class="s2"> = if(total_los, dist_from_line_feature, null())"</span> --o --v</code></pre></figure>
+r.mapcalc <span class="s2">"</span><span class="nv">$OUTFILE</span><span class="s2"> = if(total_los, dist_from_line_feature, null())"</span> <span class="nt">--o</span> <span class="nt">--v</span></code></pre></figure>
 
 <p>Here we use a bit of raster calculation (otherwise known as image manipulation) to make a new layer. To put the if statement into human terms: “if there is a  non-null value of <code class="highlighter-rouge">total_los</code> (i.e. a cell has been identified as visible), substitute its value with the value of the equivalent cell from the layer <code class="highlighter-rouge">dist_from_line_feature</code> (a raster surface where each cell knows its minimum distance from the line feature), otherwise make its value null.</p>
 
 <p>The rest should be self-explanatory:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Write output (as geotiff)</span>
-r.out.gdal <span class="nv">input</span><span class="o">=</span><span class="nv">$OUTFILE</span> <span class="nv">output</span><span class="o">=</span>../data/output/<span class="nv">$OUTFILE</span>.tif <span class="nv">format</span><span class="o">=</span>GTiff --o --v
+r.out.gdal <span class="nv">input</span><span class="o">=</span><span class="nv">$OUTFILE</span> <span class="nv">output</span><span class="o">=</span>../data/output/<span class="nv">$OUTFILE</span>.tif <span class="nv">format</span><span class="o">=</span>GTiff <span class="nt">--o</span> <span class="nt">--v</span>
 
 <span class="c"># Clean up, removing the component visibility rasters, only after outputs have been written</span>
 <span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Deleting temporary files</span><span class="se">\n</span><span class="s2">"</span>
-g.mremove -f <span class="s2">"tmp_los_*"</span> --q
-g.mremove -f <span class="s2">"total_los_*"</span> --q
+g.mremove <span class="nt">-f</span> <span class="s2">"tmp_los_*"</span> <span class="nt">--q</span>
+g.mremove <span class="nt">-f</span> <span class="s2">"total_los_*"</span> <span class="nt">--q</span>
 
 <span class="nb">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">generate_los.sh complete</span><span class="se">\n</span><span class="s2">"</span></code></pre></figure>
 
@@ -623,15 +623,15 @@ g.mremove -f <span class="s2">"total_los_*"</span> --q
     <span class="nx">southWest</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">41.722</span><span class="p">,</span><span class="mf">171.748</span><span class="p">],</span>
     <span class="nx">northEast</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">36.441</span><span class="p">,</span><span class="mf">179.124</span><span class="p">],</span>
     <span class="nx">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="nx">southWest</span><span class="p">,</span> <span class="nx">northEast</span><span class="p">],</span>
-    <span class="nx">attribution</span> <span class="o">=</span> <span class="s1">'Richard Law | \
-    Pierre Roudier | \
-    Basemap © &lt;a href="http://maps.scinfo.org.nz/"&gt;Landcare Research&lt;/a&gt; 2014. Contains data sourced from LINZ. Crown Copyright Reserved. &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | \
-    &lt;a href="https://koordinates.com/layer/40-nz-road-centrelines-topo-150k/"&gt;LINZ&lt;/a&gt; &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | \
+    <span class="nx">attribution</span> <span class="o">=</span> <span class="s1">'Richard Law | </span><span class="err">\</span><span class="s1">
+    Pierre Roudier | </span><span class="err">\</span><span class="s1">
+    Basemap © &lt;a href="http://maps.scinfo.org.nz/"&gt;Landcare Research&lt;/a&gt; 2014. Contains data sourced from LINZ. Crown Copyright Reserved. &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | </span><span class="err">\</span><span class="s1">
+    &lt;a href="https://koordinates.com/layer/40-nz-road-centrelines-topo-150k/"&gt;LINZ&lt;/a&gt; &lt;a href="http://creativecommons.org/licenses/by/3.0/nz/"&gt;CC BY 3.0 NZ&lt;/a&gt; | </span><span class="err">\</span><span class="s1">
     &lt;a href="http://grass.osgeo.org/"&gt;GRASS GIS&lt;/a&gt;'</span><span class="p">,</span>
     <span class="nx">global_min_zoom</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
     <span class="nx">global_max_zoom</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
 
-<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nb">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="o">-</span><span class="mf">38.6875</span><span class="p">,</span> <span class="mf">176.0694</span><span class="p">],</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">//centre and zoom of map, initially</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">setMaxBounds</span><span class="p">(</span><span class="nx">bounds</span><span class="p">);</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">minZoom</span> <span class="o">=</span> <span class="nx">global_min_zoom</span><span class="p">;</span>
@@ -672,7 +672,7 @@ g.mremove -f <span class="s2">"total_los_*"</span> --q
 
 <p>I then make a very important variable, <code class="highlighter-rouge">map</code>, and set a few of its options:</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nb">Map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="o">-</span><span class="mf">38.6875</span><span class="p">,</span> <span class="mf">176.0694</span><span class="p">],</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">//centre and zoom of map, initially</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">setMaxBounds</span><span class="p">(</span><span class="nx">bounds</span><span class="p">);</span>
 <span class="nx">map</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">minZoom</span> <span class="o">=</span> <span class="nx">global_min_zoom</span><span class="p">;</span>
@@ -830,7 +830,7 @@ g.mremove -f <span class="s2">"total_los_*"</span> --q
 
 <p>Then you can use Python from your command line to serve up a webpage (Python 2.x):</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python -m SimpleHTTPServer</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python <span class="nt">-m</span> SimpleHTTPServer</code></pre></figure>
 
 <p>Check out <a href="http://localhost:8000/">http://localhost:8000/</a> once this server is running. (Press ctrl-c to get back in control of your command line.)</p>
 
@@ -903,7 +903,7 @@ g.mremove -f <span class="s2">"total_los_*"</span> --q
     
   </ul>
 <div class="credits">
-<!-- <span>&copy; 2016 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
+<!-- <span>&copy; 2018 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
 <span>This site is created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme </a> for <a href="//jekyllrb.com">Jekyll</a>.</span>
 </div>
 </footer>

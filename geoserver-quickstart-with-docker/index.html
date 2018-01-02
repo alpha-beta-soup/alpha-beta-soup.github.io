@@ -73,47 +73,47 @@
 
 <p>I’ve been exploring <a href="geoserver.org/">GeoServer</a> recently, while also doing the same with <a href="https://www.docker.com/">Docker</a>. I figured I’d share a simple Dockerfile I wrote for getting started with GeoServer (Master) and some extensions, using Docker. I was pleasntly surprised how easy this is to do, after reading a few horrow stories online about getting off the ground with GeoServer. Obviously there’s a lot of additional configuration required before deploying GeoServer, but Docker does at least make it very easy to try something out by ensuring your on the same page as somebody else.</p>
 
-<figure class="highlight"><pre><code class="language-dockerfile" data-lang="dockerfile"># Dockerfile
-FROM debian:wheezy
+<figure class="highlight"><pre><code class="language-dockerfile" data-lang="dockerfile"><span class="c"># Dockerfile</span>
+<span class="k">FROM</span><span class="s"> debian:wheezy</span>
 
-# Update the sources list
-RUN apt-get update
-RUN apt-get upgrade -y
+<span class="c"># Update the sources list</span>
+<span class="k">RUN </span>apt-get update
+<span class="k">RUN </span>apt-get upgrade <span class="nt">-y</span>
 
-# Install basic applications
-RUN apt-get install -y build-essential wget unzip
+<span class="c"># Install basic applications</span>
+<span class="k">RUN </span>apt-get install <span class="nt">-y</span> build-essential wget unzip
 
-# Get the JRE/JDK installation
-RUN apt-get install -y default-jre default-jdk
-RUN apt-get install -y openjdk-7-jre openjdk-7-jdk
-ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
+<span class="c"># Get the JRE/JDK installation</span>
+<span class="k">RUN </span>apt-get install <span class="nt">-y</span> default-jre default-jdk
+<span class="k">RUN </span>apt-get install <span class="nt">-y</span> openjdk-7-jre openjdk-7-jdk
+<span class="k">ENV</span><span class="s"> JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64</span>
 
-# Get GeoServer
-ENV GEOSERVER_HOME=/usr/share/geoserver/
-RUN mkdir $GEOSERVER_HOME
-RUN wget http://ares.boundlessgeo.com/geoserver/master/geoserver-master-latest-bin.zip
-RUN cp geoserver-master-latest-bin.zip $GEOSERVER_HOME
-RUN unzip $GEOSERVER_HOME/geoserver-master-latest-bin.zip -d $GEOSERVER_HOME
-RUN rm $GEOSERVER_HOME/geoserver-master-latest-bin.zip
-ENV GEOSERVER_VER=2.9
+<span class="c"># Get GeoServer</span>
+<span class="k">ENV</span><span class="s"> GEOSERVER_HOME=/usr/share/geoserver/</span>
+<span class="k">RUN </span>mkdir <span class="nv">$GEOSERVER_HOME</span>
+<span class="k">RUN </span>wget http://ares.boundlessgeo.com/geoserver/master/geoserver-master-latest-bin.zip
+<span class="k">RUN </span>cp geoserver-master-latest-bin.zip <span class="nv">$GEOSERVER_HOME</span>
+<span class="k">RUN </span>unzip <span class="nv">$GEOSERVER_HOME</span>/geoserver-master-latest-bin.zip <span class="nt">-d</span> <span class="nv">$GEOSERVER_HOME</span>
+<span class="k">RUN </span>rm <span class="nv">$GEOSERVER_HOME</span>/geoserver-master-latest-bin.zip
+<span class="k">ENV</span><span class="s"> GEOSERVER_VER=2.9</span>
 
-# A plugin
-ENV A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin
-RUN wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/$A_PLUGIN.zip
-RUN cp $A_PLUGIN.zip $GEOSERVER_HOME
-RUN ls $GEOSERVER_HOME
-RUN ls $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
-RUN unzip $GEOSERVER_HOME/$A_PLUGIN.zip \
--d $GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/webapps/geoserver/WEB-INF/lib/
-RUN rm $GEOSERVER_HOME/$A_PLUGIN.zip
+<span class="c"># A plugin</span>
+<span class="k">ENV</span><span class="s"> A_PLUGIN=geoserver-$GEOSERVER_VER-SNAPSHOT-netcdf-plugin</span>
+<span class="k">RUN </span>wget http://ares.boundlessgeo.com/geoserver/master/ext-latest/<span class="nv">$A_PLUGIN</span>.zip
+<span class="k">RUN </span>cp <span class="nv">$A_PLUGIN</span>.zip <span class="nv">$GEOSERVER_HOME</span>
+<span class="k">RUN </span><span class="nb">ls</span> <span class="nv">$GEOSERVER_HOME</span>
+<span class="k">RUN </span><span class="nb">ls</span> <span class="nv">$GEOSERVER_HOME</span>/geoserver-<span class="nv">$GEOSERVER_VER</span><span class="nt">-SNAPSHOT</span>/
+<span class="k">RUN </span>unzip <span class="nv">$GEOSERVER_HOME</span>/<span class="nv">$A_PLUGIN</span>.zip <span class="se">\
+</span><span class="nt">-d</span> <span class="nv">$GEOSERVER_HOME</span>/geoserver-<span class="nv">$GEOSERVER_VER</span><span class="nt">-SNAPSHOT</span>/webapps/geoserver/WEB-INF/lib/
+<span class="k">RUN </span>rm <span class="nv">$GEOSERVER_HOME</span>/<span class="nv">$A_PLUGIN</span>.zip
 
-ENV GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/
-WORKDIR $GEOSERVER_HOME/bin</code></pre></figure>
+<span class="k">ENV</span><span class="s"> GEOSERVER_HOME=$GEOSERVER_HOME/geoserver-$GEOSERVER_VER-SNAPSHOT/</span>
+<span class="k">WORKDIR</span><span class="s"> $GEOSERVER_HOME/bin</span></code></pre></figure>
 
 <p>Then to build and run the Docker container:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker build -t user/geoserver-master:test .
-docker run -it --net<span class="o">=</span><span class="s2">"host"</span> user/geoserver-master:test
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker build <span class="nt">-t</span> user/geoserver-master:test <span class="nb">.</span>
+docker run <span class="nt">-it</span> <span class="nt">--net</span><span class="o">=</span><span class="s2">"host"</span> user/geoserver-master:test
 ./startup.sh</code></pre></figure>
 
 <p>Now you have GeoServer running, so head to <code class="highlighter-rouge">localhost:8080/geoserver</code>, and login with the default user and password: <code class="highlighter-rouge">admin</code> and <code class="highlighter-rouge">geoserver</code>.</p>
@@ -187,7 +187,7 @@ docker run -it --net<span class="o">=</span><span class="s2">"host"</span> user/
     
   </ul>
 <div class="credits">
-<!-- <span>&copy; 2016 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
+<!-- <span>&copy; 2018 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
 <span>This site is created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme </a> for <a href="//jekyllrb.com">Jekyll</a>.</span>
 </div>
 </footer>

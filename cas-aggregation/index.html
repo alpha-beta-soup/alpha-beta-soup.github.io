@@ -71,9 +71,8 @@
 
 <p>In my last post I included a sample disaggregate CAS record, of a crash in Ashburton. Here it is again:</p>
 
-<p><code class="highlighter-rouge">csv
-'Ashburton District','MOORE ST','100','N',' ','WILLIAM ST','201531749','07/02/2015','Sat','2335','EA','CN1V','103A 129A ','M','R','D','DO','F ',' ',' ','C','050','0','0','0','','','1499510','5137544',
-</code></p>
+<pre><code class="language-csv">'Ashburton District','MOORE ST','100','N',' ','WILLIAM ST','201531749','07/02/2015','Sat','2335','EA','CN1V','103A 129A ','M','R','D','DO','F ',' ',' ','C','050','0','0','0','','','1499510','5137544',
+</code></pre>
 
 <p>Decoded, it might look like this:</p>
 
@@ -82,9 +81,8 @@
 
 <p>Now that the NZTA has <a href="http://www.nzta.govt.nz/resources/crash-analysis-reports/grouped-crash-sites/">released aggregate data</a>, we can compare and contrast the so-called “grouped crash sites”:</p>
 
-<p><code class="highlighter-rouge">csv
-201212510,1822862,5530978,I,4,,0,Palmerston North,RUAHINE ST,FEATHERSTON ST,50
-</code></p>
+<pre><code class="language-csv">201212510,1822862,5530978,I,4,,0,Palmerston North,RUAHINE ST,FEATHERSTON ST,50
+</code></pre>
 
 <p>There’s a lot less there, but initially it’s actually harder to decode this information, because the NZTA has apparently also taken this opportunity to change how they classify crashes.<label for="sn-id-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-1" class="margin-toggle" /><span class="sidenote">From January 2016 CAS now uses v4.0 of the <a href="http://www.nzta.govt.nz/assets/resources/guide-to-coded-crash-reports/docs/Factors-contributing-to-crashes-for-use.pdf"><code class="highlighter-rouge">guide-to-coded-crash-reports</code></a>. In case NZTA moves or removes it, download it from me <a href="/assets/cas-saga/guide-to-coded-crash-reports_v4.0.pdf">here</a>. I just hope it’s possible to download the older data in this same schema. </span> The NZTA explains<label for="sn-id-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-2" class="margin-toggle" /><span class="sidenote">A diff PDF can be obtained from the NZTA <a href="http://www.nzta.govt.nz/assets/resources/guide-to-coded-crash-reports/docs/New-retired-merged-contributory-factors-for-use-from-1-Jan-2016.pdf">here</a>, and from me <a href="/assets/cas-saga/cas-diff.pdf`">here</a>. The changes largely look fine, and they have included conversions between lots of codes they have changed. An interesting new inclusion is <strong>697: Vehicle software failure</strong>, but I’m not sure what <strong>856: Barriers necessary</strong> and <strong>857: Island necessary</strong> are—they sound like policy, not explanations of an accident. Still, props to the NZTA for the semantic versioning, my only real quibble is that a PDF has to be the most annoying format for communicating a table of data. I’ll get around to making a machine-readable format of this in the near future and it will be included in my CAS repository. At that time I’ll also write CAS v4.0 versions of the original data, going back to the year 2000. </span> that</p>
 
@@ -148,7 +146,7 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
 
 <p>According to the Way Back Machine, the NZTA has published the original CSV data (or something like it) since at least 2006. Glen Koorey mentioned in a comment on the first post that CAS-the-system is about 15 years old, which marries with how much data used to be available for download without signing a license agreement. I learnt a little about Citrix, and apparently there are non-Windows clients that will enable interested parties to explore CAS via NZTA’s interface. Personally I’m still not into that: my problem is that I want to create my own data exploration tool for CAS. <strong>CAS was never intended for general public consumption; I want to make it so it is.</strong></p>
 
-<p>Glen also mentioned that a CAS upgrading program has been underway for a few years. One can get on the mailing list for this at <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#097;&#115;&#114;&#101;&#112;&#108;&#097;&#099;&#101;&#109;&#101;&#110;&#116;&#064;&#110;&#122;&#116;&#097;&#046;&#103;&#111;&#118;&#116;&#046;&#110;&#122;">&#099;&#097;&#115;&#114;&#101;&#112;&#108;&#097;&#099;&#101;&#109;&#101;&#110;&#116;&#064;&#110;&#122;&#116;&#097;&#046;&#103;&#111;&#118;&#116;&#046;&#110;&#122;</a>. Frankly it’s hard to see much fruit.</p>
+<p>Glen also mentioned that a CAS upgrading program has been underway for a few years. One can get on the mailing list for this at <a href="mailto:casreplacement@nzta.govt.nz">casreplacement@nzta.govt.nz</a>. Frankly it’s hard to see much fruit.</p>
 
 <p>The other <em>very interesting tidbit</em> that I discovered from one my readers is that the CAS interface (the one you get via Citrix after signing the license agreement) actually <em>allows you to download the disaggregate information in the exact same schema as the original CSVs</em>. For a higher fee, super-users can actually see super-disaggregate data that surely has some serious privacy considerations: records include names, addresses, Police sketches, Police comments, etc.</p>
 
@@ -225,7 +223,7 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
     
   </ul>
 <div class="credits">
-<!-- <span>&copy; 2016 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
+<!-- <span>&copy; 2018 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
 <span>This site is created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme </a> for <a href="//jekyllrb.com">Jekyll</a>.</span>
 </div>
 </footer>

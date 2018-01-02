@@ -67,7 +67,7 @@
 
 <p>Geocoding: the process of taking an address as a piece of semi-structured text, and returning a coordinate somewhere on the surface of the Earth. It’s very unlikely that you’re not going to use an online service to do this. This means a few things. Firstly, that you have to decide on a geocoding provider. Secondly, you’re going to have to sit tight while the geocoding takes place. Python can address both of these issues for you.</p>
 
-<h2 id="geopyhttpsgeopyreadthedocsorgen1110"><a href="https://geopy.readthedocs.org/en/1.11.0/">GeoPy</a></h2>
+<h2 id="geopy"><a href="https://geopy.readthedocs.org/en/1.11.0/">GeoPy</a></h2>
 
 <p>GeoPy is a Python 2/3 module for accessing a whole suite of geocoding web services. As of version 1.10.0, these include: ArcGIS; Baidu; Bing; DataBC; GeocodeFarm; GoecoderDotUS; GeoNames; Google; IGN France; LiveAddress; NaviData; Nominatim (OSM); OpenCage; OpenMapQuest; Yahoo! BOSS Place Finder; What3Words; and Yandex.</p>
 
@@ -139,25 +139,25 @@
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="s1">'Gluepot Road, Oropi, Tauranga, North Island'</span> ← geocoder starting up
 <span class="s1">'Gluepot Road, Oropi, Tauranga, New Zealand'</span> ← fail
-<span class="s1">'Gluepot Road, Tauranga, New Zealand'</span> -37.8475939 176.1500778 ← success
+<span class="s1">'Gluepot Road, Tauranga, New Zealand'</span> <span class="nt">-37</span>.8475939 176.1500778 ← success
 <span class="s1">'Maungaraki, Lower Hutt, North Island'</span> ← geocoder starting up
-<span class="s1">'Maungaraki, Lower Hutt, New Zealand'</span> -41.2058337 174.8800422 ← success
+<span class="s1">'Maungaraki, Lower Hutt, New Zealand'</span> <span class="nt">-41</span>.2058337 174.8800422 ← success
 <span class="s1">'Rimutaka Ranges, Wairarapa, North Island'</span> ← geocoder starting up
 <span class="s1">'Rimutaka Ranges, Wairarapa, New Zealand'</span> ← fail
-<span class="s1">'Rimutaka, Wairarapa, New Zealand'</span> -41.3573081 175.0005109 ← success
+<span class="s1">'Rimutaka, Wairarapa, New Zealand'</span> <span class="nt">-41</span>.3573081 175.0005109 ← success
 <span class="s1">'Mourea, Rotorua, North Island'</span> ← geocoder starting up
-<span class="s1">'Mourea, Rotorua, New Zealand'</span> -38.0442035 176.3261444 ← success
+<span class="s1">'Mourea, Rotorua, New Zealand'</span> <span class="nt">-38</span>.0442035 176.3261444 ← success
 <span class="s1">'Tauranga, North Island'</span> ← geocoder starting up
-<span class="s1">'Tauranga, New Zealand'</span> -37.6867319 176.1673614 ← success
+<span class="s1">'Tauranga, New Zealand'</span> <span class="nt">-37</span>.6867319 176.1673614 ← success
 <span class="s1">'Waihopai Valley, Marlborough, South Island'</span> ← geocoder starting up
-<span class="s1">'Waihopai Valley, Marlborough, New Zealand'</span> -41.5149705 173.7897351 ← success
+<span class="s1">'Waihopai Valley, Marlborough, New Zealand'</span> <span class="nt">-41</span>.5149705 173.7897351 ← success
 <span class="s1">'At sea off the coast of the Bay of Plenty, North Island'</span> ← geocoder starting up
 <span class="s1">'At sea off the coast of the Bay of Plenty, New Zealand'</span> ← fail
 <span class="s1">'At Bay Plenty, New Zealand'</span> ← fail
 <span class="s1">'sea off the coast of the Bay of Plenty, New Zealand'</span> ← fail
-<span class="s1">'Bay of Plenty, New Zealand'</span> -37.9503755 176.938287362 ← success
+<span class="s1">'Bay of Plenty, New Zealand'</span> <span class="nt">-37</span>.9503755 176.938287362 ← success
 <span class="s1">'Taupo, North Island'</span> ← geocoder starting up
-<span class="s1">'Taupo, New Zealand'</span> -38.6883048 176.0755486 ← success
+<span class="s1">'Taupo, New Zealand'</span> <span class="nt">-38</span>.6883048 176.0755486 ← success
 Done <span class="k">in </span>16s</code></pre></figure>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="s1">'Gluepot Road, Oropi, Tauranga, North Island'</span> ← geocoder starting up
@@ -168,19 +168,19 @@ Done <span class="k">in </span>16s</code></pre></figure>
 <span class="s1">'Tauranga, North Island'</span> ← geocoder starting up
 <span class="s1">'At sea off the coast of the Bay of Plenty, North Island'</span> ← geocoder starting up
 <span class="s1">'Taupo, North Island'</span> ← geocoder starting up
-<span class="s1">'Tauranga, New Zealand'</span> -37.6867319 176.1673614 ← success
-<span class="s1">'Mourea, Rotorua, New Zealand'</span> -38.0442035 176.3261444 ← success
-<span class="s1">'Waihopai Valley, Marlborough, New Zealand'</span> -41.5149705 173.7897351 ← success
-<span class="s1">'Taupo, New Zealand'</span> -38.6883048 176.0755486 ← success
+<span class="s1">'Tauranga, New Zealand'</span> <span class="nt">-37</span>.6867319 176.1673614 ← success
+<span class="s1">'Mourea, Rotorua, New Zealand'</span> <span class="nt">-38</span>.0442035 176.3261444 ← success
+<span class="s1">'Waihopai Valley, Marlborough, New Zealand'</span> <span class="nt">-41</span>.5149705 173.7897351 ← success
+<span class="s1">'Taupo, New Zealand'</span> <span class="nt">-38</span>.6883048 176.0755486 ← success
 <span class="s1">'Gluepot Road, Oropi, Tauranga, New Zealand'</span> ← fail
 <span class="s1">'Rimutaka Ranges, Wairarapa, New Zealand'</span> ← fail
-<span class="s1">'Maungaraki, Lower Hutt, New Zealand'</span> -41.2058337 174.8800422 ← success
+<span class="s1">'Maungaraki, Lower Hutt, New Zealand'</span> <span class="nt">-41</span>.2058337 174.8800422 ← success
 <span class="s1">'At sea off the coast of the Bay of Plenty, New Zealand'</span> ← fail
-<span class="s1">'Gluepot Road, Tauranga, New Zealand'</span> -37.8475939 176.1500778 ← success
-<span class="s1">'Rimutaka, Wairarapa, New Zealand'</span> -41.3573081 175.0005109 ← success
+<span class="s1">'Gluepot Road, Tauranga, New Zealand'</span> <span class="nt">-37</span>.8475939 176.1500778 ← success
+<span class="s1">'Rimutaka, Wairarapa, New Zealand'</span> <span class="nt">-41</span>.3573081 175.0005109 ← success
 <span class="s1">'At Bay Plenty, New Zealand'</span> ← fail
 <span class="s1">'sea off the coast of the Bay of Plenty, New Zealand'</span> ← fail
-<span class="s1">'Bay of Plenty, New Zealand'</span> -37.9503755 176.938287362 ← success
+<span class="s1">'Bay of Plenty, New Zealand'</span> <span class="nt">-37</span>.9503755 176.938287362 ← success
 Done <span class="k">in </span>4s</code></pre></figure>
 
 <p>Notice the difference? In the latter case, there are multiple processes: 8 addresses get geocoded at once. They don’t return in order because they’re all happening at the same time and take different lengths of time to complete depending on their complexity. Failing addresses don’t prevent others from getting underway, and the whole process is so much smoother.</p>
@@ -250,7 +250,7 @@ Done <span class="k">in </span>4s</code></pre></figure>
     
   </ul>
 <div class="credits">
-<!-- <span>&copy; 2016 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
+<!-- <span>&copy; 2018 &nbsp;&nbsp;RICHARD LAW</span></br> <br> -->
 <span>This site is created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme </a> for <a href="//jekyllrb.com">Jekyll</a>.</span>
 </div>
 </footer>
