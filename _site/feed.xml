@@ -7,6 +7,55 @@
     <atom:link href="http://www.nearimprov.com/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>NZ Traffic Dashboard</title>
+        <description>&lt;p&gt;Looking back at my ambitions for 2017 in early December, I’ve done OK. Getting married was obviously a huge personal milestone for me. There was one outstanding item that I’d intended to do early in the year that instead I decided to devote December to: an interactive traffic dashboard for New Zealand. In my mind’s eye this would be something like a traffic control centre, &lt;a href=&quot;https://www.stuff.co.nz/national/99897853/curious-city-the-team-that-keep-new-zealands-traffic-moving&quot;&gt;like the one in Wellington&lt;/a&gt;, which manages about two thirds of the nation’s roads.&lt;/p&gt;
+
+&lt;p&gt;I like to pick at least one new piece of technology when I work on a personal project of this nature. This time it was &lt;a href=&quot;https://electronjs.org/&quot;&gt;Electron&lt;/a&gt;: a way to make cross platform desktop apps using familiar tools for web development. I ended up using &lt;a href=&quot;https://electronforge.io/&quot;&gt;Electron Forge&lt;/a&gt; to make the process even easier, because I’d rather spend time on the actual project than on build configuration.&lt;/p&gt;
+
+&lt;p&gt;The goal for this project was quite a low bar initially: a map that could show the available traffic cameras exposed by the &lt;a href=&quot;https://www.nzta.govt.nz/traffic-and-travel-information/infoconnect-section-page/about-the-apis/traffic-cameras/&quot;&gt;NZTA traffic camera API&lt;/a&gt;. When zooming and panning that map, I wanted the cameras that were displayed in the application to filter according to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Minimum_bounding_box&quot;&gt;minimum bounding box&lt;/a&gt; defined by the user’s current map extent. I wanted this simply because when browsing the NZTA’s website for traffic cameras, I found it frustrating to have to click through menus (text) to access spatial information. To build such an application that could respond the way I wanted, I decided to use &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt;, and in particular Google’s Material UI and &lt;a href=&quot;https://github.com/alex3165/react-mapbox-gl&quot;&gt;this React binding of Mapbox GL JS&lt;/a&gt; that I’ve been using for most of this year at work.&lt;/p&gt;
+
+&lt;p&gt;I found that my decision to use Electron (and therefore a local desktop application) eventually led to some other decisions that I hadn’t originally intended: images from cameras could be cached locally on disk, so I store them in a sensible structure and then I can list the contents of each camera’s cache, sort by &lt;a href=&quot;https://www.unixtutorial.org/2008/04/atime-ctime-mtime-in-unix-filesystems/&quot;&gt;mtime&lt;/a&gt;, and create a looping animation for each camera. Anticipating that this would not always be a desktop application, it’s just a configuration change away from using an S3 bucket to cache images and to use that to drive the animation (e.g. using &lt;code class=&quot;highlighter-rouge&quot;&gt;listObjectsV2&lt;/code&gt; in the AWS JavaScript SDK to order images by modification time).&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot; data-lang=&quot;en&quot;&gt;&lt;p lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;The NZTA traffic camera API only gives you instantaneous results. So I&amp;#39;ma address that: &lt;a href=&quot;https://t.co/4B0aoe3Lby&quot;&gt;pic.twitter.com/4B0aoe3Lby&lt;/a&gt;&lt;/p&gt;&amp;mdash; ∆ Richard Law (@abetasoup) &lt;a href=&quot;https://twitter.com/abetasoup/status/936165994837327872?ref_src=twsrc%5Etfw&quot;&gt;November 30, 2017&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async=&quot;&quot; src=&quot;https://platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;the-nzta-apis&quot;&gt;The NZTA APIs&lt;/h2&gt;
+
+&lt;p&gt;In addition to the NZTA traffic camera API, I also used their Variable Message Signs API, the OpenWeatherMap API, the Mapbox vector tile API (with their traffic tiles), and trivial parts of the AWS JS SDK. There’s a handful of pain points about the NZTA APIs that would be nice to see addressed in 2018.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;You can’t manage your own API keys. You have to send a message to request access, and give a reason for wanting access (although my reason was literally just “Curiosity”). Every request must also include a username and password in the request headers. However your username and password are determined for you, and you cannot change them yourself. This all smells a little bit of an immature API and API culture. As the terms of use include a requirement that you keep this information secure, I’d argue that if someone else has control of my password, then I already have no control over the security of it.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;From doing a bit of digging into how our traffic control centres operate in New Zealand, I realised that the API only exposes a small fraction of the cameras that are on our roads. On Twitter &lt;a href=&quot;https://twitter.com/NZTAWgtn/status/943889798405771264&quot;&gt;the NZTA posted a short video of SH2&lt;/a&gt; in Wellington. This camera is video, as opposed to 30/60/240 second stills that the API exposes. It’s also in a particularly useful position. It was argued that this is done to protect privacy (e.g. in the case of a serious accident), but I’m not sure I buy this reasoning. Cameras can already be marked “unavailable” and no images retrieved for as long as that status remains. I’d hope that this feature gets used appropriately. What worries me is whether the NZTA actually has multiple camera systems operating with different APIs. I’m a firm believer in &lt;a href=&quot;https://en.wikipedia.org/wiki/Eating_your_own_dog_food&quot;&gt;eating your own dog food&lt;/a&gt;, so I &lt;strong&gt;hope&lt;/strong&gt; that this API doesn’t just exist for external consumption, but rather is used internally.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The cameras in Hamilton are almost always “under maintenance”. This I don’t really understand, unless there’s some network connectivity issue, because it only seems to affect Hamilton. A few of the cameras in Hamilton were reliable, the rest were almost always off.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The API responses themselves could be a bit more useful. For instance the direction that a camera is facing would be a very useful attribute to have. Almost all of the cameras are described as being, for example, “&lt;em&gt;Northbound&lt;/em&gt; on State Highway 1 at Pokeno”. However the cameras are not all fixed, and indeed I watched a few being rotated and zoomed, in 30 second snapshots, as the traffic controllers monitored holiday traffic north of Wellington. They can be panned 360°, tilted, and zoomed. However the only physical camera attribute that is exposed is the location. I parsed the descriptions looking for an indication of direction, and then used that to rotate symbols in the map—but it just made it more confusing (an upside-down camera icon?). The camera facing direction would be great given the ability to tilt and rotate in Mapbox GL.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Variable Message Signs API doesn’t use standard characters for newlines and tabs, which is a minor annoyance, but irritating nonetheless.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;wrapping-up&quot;&gt;Wrapping up&lt;/h2&gt;
+
+&lt;p&gt;All in all, this was a fun little distraction for the past month. I think it was a good idea to “time box” myself to avoid some bad habits, but also because it means I can now move on to something else for the month of January without feeling guilty. I don’t consider the project “finished”, although nothing ever really is, so I will probably revisit it later in the year. The code is on Github &lt;a href=&quot;https://github.com/alpha-beta-soup/traffic-dash&quot;&gt;here&lt;/a&gt; and there is also a loose Kanban-stype project board for it &lt;a href=&quot;https://github.com/alpha-beta-soup/traffic-dash/projects/1&quot;&gt;here&lt;/a&gt; where I’ve recorded the ideas I have for it.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;figcaption&gt;A brief snapshot of Traffic&lt;/figcaption&gt;&lt;img src=&quot;/./assets/traffic-dashboard/Peek 2017-12-31 15-35.gif&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 31 Dec 2017 14:25:00 +1300</pubDate>
+        <link>http://www.nearimprov.com//traffic-dashboard/</link>
+        <guid isPermaLink="true">http://www.nearimprov.com//traffic-dashboard/</guid>
+      </item>
+    
+      <item>
         <title>Found maps of the Waikato</title>
         <description>&lt;p&gt;I’ve lived in Raglan, Waikato for 18 months now. I’m preparing to move back to Wellington in just under two weeks, which is a bewildering mixture of excitement and melancholy. It involves a new chapter of working from home, although I’m not changing my employer. I will in fact be returning to Raglan regularly for work, so I look forward to getting in some travel as well.&lt;/p&gt;
 
@@ -21,7 +70,7 @@
 &lt;p&gt;Anyway, I love this vivid map: you can tell the artist who drew it is passionate about Hamilton, and is great at capturing the different feelings you get from wandering about different places in the Hamilton CBD.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;I didn&#39;t notice the attribution at the bottom left until just now, so I can&#39;t tell you whose work this is.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/waikato-found-maps/map1.jpg&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;I didn't notice the attribution at the bottom left until just now, so I can't tell you whose work this is.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/waikato-found-maps/map1.jpg&quot; /&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/./assets/waikato-found-maps/map1-detail.jpg&quot; /&gt;&lt;figcaption&gt;A detail from the above, right in the centre of Hamilton.&lt;/figcaption&gt;&lt;/figure&gt;
@@ -77,7 +126,7 @@
     
       <item>
         <title>Modelling traffic noise with laundered data</title>
-        <description>&lt;!-- TODO summarise Nick&#39;s work --&gt;
+        <description>&lt;!-- TODO summarise Nick's work --&gt;
 &lt;p&gt;I had hoped to have here outputs of traffic/road noise for New Zealands major urban centres, but unfortunately my plans with a volunteering acoustic engineer have fallen through. (If you’re reading this, I’m still interested!) The engineer in question noticed my previous post on scraping data from &lt;a href=&quot;https://mobileroad.org/&quot;&gt;MobileRoad&lt;/a&gt;. He explained to me that the data has great potential for producing city-wide road noise surfaces.&lt;/p&gt;
 
 &lt;p&gt;Noise maps on the scale of entire cities is “commonplace” in Europe, and has been performed in some Australian cities, but to their knowledge no-one has attempted to do it in New Zealand. They would be useful for everyone from planners down to indvividuals deciding where to live, and also just make neat visualisations. The software that the engineer was planning to use is called &lt;a href=&quot;http://www.soundplan.eu/english/soundplan-acoustics/&quot;&gt;SoundPLAN Acoustics&lt;/a&gt;. I don’t know much about this software or about the existence of open source equivalents. However it unfortunately works with shapefiles and doesn’t understand null data—null data has to be converted to 0.&lt;/p&gt;
@@ -85,14 +134,14 @@
 &lt;p&gt;The engineer told me that State Highway traffic volume has been available for years, but only in the &lt;a href=&quot;https://www.nzta.govt.nz/assets/resources/state-highway-traffic-volumes/docs/SHTV-2010-2014.pdf&quot;&gt;form of a PDF&lt;/a&gt;. (Download from me &lt;a href=&quot;./assets/mobile-road/HTV-2010-2014.pdf&quot;&gt;here&lt;/a&gt; if that link dies.) There’s some additional information in the data in there that doesn’t seem to have percolated into MobileRoad, including the direction of a count (super important). This is now more-or-less permanently fossilised in the PDF strata. If anyone reading this would like some feedback on this data and its distribution, please reach out to me, I’d actually love to help get this data out to a wider, public audience.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;Published March 2015, and data is still being distributed from our government agencies like it&#39;s 2003.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/pdf-fuuu.png&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;Published March 2015, and data is still being distributed from our government agencies like it's 2003.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/pdf-fuuu.png&quot; /&gt;&lt;/figure&gt;
 
 &lt;p&gt;Rather interesting is the apparently increasingly widespread use of telemeters, going back as far as 2010. It would be neat to start getting at this real-time source of data for various purposes. Route planning apps would love it.&lt;/p&gt;
 
 &lt;p&gt;Anyway, so after some back-and-forth discussion between the acoustic engineer and I, I managed to get to the bottom of my data scraping issues. The final extraction scripts, instructions, and the most recently scraped data is avilable for use &lt;a href=&quot;https://github.com/alpha-beta-soup/mobile-road-extraction&quot;&gt;here&lt;/a&gt;. The engineer did a test run on a small area of downtown Auckland. Running on a “spare computer at work”, this small area took an entire hour to compute, so an area the size of the central isthmus could take anywhere from a few days to over a week. That’s some pretty heavy calculation, but check out the result!&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;I&#39;d give credit to my unnamed acoustic engineer for this map, but he&#39;s gone below the radar of my emails for a few weeks now.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test.png&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;I'd give credit to my unnamed acoustic engineer for this map, but he's gone below the radar of my emails for a few weeks now.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test.png&quot; /&gt;&lt;/figure&gt;
 
 &lt;h1 id=&quot;data--data-quality&quot;&gt;Data &amp;amp; Data Quality&lt;/h1&gt;
 
@@ -104,7 +153,7 @@
 &lt;p&gt;This does not need to be as fully-featured as a network dataset used for routing applications.&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Although it would be great if it was easy to combine with some other national road network dataset, e.g. LINZ’s topographic network. Perhaps then you could make a pedestrian routing application that explicitly avoided busy roads. This would be a great tool for planning walking school bus routes. &lt;/span&gt; The more accurate the network geometry, the better, and topological connections are important for various kinds of analyses: just as correctly associating streams to their rivers is important for hydrological modelling. Unfortunately MobileRoad road geometries are severely limited in this regard.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;MobileRoad appears to have poor concordance with OpenStreetMap. Topologically, it&#39;s rubbish. It concerns me that we appear to be managing our nation&#39;s road assets with a dataset that is worse than what you can get for free with an open license.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/mobileroad-topology.png&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;MobileRoad appears to have poor concordance with OpenStreetMap. Topologically, it's rubbish. It concerns me that we appear to be managing our nation's road assets with a dataset that is worse than what you can get for free with an open license.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/mobileroad-topology.png&quot; /&gt;&lt;/figure&gt;
 
 &lt;p&gt;The attributes are associated with the road segments via a system of linear referencing. I’ve made a diagram to try to demonstrate:&lt;/p&gt;
 
@@ -153,21 +202,21 @@
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_seal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d?&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;w+)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s{1}(.*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{0,2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/?(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{4})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sGrade&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/]*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;swidth&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d|.]*)m&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d?&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;w+)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s{1}(.*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{0,2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/?(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{2})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d{4})&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sGrade&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/]*)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;swidth&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s([&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d|.]*)m'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;c&quot;&gt;# Maybe write to an error log&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;seal&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;coating&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;not applicable&#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;seal_date&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{y}-{m}-{d}&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'seal'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'coating'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'not applicable'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'seal_date'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{y}-{m}-{d}'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;seal_grade&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;seal_width&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&#39;seal_display&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'seal_grade'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'seal_width'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'seal_display'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;One example of a slightly crummy input is &lt;code class=&quot;highlighter-rouge&quot;&gt;INBLK Not applicable 02/2000 Grade 12 width 8.00m&lt;/code&gt;. The code has to search for the string “not applicable” and cast that to an actual null value. My testing code literally consists of one example that covers most cases, and then all of the corner cases I found when parsing. Maybe a few slipped through my regex fingers. They probably did. I would like to be more confident than that. Sharp readers may notice that the moment non-metre units are used, things fall to shit.&lt;/p&gt;
@@ -201,7 +250,7 @@
 &lt;p&gt;&lt;strong&gt;Gradient&lt;/strong&gt;. Topography is another issue I’ve glossed over here as it’s a little incidental to MobileRoad. Vehicles make more noise going uphill as the engines have to work harder. Apparently this more than outweighs the noise reduction from cars working less hard to go downhill. Trucks probably make more noise going downhill, due to engine braking. Just getting a digital elevation model isn’t quite adequate though, because bridges and tunnels are not at all well-represented by most general-prupose DEMs. You can see this quite obviously in this second map made by the acoustic engineer:&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;Motorway bidges to the northeast of the Wellington CBD are being modelled as roads on sharp hillsides, when in reality they aren&#39;t quite as steep as that would suggest. (They are pretty damn strep though.)&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test2.png&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;Motorway bidges to the northeast of the Wellington CBD are being modelled as roads on sharp hillsides, when in reality they aren't quite as steep as that would suggest. (They are pretty damn strep though.)&lt;/figcaption&gt;&lt;img src=&quot;/./assets/mobile-road/noise-test2.png&quot; /&gt;&lt;/figure&gt;
 
 &lt;p&gt;Because the algorithm used by the acoustic modelling software is known to be unreliable for roads with less than 2000 AADT, such roads were excluded from the above analysis. Roads with fewer vehicles than that are rather quiet in any case.&lt;/p&gt;
 
@@ -231,7 +280,7 @@
 
 &lt;p&gt;The term &lt;strong&gt;“data laundering”&lt;/strong&gt; is one I’ve seen used second-hand, apparently coined by Keith Ng at OS//OS NZ, 2016. It refers to scraping someone else’s data and republishing it. That’s a pretty apt term for what you’ve just heard about.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 01 Sep 2016 21:48:00 +1200</pubDate>
+        <pubDate>Thu, 01 Sep 2016 22:48:00 +1300</pubDate>
         <link>http://www.nearimprov.com//laundering-noise/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//laundering-noise/</guid>
       </item>
@@ -322,7 +371,7 @@
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/./assets/mobile-road/chch-vol.png&quot; /&gt;&lt;figcaption&gt;Absolute heavy AADT&lt;/figcaption&gt;&lt;/figure&gt;
 </description>
-        <pubDate>Wed, 18 May 2016 18:00:00 +1200</pubDate>
+        <pubDate>Wed, 18 May 2016 19:00:00 +1300</pubDate>
         <link>http://www.nearimprov.com//mobile-road/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//mobile-road/</guid>
       </item>
@@ -335,9 +384,8 @@
 
 &lt;p&gt;In my last post I included a sample disaggregate CAS record, of a crash in Ashburton. Here it is again:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;csv
-&#39;Ashburton District&#39;,&#39;MOORE ST&#39;,&#39;100&#39;,&#39;N&#39;,&#39; &#39;,&#39;WILLIAM ST&#39;,&#39;201531749&#39;,&#39;07/02/2015&#39;,&#39;Sat&#39;,&#39;2335&#39;,&#39;EA&#39;,&#39;CN1V&#39;,&#39;103A 129A &#39;,&#39;M&#39;,&#39;R&#39;,&#39;D&#39;,&#39;DO&#39;,&#39;F &#39;,&#39; &#39;,&#39; &#39;,&#39;C&#39;,&#39;050&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;&#39;,&#39;&#39;,&#39;1499510&#39;,&#39;5137544&#39;,
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-csv&quot;&gt;'Ashburton District','MOORE ST','100','N',' ','WILLIAM ST','201531749','07/02/2015','Sat','2335','EA','CN1V','103A 129A ','M','R','D','DO','F ',' ',' ','C','050','0','0','0','','','1499510','5137544',
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Decoded, it might look like this:&lt;/p&gt;
 
@@ -346,9 +394,8 @@
 
 &lt;p&gt;Now that the NZTA has &lt;a href=&quot;http://www.nzta.govt.nz/resources/crash-analysis-reports/grouped-crash-sites/&quot;&gt;released aggregate data&lt;/a&gt;, we can compare and contrast the so-called “grouped crash sites”:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;csv
-201212510,1822862,5530978,I,4,,0,Palmerston North,RUAHINE ST,FEATHERSTON ST,50
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-csv&quot;&gt;201212510,1822862,5530978,I,4,,0,Palmerston North,RUAHINE ST,FEATHERSTON ST,50
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;There’s a lot less there, but initially it’s actually harder to decode this information, because the NZTA has apparently also taken this opportunity to change how they classify crashes.&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;From January 2016 CAS now uses v4.0 of the &lt;a href=&quot;http://www.nzta.govt.nz/assets/resources/guide-to-coded-crash-reports/docs/Factors-contributing-to-crashes-for-use.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;guide-to-coded-crash-reports&lt;/code&gt;&lt;/a&gt;. In case NZTA moves or removes it, download it from me &lt;a href=&quot;/assets/cas-saga/guide-to-coded-crash-reports_v4.0.pdf&quot;&gt;here&lt;/a&gt;. I just hope it’s possible to download the older data in this same schema. &lt;/span&gt; The NZTA explains&lt;label for=&quot;sn-id-2&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-2&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;A diff PDF can be obtained from the NZTA &lt;a href=&quot;http://www.nzta.govt.nz/assets/resources/guide-to-coded-crash-reports/docs/New-retired-merged-contributory-factors-for-use-from-1-Jan-2016.pdf&quot;&gt;here&lt;/a&gt;, and from me &lt;a href=&quot;/assets/cas-saga/cas-diff.pdf`&quot;&gt;here&lt;/a&gt;. The changes largely look fine, and they have included conversions between lots of codes they have changed. An interesting new inclusion is &lt;strong&gt;697: Vehicle software failure&lt;/strong&gt;, but I’m not sure what &lt;strong&gt;856: Barriers necessary&lt;/strong&gt; and &lt;strong&gt;857: Island necessary&lt;/strong&gt; are—they sound like policy, not explanations of an accident. Still, props to the NZTA for the semantic versioning, my only real quibble is that a PDF has to be the most annoying format for communicating a table of data. I’ll get around to making a machine-readable format of this in the near future and it will be included in my CAS repository. At that time I’ll also write CAS v4.0 versions of the original data, going back to the year 2000. &lt;/span&gt; that&lt;/p&gt;
 
@@ -371,7 +418,7 @@ Site Crash Count: Number of crashes at this site
 &lt;br /&gt;&lt;br /&gt;
 Site Location Direction: The direction of the crash from the reference point. Values N, E, S, W
 &lt;br /&gt;&lt;br /&gt;
-Site Location Distance: The distance of the crash from the reference point for the crash (often the intersection of &#39;Crash Road&#39; and &#39;Side Road&#39;)
+Site Location Distance: The distance of the crash from the reference point for the crash (often the intersection of 'Crash Road' and 'Side Road')
 &lt;br /&gt;&lt;br /&gt;
 Territorial Local Authority: Territorial local authority where the crash occurred
 &lt;br /&gt;&lt;br /&gt;
@@ -393,7 +440,7 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
 &lt;p&gt;A large proportion of the original data was no-injury crashes, which now are completely absent, not even present in aggregate. These are almost certainly under-represented in CAS… but what kind of response is this? Accidents that are under-represented are not really candidates for redaction.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;figcaption&gt;A disclaimer that comes with the aggregate data, inside the spreadsheet. Note that I can&#39;t even open the original .xlsx on my computer due to (I assume) the gross formatting the NZTA has thrown into the spreadsheet; LibreOffice Calc complains that the file has been corrupted. I agree.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/meta.png&quot; /&gt;&lt;/figure&gt;
+&lt;figure&gt;&lt;figcaption&gt;A disclaimer that comes with the aggregate data, inside the spreadsheet. Note that I can't even open the original .xlsx on my computer due to (I assume) the gross formatting the NZTA has thrown into the spreadsheet; LibreOffice Calc complains that the file has been corrupted. I agree.&lt;/figcaption&gt;&lt;img src=&quot;/./assets/cas-saga/meta.png&quot; /&gt;&lt;/figure&gt;
 
 &lt;p&gt;To top it off, the CAS data is still late: following the old CAS data schedule, we’d have disaggregate data up to December 2015 by now, rather than just June 2015: so we’re six months late and severely short-changed.&lt;/p&gt;
 
@@ -412,7 +459,7 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
 
 &lt;p&gt;According to the Way Back Machine, the NZTA has published the original CSV data (or something like it) since at least 2006. Glen Koorey mentioned in a comment on the first post that CAS-the-system is about 15 years old, which marries with how much data used to be available for download without signing a license agreement. I learnt a little about Citrix, and apparently there are non-Windows clients that will enable interested parties to explore CAS via NZTA’s interface. Personally I’m still not into that: my problem is that I want to create my own data exploration tool for CAS. &lt;strong&gt;CAS was never intended for general public consumption; I want to make it so it is.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Glen also mentioned that a CAS upgrading program has been underway for a few years. One can get on the mailing list for this at &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#099;&amp;#097;&amp;#115;&amp;#114;&amp;#101;&amp;#112;&amp;#108;&amp;#097;&amp;#099;&amp;#101;&amp;#109;&amp;#101;&amp;#110;&amp;#116;&amp;#064;&amp;#110;&amp;#122;&amp;#116;&amp;#097;&amp;#046;&amp;#103;&amp;#111;&amp;#118;&amp;#116;&amp;#046;&amp;#110;&amp;#122;&quot;&gt;&amp;#099;&amp;#097;&amp;#115;&amp;#114;&amp;#101;&amp;#112;&amp;#108;&amp;#097;&amp;#099;&amp;#101;&amp;#109;&amp;#101;&amp;#110;&amp;#116;&amp;#064;&amp;#110;&amp;#122;&amp;#116;&amp;#097;&amp;#046;&amp;#103;&amp;#111;&amp;#118;&amp;#116;&amp;#046;&amp;#110;&amp;#122;&lt;/a&gt;. Frankly it’s hard to see much fruit.&lt;/p&gt;
+&lt;p&gt;Glen also mentioned that a CAS upgrading program has been underway for a few years. One can get on the mailing list for this at &lt;a href=&quot;mailto:casreplacement@nzta.govt.nz&quot;&gt;casreplacement@nzta.govt.nz&lt;/a&gt;. Frankly it’s hard to see much fruit.&lt;/p&gt;
 
 &lt;p&gt;The other &lt;em&gt;very interesting tidbit&lt;/em&gt; that I discovered from one my readers is that the CAS interface (the one you get via Citrix after signing the license agreement) actually &lt;em&gt;allows you to download the disaggregate information in the exact same schema as the original CSVs&lt;/em&gt;. For a higher fee, super-users can actually see super-disaggregate data that surely has some serious privacy considerations: records include names, addresses, Police sketches, Police comments, etc.&lt;/p&gt;
 
@@ -428,14 +475,14 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
 
 &lt;p&gt;In the next few days I’ll be submitting some requests for information under the OIA to bring more light on the decisions that have led to this point.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 08 May 2016 19:22:00 +1200</pubDate>
+        <pubDate>Sun, 08 May 2016 20:22:00 +1300</pubDate>
         <link>http://www.nearimprov.com//cas-aggregation/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//cas-aggregation/</guid>
       </item>
     
       <item>
         <title>Crash Analysis System: The Narrative Arc</title>
-        <description>&lt;p&gt;For several years, up until at least June 2015, the New Zealand Transport Agency (NZTA) published the data underlying their Crash Analysis System (CAS). This included information on every Police-attended road crash or accident in New Zealand, with attendant information on the environment it occurred in, and what was deemed to have contributed to the accident. While the method of publishing this data was primitive,&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;It consisted of one CSV file for each calendar year, with each record in the file heavily encoded. Decoding required automation and a lot of sifting through several PDFs, and a tool to get machine-readable tables from them. An example record is &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;Ashburton District&#39;,&#39;MOORE ST&#39;,&#39;100&#39;,&#39;N&#39;,&#39; &#39;,&#39;WILLIAM ST&#39;,&#39;201531749&#39;,&#39;07/02/2015&#39;,&#39;Sat&#39;,&#39;2335&#39;,&#39;EA&#39;,&#39;CN1V&#39;,&#39;103A 129A &#39;,&#39;M&#39;,&#39;R&#39;,&#39;D&#39;,&#39;DO&#39;,&#39;F &#39;,&#39; &#39;,&#39; &#39;,&#39;C&#39;,&#39;050&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;&#39;,&#39;&#39;,&#39;1499510&#39;,&#39;5137544&#39;,&lt;/code&gt; and yes that whitespace in &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;F &#39;&lt;/code&gt; is actually meaningful. &lt;/span&gt; it was sufficient for people with a little bit of time to spare (me) and an unhealthy obsession with transportation issues (me) to make use of it. While in many ways it was a good example of how not to do open data, at the very least it existed, so &lt;a href=&quot;http://www.statschat.org.nz/?s=foreign+drivers&quot;&gt;other&lt;/a&gt; &lt;a href=&quot;http://www.mixnmashentry.blogspot.co.nz/&quot;&gt;people&lt;/a&gt; could take it and run with it. All the NZTA had to do was sit back and watch, massage new data, and upload a new file every three months.&lt;/p&gt;
+        <description>&lt;p&gt;For several years, up until at least June 2015, the New Zealand Transport Agency (NZTA) published the data underlying their Crash Analysis System (CAS). This included information on every Police-attended road crash or accident in New Zealand, with attendant information on the environment it occurred in, and what was deemed to have contributed to the accident. While the method of publishing this data was primitive,&lt;label for=&quot;sn-id-1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;It consisted of one CSV file for each calendar year, with each record in the file heavily encoded. Decoding required automation and a lot of sifting through several PDFs, and a tool to get machine-readable tables from them. An example record is &lt;code class=&quot;highlighter-rouge&quot;&gt;'Ashburton District','MOORE ST','100','N',' ','WILLIAM ST','201531749','07/02/2015','Sat','2335','EA','CN1V','103A 129A ','M','R','D','DO','F ',' ',' ','C','050','0','0','0','','','1499510','5137544',&lt;/code&gt; and yes that whitespace in &lt;code class=&quot;highlighter-rouge&quot;&gt;'F '&lt;/code&gt; is actually meaningful. &lt;/span&gt; it was sufficient for people with a little bit of time to spare (me) and an unhealthy obsession with transportation issues (me) to make use of it. While in many ways it was a good example of how not to do open data, at the very least it existed, so &lt;a href=&quot;http://www.statschat.org.nz/?s=foreign+drivers&quot;&gt;other&lt;/a&gt; &lt;a href=&quot;http://www.mixnmashentry.blogspot.co.nz/&quot;&gt;people&lt;/a&gt; could take it and run with it. All the NZTA had to do was sit back and watch, massage new data, and upload a new file every three months.&lt;/p&gt;
 
 &lt;h1 id=&quot;rising-action&quot;&gt;Rising Action&lt;/h1&gt;
 
@@ -474,7 +521,7 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
 
 &lt;p&gt;I took the liberty of downloading the linked documents, for posterity. Here are links to them:&lt;/p&gt;
 
-&lt;h3 id=&quot;cas-privacy-agreement-v1docxassetscas-sagacas-privacy-agreement-v1docx&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CAS-Privacy-Agreement-v1.docx&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CAS-Privacy-Agreement-v1.docx&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;cas-privacy-agreement-v1docx&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CAS-Privacy-Agreement-v1.docx&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CAS-Privacy-Agreement-v1.docx&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
 
 &lt;p&gt;An MS Word privacy agreement that must be signed to use the NZTA’s CAS viewer. (&lt;a href=&quot;./assets/cas-saga/CAS-Privacy-Agreement-v1.pdf&quot;&gt;PDF&lt;/a&gt;.) In particular, it stipulates that no-one can access or use CAS data unless they have been entitled to do so by the NZTA in writing. I figured that providing the data for download absolved me from this, and these statements were only to be found in relation to accessing the Citrix system. I was never told otherwise. There was no fee associated with using CAS.&lt;/p&gt;
 
@@ -502,15 +549,15 @@ Speed Limit: The speed limit in force at the crash site at the time of the crash
   &lt;p&gt;&lt;strong&gt;13.1&lt;/strong&gt;	The NZTA will make all reasonable endeavours to provide a secure and reliable system allowing the customer and user to use CAS at all times other than between 5pm and midnight each Saturday, such time being set aside for CAS maintenance.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&quot;guide-to-coded-crash-reportspdfassetscas-sagaguide-to-coded-crash-reportspdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/guide-to-coded-crash-reports.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;guide-to-coded-crash-reports.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;guide-to-coded-crash-reportspdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/guide-to-coded-crash-reports.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;guide-to-coded-crash-reports.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
 
 &lt;p&gt;My program uses the information in this PDF to decode the raw CSV data to a more meaningful GeoJSON structure, which then gets rendered in your browser. Go to page 15 to see the breakdown of the several hundred possible contributions to a crash. One crash can have as many of these explanations as needed; most explanations are additionally assigned to one of the parties to the crash, keyed by the type of vehicle, even working around the case where there are multiple vehicles of the same type in a crash. That’s a pretty complex structure, and &lt;em&gt;kudos&lt;/em&gt; for the NZTA for managing to cram that into a CSV!&lt;/p&gt;
 
-&lt;h3 id=&quot;casp24pdfassetscas-sagacasp24pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp24.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp24.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;casp24pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp24.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp24.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
 
 &lt;p&gt;A report prepared by Beca on some cycling project that includes images showing the NZTA’s CAS interface as it stood.&lt;/p&gt;
 
-&lt;h3 id=&quot;casp27pdfassetscas-sagacasp27pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp27.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp27.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;casp27pdf&quot;&gt;&lt;a href=&quot;./assets/cas-saga/CASp27.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CASp27.pdf&lt;/code&gt;&lt;/a&gt;&lt;/h3&gt;
 
 &lt;p&gt;A report prepared by OPUS on a cycling project in Wellington that includes an Appendix showing the use of CAS data, including an almost hieroglyphic map of the movements of parties involved in accidents in their case study area.&lt;label for=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/./assets/cas-saga/heiroglyphics.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
 
@@ -643,20 +690,22 @@ I hope this is of assistance.&lt;/p&gt;
   &lt;p&gt;Thanks for your email.
 &lt;br /&gt;
 As previously discussed, people can apply for free access to CAS for the following purposes:
-&lt;br /&gt;
-1. Informing transport policy and regulations
-&lt;br /&gt;
-2. Designing and prioritising a range of network user behaviour and road safety initiatives
-&lt;br /&gt;
-3. Supporting funding applications for network and road safety improvements
-&lt;br /&gt;
-4. Monitoring and evaluating the effectiveness of road safety initiatives
-&lt;br /&gt;
-5. Providing information for research purposes connected with road network user behaviour, road safety and transport policy.
+&lt;br /&gt;&lt;/p&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Informing transport policy and regulations
+&lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Designing and prioritising a range of network user behaviour and road safety initiatives
+&lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Supporting funding applications for network and road safety improvements
+&lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Monitoring and evaluating the effectiveness of road safety initiatives
+&lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Providing information for research purposes connected with road network user behaviour, road safety and transport policy.
 &lt;br /&gt;
 Please do let us know if you would like to apply for access.
 &lt;br /&gt;
-We are currently working to provide as much aggregated data as possible on our website while maintaining our obligations under the Privacy Act. We will be making this information available over the coming weeks, and will also be providing information as to why the csv files are no longer available. Would you like me to send you a link to the aggregated information when it becomes available?&lt;/p&gt;
+We are currently working to provide as much aggregated data as possible on our website while maintaining our obligations under the Privacy Act. We will be making this information available over the coming weeks, and will also be providing information as to why the csv files are no longer available. Would you like me to send you a link to the aggregated information when it becomes available?&lt;/li&gt;
+  &lt;/ol&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;That last bit of communication is now two weeks’ old. I thank all those who have reached out to me via &lt;a href=&quot;https://twitter.com/alphabeta_soup&quot;&gt;Twitter&lt;/a&gt;, email and other channels to offer advice and information about this situation; it has all been taken on board. I’m trying to use this blog post to get all the information and my thoughts into one place, before taking the next step.&lt;/p&gt;
@@ -698,7 +747,7 @@ We are currently working to provide as much aggregated data as possible on our w
 
 &lt;p&gt;I do apologise for the level of snark you have just endured. I truly appreciate all the hard work that has gone in to CAS and will continue to go into it. In turn, I hope that those at the NZTA appreciate the frustration that I’ve felt after putting in effort into this application, only for the rug to have been pulled out from underneath it without much explanation. Ultimately we both have similar goals: public safety, and factual information.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 28 Apr 2016 20:02:00 +1200</pubDate>
+        <pubDate>Thu, 28 Apr 2016 21:02:00 +1300</pubDate>
         <link>http://www.nearimprov.com//cas-saga/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//cas-saga/</guid>
       </item>
@@ -765,7 +814,7 @@ We are currently working to provide as much aggregated data as possible on our w
 &lt;p&gt;SFCGAL will need to be compiled, and then activated within PostgreSQL:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EXTENSION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgis_sfcgal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backend&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;sfcgal&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backend&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'sfcgal'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;There is also a dedicated PostgreSQL extension for storing point cloud data: &lt;a href=&quot;https://github.com/pgpointcloud/pointcloud&quot;&gt;https://github.com/pgpointcloud/pointcloud&lt;/a&gt;&lt;/p&gt;
 
@@ -841,33 +890,6 @@ We are currently working to provide as much aggregated data as possible on our w
         <pubDate>Sun, 29 Nov 2015 12:55:00 +1300</pubDate>
         <link>http://www.nearimprov.com//algorithms-group-tue/</link>
         <guid isPermaLink="true">http://www.nearimprov.com//algorithms-group-tue/</guid>
-      </item>
-    
-      <item>
-        <title>New Zealand Spatial Excellence Awards&lt;br&gt;&lt;small&gt;Reflections following a PostGIS presentation&lt;/small&gt;</title>
-        <description>&lt;p&gt;I have just returned from the New Zealand Spatial Excellence Awards for 2015. I was awarded the Postgraduate Student of the Year Award. I’m very slightly tipsy. I also had a very interesting contrasting experience that I think people in the “spatial industry” in New Zealand might be interested in.&lt;/p&gt;
-
-&lt;p&gt;I had quite a tight schedule today, waking up in Raglan, popping into work in the morning, getting to the National Library in Wellington by early afternoon, meeting friends afterwards, attending a PostgreSQL/PostGIS user group meeting at 6, and then skipping out to go to the final NZSEA awards and dinner.&lt;/p&gt;
-
-&lt;p&gt;The PostgreSQL/PostGIS user meeting was great. I had no idea what to expect. Two geo-friends (they’re real friends, we just bond over maps, so therefore they need the geo- preffix, © ESRI) came with me to Catalyst IT on Willis St, Wellington. Inside there were a few couches, and Brent Wood hanging out in shorts and a t-shirt. Dressed up in dress shoes and a shirt (but no jacket and tie), I felt very over-dressed. Brent discussed PostgreSQL/PostGIS, the treatment of geometry primitives in databases, spatial indexes and limitations thereof, MapServer, WMS in QGIS, GEOS, Proj.4, GDAL, and the antimeridian and how PostGIS’s &lt;code class=&quot;highlighter-rouge&quot;&gt;geography&lt;/code&gt; type gets over many of the attendant problems of that irritating fecking line. Then, we had pizza and I had to skip off without much of a chance to talk to Brent.&lt;/p&gt;
-
-&lt;p&gt;I literally ran off to Te Papa, where a nibbles and networking event was going down. People were wearing frocks and tuxedos, and even kilts. Dressed up in dress shoes and a shirt (but no jacket and tie), I felt very under-dressed. Not to mention sweaty from running in a merino jumper. People talked “spatial enablement” and lots of buzzwords. A Minister ministered. Mark Sainsbury officiated. Lights flashed. Entrées were served. Awards were dished out. There was engaging discussion in my immediate neighbourhood, although lots of the surrounding attendees seemed to just be in attendance at a $180 dinner to… do something that I never quite worked out.&lt;/p&gt;
-
-&lt;p&gt;Apparently we were highlighting the spatial industry in New Zealand and how cool it is. It felt like a bunch of people patting themselves on the back.&lt;/p&gt;
-
-&lt;p&gt;Maybe it’s the wine talking, but to be honest, if the “spatial industry” had just spent that money funding PostGIS or GeoServer or Neo4j feature requests… more would have been done for the “spatial industry”.&lt;/p&gt;
-
-&lt;p&gt;Don’t get me wrong: the individuals and organisations represented tonight do amazing work. Special congratulations to Interpret Geospatial Solutions for their huge haul of awards, Dr Mairéad de Róiste for her enormously well-deserved award for her hard work establishing the Masters in GIS (of which I am a graduate, and she was my thesis supervisor), Hamish Kingsbury (undergraduate student of the year), and Kim Ollivier (celebrating 30 years of working with spatial information). I’m truly grateful for my award, and the event itself was lovely and well organised. I had a great time talking to interesting and very intelligent people. With delicious food (but not beer and pizza). They even paid for my flights, which had a lot of private benefit as I got to see my friends.&lt;/p&gt;
-
-&lt;p&gt;I don’t even think I deserve my award at all after talking to my category competition: superb PhD candidates Judy Rodda from Otago University, and Anton Marais from Waikato University. Judy has been modelling the distribution of the endangered Hector’s dolphins off the south coast of the South Island. Anton made a cellular automaton model of residents’ location and re-location decisions across the Waikato region, extending ten years’ into the future. (It annoys me that I’ve forgotten the name of open source software he used for this.)&lt;/p&gt;
-
-&lt;p&gt;I just think the “spatial industry” in NZ is more than a little… self-obsessed. I certainly noticed that tonight.&lt;/p&gt;
-
-&lt;p&gt;I wish I wasn’t the &lt;em&gt;only&lt;/em&gt; person who attempted to squeeze in attendance at both the awards and a brilliant session on PostGIS. Without any finger pointing, I think the industry can do better, if indeed there is such a thing as a “spatial industry”. For the record, I don’t even think there is such a thing. We are in a hardware, software and data industry, and that’s just fine.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 19 Nov 2015 03:00:00 +1300</pubDate>
-        <link>http://www.nearimprov.com//nzsea/</link>
-        <guid isPermaLink="true">http://www.nearimprov.com//nzsea/</guid>
       </item>
     
   </channel>

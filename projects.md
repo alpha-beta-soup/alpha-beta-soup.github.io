@@ -54,21 +54,3 @@ Disclaimer: I don't believe aliens visit earth, though they probably exist in so
 For this project, I maintain a web scraper that I use periodically to update the data for the interactive map. Geocoding is done imperfectly, using the fantastic [`geopy`](http://geopy.readthedocs.org/en/latest/) Python module.
 
 I'd like to do some analysis, trying to find reports of similar phenomena, reported around the same time, in around the same place. Sightings by an isolated stoner in Motueka are much less interesting than those reported by independent witnesses who describe the same thing. Get in touch if this could be of interest to you.
-
-## [Cloudburst API](https://github.com/metocean/cloudburst-api)
-
-Currently I am working to build a map tile server for weather data, which has a free tier, exposed via the linked API. I also wrote the API. Soon, you will be able to use it connect to a range of global weather forecasts, using Leaflet, OpenLayers, or Google Maps.
-
-<br>
-{% fullwidth "./assets/cloudburst.png" "Example tile map layer and interface constructed using the Cloudburst API." %}
-<br>
-
-## Real-time lightning server
-
-I wrote a web socket server for sending lightning strikes to client applications in real time: seconds after they are detected by physical instrumentation.
-
-<br>
-{% fullwidth "./assets/lightning.gif" "This is a GIF of ten seconds of lightning occurring in central Australia; watch carefully around the major cluster of strikes as new ones occur." %}
-<br>
-
-I think there is massive underuse of web sockets in geographic applications; I have the beginnings of a QGIS plugin to connect to GeoJSON-serving web sockets to demonstrate their utility.
