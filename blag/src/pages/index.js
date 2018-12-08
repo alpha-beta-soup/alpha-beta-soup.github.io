@@ -18,7 +18,7 @@ class Index extends React.Component {
         <Helmet
           htmlAttributes={{ lang: 'en' }}
           meta={[{ name: 'description', content: siteDescription }]}
-          title={'siteTitle'}
+          title={siteTitle}
         />
         <Bio />
         <div key={lastPost.fields.slug}>
