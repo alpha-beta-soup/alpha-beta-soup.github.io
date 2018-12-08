@@ -1,0 +1,20 @@
+body {
+  color: #113654;
+}
+
+a {
+  text-decoration: none;
+  -webkit-box-shadow: none;
+  color: #3d93f6;
+}
+
+.blog-figcaption {
+  box-shadow: 1px 1px 5px #555 inset;
+  padding: 20px 10px;
+  font-size: 0.8em;
+}
+
+.blog-figure {
+  box-shadow: 1px 1px 5px #555 inset;
+  padding: 20px;
+}

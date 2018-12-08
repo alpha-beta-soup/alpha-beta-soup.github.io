@@ -20,8 +20,11 @@ module.exports = {
         plugins: [
           {
             resolve: `gatsby-remark-images`,
+            // https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-remark-images
             options: {
               maxWidth: 590,
+              showCaptions: true,
+              linkImagesToOriginal: true,
             },
           },
           {
@@ -29,6 +32,14 @@ module.exports = {
             options: {
               wrapperStyle: `margin-bottom: 1.0725rem`,
             },
+          },
+          {
+            resolve: 'gatsby-remark-figure-caption', // https://www.gatsbyjs.org/packages/gatsby-remark-figure-caption/
+            options: {
+              figureClassName: 'blog-figure',
+              imageClassName: 'blog-img',
+              captionClassName: 'blog-figcaption',
+            }
           },
           'gatsby-remark-prismjs',
           'gatsby-remark-copy-linked-files',
@@ -66,5 +77,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-styled-components`,
+    `gatsby-plugin-twitter`
   ],
 }

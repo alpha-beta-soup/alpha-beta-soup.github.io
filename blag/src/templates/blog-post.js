@@ -30,6 +30,17 @@ class BlogPostTemplate extends React.Component {
         >
           {post.frontmatter.date}
         </p>
+        {post.frontmatter.updated && <p
+          style={{
+            ...scale(-1 / 5),
+            display: 'block',
+            marginBottom: rhythm(1),
+            marginTop: rhythm(-1),
+            opacity: 0.5,
+          }}
+        >
+          Updated: {post.frontmatter.updated}
+        </p>}
         <div dangerouslySetInnerHTML={{ __html: post.html }} />
         <hr
           style={{
@@ -85,7 +96,8 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
-        date(formatString: "MMMM DD, YYYY")
+        date(formatString: "hh:mm A, dddd MMMM DD, YYYY")
+        updated(formatString: "hh:mm A, dddd MMMM DD, YYYY")
       }
     }
   }

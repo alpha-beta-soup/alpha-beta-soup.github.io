@@ -6,13 +6,13 @@ import Bio from '../components/ExtendedBio'
 import Layout from '../components/Layout'
 import { rhythm } from '../utils/typography'
 
-class BlogIndex extends React.Component {
+class Index extends React.Component {
   render() {
     const data = this.props.data;
     const siteTitle = data.site.siteMetadata.title
     const siteDescription = data.site.siteMetadata.description
-    const posts = data.allMarkdownRemark.edges
-
+    const lastPost = data.allMarkdownRemark.edges[0].node
+    const lastPostTitle = lastPost.frontmatter.title || lastPost.fields.slug
     return (
       <Layout location={this.props.location} title={siteTitle} style={{fontSize: '5vw'}}>
         <Helmet
@@ -21,30 +21,34 @@ class BlogIndex extends React.Component {
           title={'siteTitle'}
         />
         <Bio />
-        {posts.map(({ node }) => {
-          const title = node.frontmatter.title || node.fields.slug
-          return (
-            <div key={node.fields.slug}>
-              <h3
-                style={{
-                  marginBottom: rhythm(1 / 4),
-                }}
-              >
-                <Link style={{ boxShadow: 'none' }} to={node.fields.slug}>
-                  {title}
-                </Link>
-              </h3>
-              <small>{node.frontmatter.date}</small>
-              <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
-            </div>
-          )
-        })}
+        <div key={lastPost.fields.slug}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)'
+          }}>
+            <h4 style={{gridColumn: '1/2'}}>Most recent post</h4>
+            <h4 style={{gridColumn: '3/last', textAlign: 'right'}}>
+              <a href="/blog">All posts</a>
+            </h4>
+          </div>
+            <h3
+              style={{
+                marginBottom: rhythm(1 / 4),
+              }}
+            >
+            <Link style={{ boxShadow: 'none' }} to={lastPost.fields.slug}>
+              {lastPostTitle}
+            </Link>
+          </h3>
+          <small>{lastPost.frontmatter.date}</small>
+          <p dangerouslySetInnerHTML={{ __html: lastPost.excerpt }} />
+        </div>
       </Layout>
     )
   }
 }
 
-export default BlogIndex
+export default Index
 
 export const pageQuery = graphql`
   query {
@@ -54,7 +58,7 @@ export const pageQuery = graphql`
         description
       }
     }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }, limit: 1) {
       edges {
         node {
           excerpt

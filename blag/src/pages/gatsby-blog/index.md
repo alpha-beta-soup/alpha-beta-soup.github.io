@@ -1,0 +1,17 @@
+---
+title: Gatsby Blog
+date: "2018-12-08T21:39:00.000Z"
+updated: "2018-12-08T22:25:00.000Z"
+---
+
+I've just obtained the <a href="https://spatialparalysis.xyz">spatialparalysis.xyz</a> domain. I'm going to move my blog here from my old blog/portfolio website (nearimprov.com). I wanted to try out Gatsby JS, so that I could build some little React components and include them in various places. I've used React a lot over the last two years, and since I've accepted a new job with much less web development, I might have the desire to make some components for fun rather than for profit.
+
+I haven't written anything this year, but I hope to get back into the swing of things next year when I'm more in my element.
+
+### Why "Spatial Paralysis"?
+
+Well, I really just wanted:
+
+1. **A domain that is better than "nearimprov.com".** This was easy, since the old domain communicated exactly nothing. I think I picked it with a random generator of word pairs until I arrived at a pair of words that sounded like more than nothing, but less than anything. I'm not going to renew that domain.
+2. **A domain that communicates "spatial".** My Masters degree is in geographic information systems. I will talk about it a lot. I will use my knowledge of the area to feed my family. Although I have general reservations about the field, for better or for worse my hat is in the ring. Spatial systems are my speciality, and—momentarily putting aside all forms of imposter syndrome—I'm an expert in the field.
+3. **A silly-therefore-memorable name.** Eventually I settled on a rather crude rhyming pun on "facial paralysis". I was thinking about other blogs that follow a similar kind of naming strategy, such as the [SaltyCrane Blog](https://www.saltycrane.com/about/).
