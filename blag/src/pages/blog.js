@@ -5,6 +5,7 @@ import Helmet from 'react-helmet'
 import Bio from '../components/Bio'
 import Layout from '../components/Layout'
 import { rhythm } from '../utils/typography'
+import Tag from '../components/Tag'
 
 class BlogIndex extends React.Component {
   render() {
@@ -12,8 +13,6 @@ class BlogIndex extends React.Component {
     const siteTitle = data.site.siteMetadata.title
     const siteDescription = data.site.siteMetadata.description
     const posts = data.allMarkdownRemark.edges
-    console.log({posts})
-    console.log({props: this.props})
     return (
       <Layout location={this.props.location} title={siteTitle} style={{fontSize: '5vw'}}>
         <Helmet
@@ -27,17 +26,27 @@ class BlogIndex extends React.Component {
             const title = post.node.frontmatter.title || post.node.fields.slug
             return (
               <div key={post.node.fields.slug}>
-                <h3
-                  style={{
-                    marginBottom: rhythm(1 / 4),
-                  }}
-                >
-                  <Link style={{ boxShadow: 'none' }} to={post.node.fields.slug}>
-                    {title}
-                  </Link>
-                </h3>
-                <small>{post.node.frontmatter.date}</small>
-                <p dangerouslySetInnerHTML={{ __html: post.node.excerpt }} />
+                <div>
+                  <h3
+                    style={{
+                      marginBottom: rhythm(1 / 4),
+                    }}
+                  >
+                    <Link style={{ boxShadow: 'none' }} to={post.node.frontmatter.path}>
+                      {title}
+                    </Link>
+                  </h3>
+                  <small>{post.node.frontmatter.date}</small>
+                  <p dangerouslySetInnerHTML={{ __html: post.node.excerpt }} />
+                </div>
+                <div>
+                  <div style={{fontSize: 'x-small'}}><strong>See other posts tagged with</strong></div>
+                  {
+                    post.node.frontmatter.tags.map(tag => (
+                      <Tag key={tag} tag={tag}/>
+                    ))
+                  }
+                </div>
               </div>
             )
           })
@@ -68,6 +77,8 @@ export const pageQuery = graphql`
             date(formatString: "MMMM DD, YYYY")
             title
             updated(formatString: "MMMM DD, YYYY")
+            tags
+            path
           }
         }
       }

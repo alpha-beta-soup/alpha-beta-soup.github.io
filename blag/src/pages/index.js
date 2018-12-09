@@ -36,7 +36,7 @@ class Index extends React.Component {
                 marginBottom: rhythm(1 / 4),
               }}
             >
-            <Link style={{ boxShadow: 'none' }} to={lastPost.fields.slug}>
+            <Link style={{ boxShadow: 'none' }} to={lastPost.frontmatter.path}>
               {lastPostTitle}
             </Link>
           </h3>
@@ -68,6 +68,7 @@ export const pageQuery = graphql`
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             title
+            path
           }
         }
       }

@@ -36,7 +36,8 @@
     "typeface-merriweather": "0.0.43",
     "typeface-montserrat": "0.0.43",
     "typography": "^0.16.17",
-    "typography-theme-wordpress-2016": "^0.15.10"
+    "typography-theme-wordpress-2016": "^0.15.10",
+    "written-number": "^0.8.1"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

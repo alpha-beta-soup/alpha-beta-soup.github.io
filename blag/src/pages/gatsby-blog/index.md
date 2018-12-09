@@ -2,6 +2,10 @@
 title: Gatsby Blog
 date: "2018-12-08T21:39:00.000Z"
 updated: "2018-12-08T22:25:00.000Z"
+published: true
+path: "/blog/gatsby-blog"
+category: personal
+tags: ["meta"]
 ---
 
 I've just obtained the <a href="https://spatialparalysis.xyz">spatialparalysis.xyz</a> domain. I'm going to move my blog here from my old blog/portfolio website (nearimprov.com). I wanted to try out Gatsby JS, so that I could build some little React components and include them in various places. I've used React a lot over the last two years, and since I've accepted a new job with much less web development, I might have the desire to make some components for fun rather than for profit.

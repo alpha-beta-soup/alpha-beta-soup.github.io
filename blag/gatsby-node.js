@@ -1,16 +1,22 @@
 const path = require('path')
+const _ = require('lodash')
 const { createFilePath } = require('gatsby-source-filesystem')
 
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
+  const blogPostTemplate = path.resolve('./src/templates/blog-post.js')
+  const tagTemplate = path.resolve('./src/templates/tags.js')
+
   return new Promise((resolve, reject) => {
-    const blogPost = path.resolve('./src/templates/blog-post.js')
     resolve(
       graphql(
         `
           {
-            allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
+            allMarkdownRemark(
+              sort: { fields: [frontmatter___date], order: DESC },
+              limit: 2000
+            ) {
               edges {
                 node {
                   fields {
@@ -20,6 +26,8 @@ exports.createPages = ({ graphql, actions }) => {
                     title
                     updated
                     date
+                    path
+                    tags
                   }
                 }
               }
@@ -28,7 +36,7 @@ exports.createPages = ({ graphql, actions }) => {
         `
       ).then(result => {
         if (result.errors) {
-          console.log(result.errors)
+          console.error(result.errors)
           reject(result.errors)
         }
 
@@ -40,13 +48,31 @@ exports.createPages = ({ graphql, actions }) => {
           const next = index === 0 ? null : posts[index - 1].node;
 
           createPage({
-            path: post.node.fields.slug,
-            component: blogPost,
+            path: post.node.frontmatter.path,
+            component: blogPostTemplate,
             context: {
               slug: post.node.fields.slug,
               previous,
               next,
             },
+          })
+        })
+
+        // Tag pages
+        let tags = new Set([])
+        // ITerate through posts, putting tags into tags
+        _.each(posts, edge => {
+          if (_.get(edge, "node.frontmatter.tags")) {
+            _.forEach(edge.node.frontmatter.tags, tag => tags.add(tag))
+          }
+        })
+        _.forEach([...tags.values()], tag => {
+          createPage({
+            path: `/tags/${_.kebabCase(tag)}/`,
+            component: tagTemplate,
+            context: {
+              tag
+            }
           })
         })
       })

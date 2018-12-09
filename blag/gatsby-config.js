@@ -77,6 +77,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-styled-components`,
-    `gatsby-plugin-twitter`
+    `gatsby-plugin-twitter`,
   ],
 }

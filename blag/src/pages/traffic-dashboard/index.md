@@ -2,9 +2,11 @@
 layout: post
 title: "NZ Traffic Dashboard"
 date: 2017-12-31T14:25:00.000Z
+path: "/blog/nz-traffic-dashboard"
 comments: true
-category:
-tags: ["side projects", "development", "react", "javascript", "transport", "New Zealand", "NZTA"]
+category: dev
+published: true
+tags: ["side projects", "development", "react", "javascript", "transport", "New Zealand", "NZTA", 'meta']
 ---
 
 This is an old post, that I'm using to iron out any issues I have importing old content.
