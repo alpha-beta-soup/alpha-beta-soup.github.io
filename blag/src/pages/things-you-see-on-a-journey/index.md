@@ -315,13 +315,13 @@ Can you see that we're doing inequality checks? The value of `v1` is 1, true (10
 
 Now at this point it is a good idea to point out that I have actually picked arbitrary values for `MAX_VIS_DIST` in this example. There are more robust methods to determine the distance to the visible horizon that depend on the elevation of your position, and the curvature of the earth. The value can actually vary quite markedly. The GRASS documentation offers a nice approximation, but `r.los` itself does not take into account the curvature of the earth:
 
-> The curvature of the Earth is not taken into account for these calculations. However, for interest's sake, a handy calculation for distance to the true horizon is approximated by $d = \sqrt{(13 \times h)}$ where $h$ is the height of the observer in meters (above sea level) and $d$ is the distance to the horizon in km. This may be useful for setting the max_dist value.
+> The curvature of the Earth is not taken into account for these calculations. However, for interest's sake, a handy calculation for distance to the true horizon is approximated by $d = \sqrt{13h}$ where $h$ is the height of the observer in meters (above sea level) and $d$ is the distance to the horizon in km. This may be useful for setting the `max_dist` value.
 
 You could implement this in GRASS with a bit of `bc` and considering the elevation value of each cell beneath each observer point, but I'll leave that as an exercise for the reader (God I hate that). Consider this a reminder that any proposed solution to a geographic problem can almost always be improved.
 
 A partial solution is to switch to GRASS 7.0: [`r.viewshed`](http://grass.osgeo.org/grass70/manuals/r.viewshed.html) allows a `-c` flag that considers the curvature of the earth better than you could—with reference to the current ellipsoid:
 
-> By default the elevations are not adjusted for the curvature of the earth. The user can turn this on with flag -c.
+> By default the elevations are not adjusted for the curvature of the earth. The user can turn this on with flag `-c`.
 
 However this **still** doesn't resolve the problem of determining the actual distance to the horizon. In part, this is because that also depends on atmospheric conditions. For example, on an exceptionally clear day, when the atmospheric pressure is just right, you can actually make out Mt. Taranaki when standing on the Kāpiti Coast!
 
