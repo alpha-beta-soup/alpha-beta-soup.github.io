@@ -22,12 +22,8 @@ Well, I really just wanted:
 
 ### What's left to do?
 
-I need to migrate all my old content to this blog, which will be a little bit manual because I didn't stick entirely to simple Markdown content.
-
-I also want to implement tags. (Note: [done](/tags)!)
-
-I need to get the Disqus comments working again, hopefully without losing comments. I've been through this once before, and it was a bit of a pain.
-
-I'd also like to be able to post privately, perhaps behind a password, or even a full authentication system with Auth0, so I could write updates for IRL friends and family using their social logins, without sharing things with the wider world. This would be doubly nice since I've stopped using social media.
-
-I still haven't worked out timezones in my post metadata. We have a rule of thumb at work: when implmenting a feature that involves time, the complexity of the feature is +2 effort points harder than you think. Every time.
+- I need to migrate all my old content to this blog, which will be a little bit of a manual process than I'd like, because I didn't entirely stick to simple Markdown content.
+- I also want to implement tags. (Note: [done](/tags)!)
+- I need to get the Disqus comments working again, hopefully without losing comments. I've been through this once before, and it was a bit of a pain.
+- I'd also like to be able to post privately, perhaps behind a password, or even a full authentication system with Auth0. Then I could write updates for IRL friends and family using their social logins, without sharing things with the wider world. This would be doubly nice since I've stopped using social media.
+- I still haven't worked out timezones in my post metadata. We have a rule of thumb at work: when implmenting a feature that involves time, the complexity of the feature is +2 effort points harder than you think. Every time.
