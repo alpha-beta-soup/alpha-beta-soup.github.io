@@ -1,12 +1,11 @@
 ---
-layout: post
 title: "NZ Traffic Dashboard"
-date: 2017-12-31T14:25:00.000Z
+date: 2017-12-31T14:25:00
 path: "/blog/nz-traffic-dashboard"
 comments: true
 category: dev
 published: true
-tags: ["side projects", "development", "react", "javascript", "transport", "New Zealand", "NZTA", 'meta']
+tags: ["portfolio", "development", "react", "JavaScript", "transport", "New Zealand", "NZTA"]
 ---
 
 This is an old post, that I'm using to iron out any issues I have importing old content.

@@ -8,13 +8,48 @@ a {
   color: #3d93f6;
 }
 
-.blog-figcaption {
-  box-shadow: 1px 1px 5px #555 inset;
+figcaption {
+  /* box-shadow: 1px 1px 5px #ccc inset; */
   padding: 20px 10px;
   font-size: 0.8em;
+  margin-top: 20px;
+}
+/* It's a figure when there's a caption, otherwise .gatsby-resp-image-wrapper */
+.gatsby-resp-image-wrapper, figure {
+  box-shadow: 1px 1px 50px #ccc inset;
+  border-radius: 10px;
+  padding: 20px;
+}
+.gatsby-resp-image-wrapper, figure > img, span {
+  margin: 0;
+  border-radius: 5px;
 }
 
-.blog-figure {
-  box-shadow: 1px 1px 5px #555 inset;
-  padding: 20px;
+.newthought > h1, h2, h3, h4, h5, h6 {
+  margin-top: 3vh;
+}
+.newthought {
+  border-radius: 10px;
+  font-size: 0.85em;
+  padding: 0.8vh 2vw;
+  margin: 3vh 4vw;
+  background-color: #3d93f6;
+  color: white;
+}
+.newthought a {
+  color: #113654;
+  text-decoration: underline;
+}
+
+.sidenote {
+  opacity: 0.5;
+  padding: 0.8vh 2vw;
+  font-size: 0.85em;
+}
+
+table > thead {
+  font-size: 0.8em;
+}
+table > tbody {
+  font-size: 0.7em;
 }
