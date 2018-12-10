@@ -65,7 +65,7 @@ I talked to Pierre about a train trip across the North Island of New Zealand, kn
 
 To solve this problem, you need to think abstractly about it, and then apply that back to the real problem, phrased in reduced, but practical terms:
 
-**Given a line feature, how can you determine the places that are visible are from the line?**
+**Given a line feature, and an elevation model, how can you determine the subset of the elevation model that is visible from the line?**
 
 Translated into the vernacular: if you're sitting on the train, what can you see out of the window?
 
@@ -73,7 +73,7 @@ What could be taken into consideration in this case, from a spatial perspective?
 
 The not-so-straightforward, or even unresolvable issues include: are you on the left or right side of the train? Is the train going north or south? What speed is the train travelling at? Can you actually see out of the window? Is it dark? Are you asleep? Are there trees in the way? Are there tunnels?
 
-Like all good spatial problems, the difficult issues outnumber the tractable ones. **We're just going to be thinking about visibility as determined by the bare terrain, using a constant distance to the horizon.** This (arguably) gives us some measurement of the *maximum extent* of space that is visible, which could be refined further.
+Like all good spatial problems, the difficult issues outnumber the tractable ones. **We're just going to be thinking about visibility as determined by the bare terrain, using a constant distance to the horizon, ignoring tunnels.** This (arguably) gives us some measurement of the *maximum extent* of space that is visible, which could be reduced further.
 
 The two most influential decisions are the resolution of our terrain model, which determines blocking, and the distance to the horizon, which in an ideal world considers the curvature of the earth and an observer's elevation.
 
@@ -89,7 +89,7 @@ git clone https://github.com/alpha-beta-soup/train-landscapes
 
 This creates a folder called `train-landscapes` in your current directory, within which the project is "cloned": duplicated for your local consumption.
 
-If you browse my Github repository in your web browser via the link in the `git clone` command, you'll see that I originally "forked" this project from Pierre. That is, he started it, and I carried it on with my own changes. Pierre wrote the initial version of the GRASS procedure, targeting GRASS version 7. I adjusted this script, to make it work a bit faster with a larger input and higher resolution raster terrain model. I also made a second version that would work with GRASS 6.4, which is what I was using at the time. That's what's great about Github and open source code generally: being able to take someone else's idea, and use it or run with it.
+If you browse my Github repository in your web browser via the [link](https://github.com/alpha-beta-soup/train-landscapes) in the `git clone` command, you'll see that I originally "forked" this project from Pierre. That is, he started it, and I carried it on with my own changes. Pierre wrote the initial version of the GRASS procedure, targeting GRASS version 7. I adjusted this script, to make it work a bit faster with a larger input and higher resolution raster terrain model. I also made a second version that would work with GRASS 6.4, which is what I was using at the time. That's what's great about Git and open source code generally: being able to take someone else's idea, and adapt it to fit your needs and circumstances.
 
 After cloning, you'll see that there are a few files and folders, if you enter the `train-landscapes` directory. `.gitignore` is a text file with the following contents:
 
@@ -147,7 +147,7 @@ After that, we define a function called `usage`. Usage is called upon when check
 
 The `usage` function and argument parsing:
 
-```
+```bash
 usage() {
    cat << EOF
 Usage: generate_los.sh [-train | -road]
@@ -315,7 +315,7 @@ Can you see that we're doing inequality checks? The value of `v1` is 1, true (10
 
 Now at this point it is a good idea to point out that I have actually picked arbitrary values for `MAX_VIS_DIST` in this example. There are more robust methods to determine the distance to the visible horizon that depend on the elevation of your position, and the curvature of the earth. The value can actually vary quite markedly. The GRASS documentation offers a nice approximation, but `r.los` itself does not take into account the curvature of the earth:
 
-> The curvature of the Earth is not taken into account for these calculations. However, for interest's sake, a handy calculation for distance to the true horizon is approximated by {% math %}d = \sqrt{(13 \times h)}{% endmath %}where *h* is the height of the observer in meters (above sea level) and *d* is the distance to the horizon in km. This may be useful for setting the max_dist value.
+> The curvature of the Earth is not taken into account for these calculations. However, for interest's sake, a handy calculation for distance to the true horizon is approximated by $d = \sqrt{(13 \times h)}$ where $h$ is the height of the observer in meters (above sea level) and $d$ is the distance to the horizon in km. This may be useful for setting the max_dist value.
 
 You could implement this in GRASS with a bit of `bc` and considering the elevation value of each cell beneath each observer point, but I'll leave that as an exercise for the reader (God I hate that). Consider this a reminder that any proposed solution to a geographic problem can almost always be improved.
 
