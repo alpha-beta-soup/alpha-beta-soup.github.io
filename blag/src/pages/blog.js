@@ -24,6 +24,18 @@ class BlogIndex extends React.Component {
         {
           posts.map(post => {
             const title = post.node.frontmatter.title || post.node.fields.slug
+            const path = post.node.frontmatter.path || post.node.fields.slug
+            const tags = post.node.frontmatter.tags || []
+            const tagsContainer = tags.length ? (
+              <div>
+                <div style={{fontSize: 'x-small'}}><strong>See other posts tagged with</strong></div>
+                {
+                  tags.map(tag => (
+                    <Tag key={tag} tag={tag}/>
+                  ))
+                }
+              </div>
+            ) : null
             return (
               <div key={post.node.fields.slug}>
                 <div>
@@ -32,21 +44,14 @@ class BlogIndex extends React.Component {
                       marginBottom: rhythm(1 / 4),
                     }}
                   >
-                    <Link style={{ boxShadow: 'none' }} to={post.node.frontmatter.path}>
+                    <Link style={{ boxShadow: 'none' }} to={path}>
                       {title}
                     </Link>
                   </h3>
                   <small>{post.node.frontmatter.date}</small>
                   <p dangerouslySetInnerHTML={{ __html: post.node.excerpt }} />
                 </div>
-                <div>
-                  <div style={{fontSize: 'x-small'}}><strong>See other posts tagged with</strong></div>
-                  {
-                    post.node.frontmatter.tags.map(tag => (
-                      <Tag key={tag} tag={tag}/>
-                    ))
-                  }
-                </div>
+                {tagsContainer}
               </div>
             )
           })
@@ -78,7 +83,6 @@ export const pageQuery = graphql`
             title
             updated(formatString: "MMMM DD, YYYY")
             tags
-            path
           }
         }
       }

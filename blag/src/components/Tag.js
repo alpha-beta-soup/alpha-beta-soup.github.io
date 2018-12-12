@@ -27,6 +27,7 @@ const TagButton = styled.div`
   }
   position: relative;
   width: 100%;
+  font-weight: bolder;
 `
 
 // Import typefaces

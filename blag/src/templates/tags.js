@@ -27,7 +27,8 @@ const Tags = ({ pageContext, data }) => {
       <h2>{tagHeader} <Tag tag={tag}/></h2>
       <ul>
         {edges.map(({ node }) => {
-          const { path, title } = node.frontmatter
+          const { title } = node.frontmatter
+          const path = node.frontmatter.path || node.fields.slug
           return (
             <li key={path}>
               <Link to={path}>{title}</Link>
@@ -35,10 +36,6 @@ const Tags = ({ pageContext, data }) => {
           )
         })}
       </ul>
-      {/*
-              This links to a page that does not yet exist.
-              We'll come back to it!
-            */}
       <Link to="/tags">All tags</Link>
     </div>
   )
@@ -57,6 +54,9 @@ Tags.propTypes = {
             frontmatter: PropTypes.shape({
               path: PropTypes.string.isRequired,
               title: PropTypes.string.isRequired,
+            }),
+            fields: PropTypes.shape({
+              slug: PropTypes.string.isRequired,
             }),
           }),
         }).isRequired
@@ -80,6 +80,9 @@ export const pageQuery = graphql`
           frontmatter {
             title
             path
+          }
+          fields {
+            slug
           }
         }
       }

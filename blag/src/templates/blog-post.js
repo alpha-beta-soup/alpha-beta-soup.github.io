@@ -15,6 +15,8 @@ class BlogPostTemplate extends React.Component {
     const siteTitle = this.props.data.site.siteMetadata.title
     const siteDescription = post.excerpt
     const { previous, next } = this.props.pageContext
+    const lastPath = previous ? (previous.frontmatter.path || previous.fields.slug) : undefined
+    const nextPath = next ? (next.frontmatter.path || next.fields.slug) : undefined
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <Helmet
@@ -64,7 +66,7 @@ class BlogPostTemplate extends React.Component {
           <li>
             {
               previous &&
-              <Link to={previous.frontmatter.path} rel="prev">
+              <Link to={lastPath} rel="prev">
                 ← {previous.frontmatter.title}
               </Link>
             }
@@ -72,7 +74,7 @@ class BlogPostTemplate extends React.Component {
           <li>
             {
               next &&
-              <Link to={next.frontmatter.path} rel="next">
+              <Link to={nextPath} rel="next">
                 {next.frontmatter.title} →
               </Link>
             }
@@ -101,6 +103,10 @@ export const pageQuery = graphql`
         title
         date(formatString: "hh:mm A, dddd MMMM DD, YYYY")
         updated(formatString: "hh:mm A, dddd MMMM DD, YYYY")
+        path
+      }
+      fields {
+        slug
       }
     }
   }

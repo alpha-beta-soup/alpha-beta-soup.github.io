@@ -53,6 +53,42 @@ module.exports = {
           'gatsby-remark-smartypants',
           'gatsby-remark-katex',
           'gatsby-remark-prismjs',
+          {
+            resolve: "gatsby-remark-custom-blocks",
+            options: {
+              blocks: {
+                newthought: {
+                  classes: "newthought",
+                  title: "optional",
+                  details: false
+                },
+                sidenote: {
+                  classes: "sidenote",
+                  title: "required",
+                  details: true
+                }
+              },
+            },
+          },
+          {
+            resolve: 'gatsby-remark-emojis',
+            options: {
+              // Deactivate the plugin globally (default: true)
+              active: true,
+              // Add a custom css class
+              class: 'emoji-icon',
+              // Select the size (available size: 16, 24, 32, 64)
+              size: 32,
+              // Add custom styles
+              styles : {
+                display: 'inline',
+                margin: '0',
+                position: 'relative',
+                top: '5px',
+                width: '20px'
+              }
+            }
+          }
         ],
       },
     },
@@ -86,6 +122,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-styled-components`,
-    `gatsby-plugin-twitter`
+    `gatsby-plugin-twitter`,
   ],
 }

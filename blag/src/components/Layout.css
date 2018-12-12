@@ -2,6 +2,10 @@ body {
   color: #113654;
 }
 
+code {
+  font-size: inherit;
+}
+
 a {
   text-decoration: none;
   -webkit-box-shadow: none;
@@ -25,13 +29,10 @@ figcaption {
   border-radius: 5px;
 }
 
-.newthought > h1, h2, h3, h4, h5, h6 {
-  margin-top: 3vh;
-}
 .newthought {
   border-radius: 10px;
   font-size: 0.85em;
-  padding: 0.8vh 2vw;
+  padding: 0.8vh 2vw 0px 2vw;
   margin: 3vh 4vw;
   background-color: #3d93f6;
   color: white;
@@ -40,12 +41,34 @@ figcaption {
   color: #113654;
   text-decoration: underline;
 }
+.newthought .custom-block-heading {
+  margin-top: 3vh;
+  font-size: 1.5em;
+  line-height: 1.4em;
+  margin-bottom: 15px;
+}
+.newthought .custom-block-body {
+  padding-bottom: 1px;
+}
 
 .sidenote {
   opacity: 0.5;
   padding: 0.8vh 2vw;
   font-size: 0.85em;
+  margin-bottom: 20px;
 }
+.sidenote .custom-block-heading {
+  font-size: 1em;
+}
+.sidenote .custom-block-heading:after {
+  content: "\25bc";
+  padding-left: 10px;
+}
+.sidenote .custom-block-heading:focus:after {
+  content: "\25b2";
+  padding-left: 10px;
+}
+
 
 table > thead {
   font-size: 0.8em;

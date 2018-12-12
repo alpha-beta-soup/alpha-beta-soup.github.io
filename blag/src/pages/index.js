@@ -13,6 +13,7 @@ class Index extends React.Component {
     const siteDescription = data.site.siteMetadata.description
     const lastPost = data.allMarkdownRemark.edges[0].node
     const lastPostTitle = lastPost.frontmatter.title || lastPost.fields.slug
+    const lastPostPath = lastPost.frontmatter.path || lastPost.fields.slug
     return (
       <Layout location={this.props.location} title={siteTitle} style={{fontSize: '5vw'}}>
         <Helmet
@@ -36,7 +37,7 @@ class Index extends React.Component {
                 marginBottom: rhythm(1 / 4),
               }}
             >
-            <Link style={{ boxShadow: 'none' }} to={lastPost.frontmatter.path}>
+            <Link style={{ boxShadow: 'none' }} to={lastPostPath}>
               {lastPostTitle}
             </Link>
           </h3>
@@ -68,7 +69,6 @@ export const pageQuery = graphql`
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             title
-            path
           }
         }
       }
