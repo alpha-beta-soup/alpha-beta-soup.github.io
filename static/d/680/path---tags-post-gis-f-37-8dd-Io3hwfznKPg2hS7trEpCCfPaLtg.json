@@ -1,0 +1,1 @@
+{"data":{"allMarkdownRemark":{"totalCount":2,"edges":[{"node":{"frontmatter":{"title":"Geodata web services","path":null},"fields":{"slug":"/blog/geodata-web-services/"}}},{"node":{"frontmatter":{"title":"3D spatial indexes in PostGIS","path":null},"fields":{"slug":"/blog/nd-spatial-indexes-postgis/indes/"}}}]}},"pageContext":{"tag":"PostGIS"}}
