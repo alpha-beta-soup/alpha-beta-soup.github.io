@@ -1,0 +1,1 @@
+{"componentChunkName":"component---src-templates-tags-js","path":"/tags/geocoding/","result":{"data":{"allMarkdownRemark":{"totalCount":1,"edges":[{"node":{"frontmatter":{"title":"Parallel geocoding in Python with geopy","path":null},"fields":{"slug":"/blog/parallel-geopy/"}}}]}},"pageContext":{"tag":"geocoding"}},"staticQueryHashes":[]}

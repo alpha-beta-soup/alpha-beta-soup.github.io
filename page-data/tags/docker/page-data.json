@@ -1,0 +1,1 @@
+{"componentChunkName":"component---src-templates-tags-js","path":"/tags/docker/","result":{"data":{"allMarkdownRemark":{"totalCount":1,"edges":[{"node":{"frontmatter":{"title":"GeoServer Quickstart with Docker","path":null},"fields":{"slug":"/blog/geoserver-docker/"}}}]}},"pageContext":{"tag":"Docker"}},"staticQueryHashes":[]}
