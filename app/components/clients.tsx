@@ -72,18 +72,18 @@ export function Clients() {
                             target="_blank"
                         >
                             <div className="w-full flex flex-col items-center space-y-1">
-                                <div className="flex items-center justify-center">
+                                <div className="flex items-center h-12 w-auto justify-center">
                                     <img
                                         src={client.image}
                                         alt={`${client.name} Logo`}
-                                        className="h-12 w-auto"
+                                        className="max-h-12 w-auto"
                                     />
                                 </div>
-                                <p className="font-bold text-neutral-900 dark:text-neutral-100 tabular-nums">
+                                <p className="font-bold text-neutral-900 dark:text-neutral-100">
                                     {client.name}
                                 </p>
-                                <p className="text-neutral-600 dark:text-neutral-400 tracking-tight">
-                                    ({dateRange})
+                                <p className="text-neutral-600 dark:text-neutral-400 tabular-nums tracking-tight">
+                                    {dateRange}
                                 </p>
                             </div>
                         </Link>
