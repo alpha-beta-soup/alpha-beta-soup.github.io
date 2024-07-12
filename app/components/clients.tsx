@@ -46,13 +46,23 @@ export function Clients() {
         image: 'images/clients/MetOcean-logo.png',
     }, {
         name: 'Sealord Group',
-        when: new DateRange('2018-08-01', '2018-09-29'),
+        when: new DateRange('2014-08-01', '2014-09-29'),
         url: 'https://www.sealord.com/',
         image: 'images/clients/Sealord-logo.png',
+    }, {
+        name: 'NZ ISCR',
+        when: new DateRange('2013-12-01', '2015-03-31'),
+        url: 'https://ir.wgtn.ac.nz/handle/123456789/30540',
+        image: 'images/clients/ISCR-logo.png'
+    }, {
+        name: 'Victoria University of Wellington',
+        when: new DateRange('2013-03-01', '2015-03-31'),
+        url: 'https://vuw.ac.nz',
+        image: 'images/clients/VUW-logo.png'
     }]
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex flex-wrap justify-center gap-2"> 
             {allClients
                 .sort((a, b) => {
                     if (
@@ -79,10 +89,10 @@ export function Clients() {
                                         className="max-h-12 w-auto"
                                     />
                                 </div>
-                                <p className="font-bold text-neutral-900 dark:text-neutral-100">
+                                <p className="font-bold text-center text-neutral-900 dark:text-neutral-100">
                                     {client.name}
                                 </p>
-                                <p className="text-neutral-600 dark:text-neutral-400 tabular-nums tracking-tight">
+                                <p className="text center text-neutral-600 dark:text-neutral-400 tabular-nums tracking-tight">
                                     {dateRange}
                                 </p>
                             </div>

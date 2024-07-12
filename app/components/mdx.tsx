@@ -92,6 +92,19 @@ function createHeading(level) {
   return Heading
 }
 
+function YouTube ({ id } : { id : string }){
+  return (
+    <div>
+      <iframe
+        className="aspect-video w-full"
+        src={"https://www.youtube.com/embed/" + id}
+        title="YouTube Video Player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      ></iframe>
+    </div>
+  );
+};
+
 let components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -104,6 +117,7 @@ let components = {
   code: Code,
   Table,
   Shimmer,
+  YouTube,
 }
 
 export function CustomMDX(props) {

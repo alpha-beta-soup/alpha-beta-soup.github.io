@@ -7,9 +7,9 @@ const navItems = {
   '/blog': {
     name: 'Blog',
   },
-  'https://github.com/alpha-beta-soup': {
-    name: 'GitHub',
-  },
+  // 'https://github.com/alpha-beta-soup': {
+  //   name: 'GitHub',
+  // },
 }
 
 export function Navbar() {

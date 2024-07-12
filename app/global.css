@@ -50,6 +50,10 @@ html {
   @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
 }
 
+p > a, a[href^="mailto:"] {
+  text-decoration-line: underline;
+}
+
 .prose .anchor:after {
   @apply text-neutral-300 dark:text-neutral-700;
   content: '#';
@@ -147,3 +151,16 @@ table {
 .title {
   text-wrap: balance;
 }
+
+.hashtag {
+  font-family: monospace;
+}
+
+blockquote {
+  font: 14px/22px normal helvetica, sans-serif;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding-left: 15px;
+  border-left: 3px solid #ccc;
+} 
