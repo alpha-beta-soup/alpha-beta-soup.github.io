@@ -39,7 +39,7 @@ export default function Client({ params }) {
                         className="max-h-12 w-auto"
                     />
                 </div>
-                <p>📍 {client.where}</p>
+                <p className="text-center">📍 {client.where}</p>
                 <p>I worked for <a href={client.url} target="blank">{client.name}</a> between {client.when.toString()}.</p>
                 {client.component}
             </article>
