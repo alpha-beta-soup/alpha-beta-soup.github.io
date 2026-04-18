@@ -59,7 +59,8 @@ export default function Blog({ params }) {
   }
 
   return (
-    <section>
+    <section className="page-breakout">
+      <div className="page-shell">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -90,9 +91,10 @@ export default function Blog({ params }) {
           {formatDate(post.metadata.publishedAt)}
         </p>
       </div>
-      <article className="prose">
+      <article className="prose page-prose">
         <CustomMDX source={post.content} />
       </article>
+      </div>
     </section>
   )
 }

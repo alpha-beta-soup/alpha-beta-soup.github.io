@@ -15,6 +15,14 @@
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
   --sh-entity: #e25a1c;
+  --editorial-title: rgb(82 82 82);
+  --editorial-body: rgb(115 115 115);
+  --editorial-body-strong: rgb(64 64 64);
+  --editorial-border: rgb(229 229 229);
+  --editorial-rule: rgb(115 115 115);
+  --editorial-link-underline: rgb(163 163 163);
+  --editorial-note-marker: rgb(115 115 115);
+  --editorial-note-border: rgb(194 194 194);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +31,14 @@
     --sh-identifier: white;
     --sh-keyword: #f47067;
     --sh-string: #0fa295;
+    --editorial-title: rgb(194 194 194);
+    --editorial-body: rgb(218 218 218);
+    --editorial-body-strong: rgb(154 154 154);
+    --editorial-border: rgb(54 54 54);
+    --editorial-rule: rgb(218 218 218);
+    --editorial-link-underline: rgb(82 82 82);
+    --editorial-note-marker: rgb(163 163 163);
+    --editorial-note-border: rgb(64 64 64);
   }
   html {
     color-scheme: dark;
@@ -156,6 +172,100 @@ table {
   font-family: monospace;
 }
 
+.newthought {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--editorial-title);
+  font-weight: 500;
+}
+
+.newthought-block {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.4rem 1rem 0.85rem;
+  border: 1px solid var(--editorial-border);
+  border-radius: 0.75rem;
+  background: transparent;
+}
+
+.newthought-title {
+  margin: 0 !important;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--editorial-rule);
+  color: var(--editorial-title);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.newthought-content {
+  margin-top: 0.35rem;
+  color: var(--editorial-body-strong);
+}
+
+.prose .newthought-content :where(p, li, blockquote) {
+  color: var(--editorial-body-strong);
+}
+
+.newthought-content :where(strong, b) {
+  color: var(--editorial-body-strong);
+  font-weight: 500;
+}
+
+.newthought-content :where(a) {
+  text-decoration-color: var(--editorial-link-underline);
+}
+
+.newthought-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.newthought-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+@media (min-width: 1024px) {
+  .newthought-block {
+    float: right;
+    clear: right;
+    width: min(50%, 34rem);
+    margin: 0.35rem 0 1rem 1.35rem;
+    padding: 0.35rem 1rem 0.9rem;
+  }
+}
+
+.marginalia-wrap {
+  display: inline;
+}
+
+.marginalia-toggle-label {
+  cursor: pointer;
+  vertical-align: super;
+  font-size: 0.75em;
+  line-height: 1;
+  margin-left: 0.15rem;
+  color: var(--editorial-note-marker);
+}
+
+.marginalia-toggle-input {
+  display: none;
+}
+
+.marginalia {
+  display: none;
+  margin: 0.75rem 0;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--editorial-note-border);
+  color: var(--editorial-body-strong);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.marginalia-toggle-input:checked + .marginalia {
+  display: block;
+}
+
 blockquote {
   font: 14px/22px normal helvetica, sans-serif;
   margin-top: 10px;
@@ -164,3 +274,66 @@ blockquote {
   padding-left: 15px;
   border-left: 3px solid #ccc;
 } 
+
+.page-prose {
+  max-width: none;
+}
+
+@media (min-width: 1024px) {
+  .marginalia-toggle-label,
+  .marginalia-toggle-input {
+    display: none;
+  }
+
+  .marginalia-wrap.marginalia-side-right .marginalia,
+  .marginalia-wrap:not(.marginalia-side-left) .marginalia {
+    display: block;
+    float: right;
+    clear: right;
+    width: 42%;
+    margin-right: -42%;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+  }
+
+  .marginalia-wrap.marginalia-side-left .marginalia {
+    display: block;
+    float: left;
+    clear: left;
+    width: 42%;
+    margin-left: calc(-42% - 0.9rem);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    border-left: 0;
+    border-right: 1px solid var(--editorial-note-border);
+  }
+
+  .page-breakout {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+  }
+
+  .page-shell {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 72rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-shell {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

@@ -26,12 +26,6 @@ function Table({ data }) {
   )
 }
 
-function Shimmer({ message }) {
-  return (
-    <span className="shimmer">{message}</span>
-  )
-}
-
 function CustomLink(props) {
   let href = props.href
 
@@ -105,6 +99,47 @@ function YouTube ({ id } : { id : string }){
   );
 };
 
+function NewThought({
+  children,
+  title,
+}: {
+  children: React.ReactNode
+  title?: React.ReactNode
+}) {
+  if (!title) {
+    return <span className="newthought">{children}</span>
+  }
+
+  return (
+    <aside className="newthought-block" aria-label="New thought">
+      <h3 className="newthought-title">{title}</h3>
+      <div className="newthought-content">{children}</div>
+    </aside>
+  )
+}
+
+function Marginalia({
+  children,
+  marker = '⊕',
+  side = 'right',
+}: {
+  children: React.ReactNode
+  marker?: string
+  side?: 'left' | 'right'
+}) {
+  const id = React.useId().replace(/:/g, '')
+
+  return (
+    <span className={`marginalia-wrap marginalia-side-${side}`}>
+      <label htmlFor={id} className="marginalia-toggle-label" aria-label="Toggle marginal note">
+        {marker}
+      </label>
+      <input id={id} type="checkbox" className="marginalia-toggle-input" />
+      <span className="marginalia">{children}</span>
+    </span>
+  )
+}
+
 let components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -116,8 +151,9 @@ let components = {
   a: CustomLink,
   code: Code,
   Table,
-  Shimmer,
   YouTube,
+  NewThought,
+  Marginalia,
 }
 
 export function CustomMDX(props) {

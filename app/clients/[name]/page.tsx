@@ -19,8 +19,8 @@ export default function Client({ params }) {
     const current = client.when.endDate ? false : true;
     
     return (
-        <section className="lg:relative lg:left-1/2 lg:right-1/2 lg:w-screen lg:-translate-x-1/2">
-            <div className="lg:mx-auto lg:max-w-6xl lg:px-6 xl:px-8">
+        <section className="page-breakout">
+            <div className="page-shell">
             <script
                 type="application/ld+json"
                 suppressHydrationWarning
@@ -41,7 +41,7 @@ export default function Client({ params }) {
             <h1 className="title text-center font-semibold text-2xl">
                 {client.name}
             </h1>
-            <article className="prose max-w-none">
+            <article className="prose page-prose">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
                     <div className="p-2 sm:p-4">
                         <div className="flex flex-col justify-center items-center">
