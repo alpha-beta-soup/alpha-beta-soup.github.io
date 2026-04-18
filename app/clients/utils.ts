@@ -2,9 +2,10 @@ export type Client = {
     name: string;
     when: DateRange;
     where: string;
+    coordinates: [number, number],
     url: string;
-    image?: string;
-    component?: React.ReactElement
+    image: string;
+    scale?: number; // Used to scale the logo on a map view
 }
 
 export class DateRange {
@@ -32,4 +33,23 @@ export class DateRange {
     const endStr = this.endDate ? this.endDate.toLocaleString(this.locale, options) : 'Present';
     return `${startStr} – ${endStr}`;
   }
-} 
+}
+
+export function getClientLocationData(client: Client) {
+  return {
+      "type": "FeatureCollection",
+      "features": [{
+          "type": "Feature",
+          "properties": {
+              label: client.name,
+              icon: client.image,
+              scale: client.scale  ? client.scale : undefined
+          },
+          "geometry": {
+            "coordinates": client.coordinates,
+            "type": "Point"
+          }
+        }
+      ]
+  };
+};

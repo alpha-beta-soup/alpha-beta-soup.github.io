@@ -30,7 +30,7 @@ export default function Footer() {
             <p className="ml-2 h-7">RSS</p>
           </a>
         </li>
-        <li className="mb-2 md:mb-0">
+        <li className="mb-2 mb:mb-0 md:mr-4">
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
@@ -41,6 +41,17 @@ export default function Footer() {
             <p className="ml-2 h-7">GitHub</p>
           </a>
         </li>
+        <li className="mb-2 mb:mb-0 md:mr-4">
+          <a
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://orcid.org/0000-0002-7400-2530"
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">ORCID</p>
+          </a>
+        </li>
       </ul>
       <p className="mt-8 text-neutral-600 dark:text-neutral-300">
         © {new Date().getFullYear()} Richard Law
@@ -48,3 +59,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+
