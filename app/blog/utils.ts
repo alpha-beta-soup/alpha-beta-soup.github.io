@@ -1,12 +1,54 @@
 import fs from 'fs'
 import path from 'path'
 
-type Metadata = {
+export type Metadata = {
   title: string
   subtitle?: string
   publishedAt: string
   summary: string
   image?: string
+  tags?: string[]
+}
+
+export type BlogPost = {
+  metadata: Metadata
+  slug: string
+  content: string
+}
+
+function parseTagList(value: string) {
+  let trimmedValue = value.trim()
+
+  if (trimmedValue.startsWith('[')) {
+    trimmedValue = trimmedValue.slice(1)
+  }
+
+  if (trimmedValue.endsWith(']')) {
+    trimmedValue = trimmedValue.slice(0, -1)
+  }
+
+  if (!trimmedValue) {
+    return []
+  }
+
+  return trimmedValue
+    .split(',')
+    .map((item) => item.trim().replace(/^['"](.*)['"]$/, '$1'))
+    .filter(Boolean)
+}
+
+function parseFrontmatterValue(key: string, value: string) {
+  if (key === 'tags') {
+    return parseTagList(value)
+  }
+
+  let trimmedValue = value.trim()
+
+  if (trimmedValue.startsWith('[') && trimmedValue.endsWith(']')) {
+    return parseTagList(trimmedValue)
+  }
+
+  return trimmedValue.replace(/^['"](.*)['"]$/, '$1')
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -18,10 +60,16 @@ function parseFrontmatter(fileContent: string) {
   let metadata: Partial<Metadata> = {}
 
   frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(': ')
-    let value = valueArr.join(': ').trim()
-    value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value
+    let normalizedLine = line.trim()
+
+    if (!normalizedLine || normalizedLine.startsWith('#') || !normalizedLine.includes(':')) {
+      return
+    }
+
+    let [key, ...valueArr] = normalizedLine.split(':')
+    let value = valueArr.join(':').trim()
+
+    metadata[key.trim() as keyof Metadata] = parseFrontmatterValue(key.trim(), value) as never
   })
 
   return { metadata: metadata as Metadata, content }
@@ -36,7 +84,7 @@ function readMDXFile(filePath) {
   return parseFrontmatter(rawContent)
 }
 
-function getMDXData(dir) {
+function getMDXData(dir): BlogPost[] {
   let mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file))
@@ -52,6 +100,56 @@ function getMDXData(dir) {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+}
+
+export function sortBlogPosts(posts: BlogPost[]) {
+  return [...posts].sort((a, b) => {
+    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+      return -1
+    }
+
+    return 1
+  })
+}
+
+export function slugifyTag(tag: string) {
+  return tag
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+export function getAllBlogTags() {
+  let tagMap = new Map<string, string>()
+
+  getBlogPosts().forEach((post) => {
+    post.metadata.tags?.forEach((tag) => {
+      let tagSlug = slugifyTag(tag)
+
+      if (!tagMap.has(tagSlug)) {
+        tagMap.set(tagSlug, tag)
+      }
+    })
+  })
+
+  return Array.from(tagMap.entries())
+    .map(([slug, name]) => ({ slug, name }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+export function getBlogTagBySlug(tagSlug: string) {
+  return getAllBlogTags().find((tag) => tag.slug === tagSlug)
+}
+
+export function getBlogPostsByTag(tagSlug: string) {
+  return sortBlogPosts(
+    getBlogPosts().filter((post) =>
+      post.metadata.tags?.some((tag) => slugifyTag(tag) === tagSlug)
+    )
+  )
 }
 
 export function formatDate(date: string, includeRelative = false) {

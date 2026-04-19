@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { formatDate, getBlogPosts, slugifyTag } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 
 export async function generateStaticParams() {
@@ -91,10 +92,23 @@ export default function Blog({ params }) {
           {post.metadata.subtitle}
         </p>
       )}
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+      <div className="mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(post.metadata.publishedAt)}
         </p>
+        {post.metadata.tags && post.metadata.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {post.metadata.tags.map((tag) => (
+              <Link
+                key={tag}
+                href={`/blog/tag/${slugifyTag(tag)}`}
+                className="rounded-full border border-neutral-200 px-2.5 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
+              >
+                {tag}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
       <article className="prose page-prose">
         <CustomMDX source={post.content} />
