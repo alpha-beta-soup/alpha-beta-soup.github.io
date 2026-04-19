@@ -164,6 +164,33 @@ table {
   white-space: nowrap;
 }
 
+p:has(> span.katex:only-child) {
+  text-align: center;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.prose table {
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: 0.45rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose thead th {
+  border-bottom: 3px solid var(--editorial-border);
+  color: var(--editorial-title);
+  font-weight: 500;
+}
+
+.prose tbody td {
+  border-bottom: 1px solid var(--editorial-border);
+}
+
 .title {
   text-wrap: balance;
 }
