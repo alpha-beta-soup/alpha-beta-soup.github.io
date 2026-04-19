@@ -113,6 +113,41 @@ export default function Blog({ params }) {
       <article className="prose page-prose">
         <CustomMDX source={post.content} />
       </article>
+      {post.metadata.tags && post.metadata.tags.length > 0 && (() => {
+        const related = getBlogPosts()
+          .filter((p) =>
+            p.slug !== post.slug &&
+            p.metadata.tags?.some((t) => post.metadata.tags!.includes(t))
+          )
+          .sort((a, b) =>
+            new Date(b.metadata.publishedAt).getTime() -
+            new Date(a.metadata.publishedAt).getTime()
+          )
+        return related.length > 0 ? (
+          <div className="mt-12 border-t border-neutral-200 dark:border-neutral-800 pt-8">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400 mb-4">
+              Related posts
+            </h2>
+            <ul className="space-y-3">
+              {related.map((r) => (
+                <li key={r.slug}>
+                  <Link
+                    href={`/blog/${r.slug}`}
+                    className="group flex items-baseline justify-between gap-4"
+                  >
+                    <span className="text-neutral-900 dark:text-neutral-100 group-hover:underline underline-offset-2">
+                      {r.metadata.title}
+                    </span>
+                    <span className="shrink-0 text-xs text-neutral-400 dark:text-neutral-500">
+                      {formatDate(r.metadata.publishedAt, false)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null
+      })()}
       </div>
     </section>
   )
