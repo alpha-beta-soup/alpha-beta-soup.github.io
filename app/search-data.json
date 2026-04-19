@@ -1,0 +1,51 @@
+[
+  {
+    "slug": "global-isochrone-travel-time-from-london-1881",
+    "title": "Global Isochrone Travel Time from London (1881)",
+    "summary": "A critique of a historical map showing global isochrone travel times from London in 1881, created by Francis Galton. The map highlights the state of international travel and the assumptions made in transportation analysis at the time.",
+    "tags": "Critique Historical Maps Isochrones Global Travel Time Static Maps",
+    "content": "\n\nHere's an interesting historical map that turned up on [/r/MapPorn](http://www.reddit.com/r/MapPorn/comments/27yfn0/isochronic_passage_chart_for_travelers_global_map/ \"Link to Reddit thread\") today. Made by Francis Galton for the Proceedings of the Royal Geographic Society in 1881, I find it particularly interesting because it represents the state of international travel only a decade or so after my Scottish and Irish ancestors travelled to New Zealand (via way of Cape Town, where one of my gr"
+  },
+  {
+    "slug": "landsat-8-mosaic",
+    "title": "Landsat 8 Mosaic",
+    "summary": "A link to a Tweet",
+    "tags": "UX Landuse Imagery",
+    "content": "\n\nI noticed this Tweet today, and thought it was such a great example of good a well-designed interface, and actually useful tool. I felt I needed to share it.\n\n<blockquote class=\"twitter-tweet\" lang=\"en\"><p lang=\"en\" dir=\"ltr\">Announcing Landsat 8 Mosaic: fast and easy mosaic creation of landsat data! &#10;<a href=\"http://t.co/Gd3DZjkBJJ\">http://t.co/Gd3DZjkBJJ</a> <a href=\"http://t.co/htzUcqveQ5\">pic.twitter.com/htzUcqveQ5</a></p>&mdash; Vincent Sarago (@_VincentS_) <a href=\"https://twitter.co"
+  },
+  {
+    "slug": "one-day-in-montreal",
+    "title": "One Day in Montréal",
+    "summary": "A critique of a video showing 24 hours of transit in Montréal, created by Colin Stewart and Ahmed El-Geneidy at McGill University. The video visualizes the transit system using different colors and sizes for various modes of transportation, but the critique highlights issues with the information presentation, basemap design, and format choice.",
+    "tags": "Critique Canada Québec Montréal Public Transport Animation",
+    "content": "\n\nThis video of Montréal's transit system fell across my path today, made by Colin Stewart and Ahmed El-Geneidy at McGill University's School of Urban Planning. I've been reading a bit of professor El-Geneidy's work recently for my own research, and I've recently been entertaining the idea of visiting Montréal for an extended period of time once I print a thesis onto a reconstituted tree. Providence?\n\n<YouTube id=\"1ztMm5xmk3M\"/>\n\nThe video shows 24 hours of transit, from 4:30 in the morning for "
+  },
+  {
+    "slug": "spatial-isnt-special",
+    "title": "Spatial isn't that special",
+    "summary": "My condescending opinion",
+    "tags": "Opinion GIS",
+    "content": "\n\n\nThis may be a strange thing for me to say, given that my postgraduate qualification, and profession is in geographic information systems. But I don't think that spatial is particularly special. People pretend it is, and then use that to justify the selling of ridiculous desktop software and \"enterprise\" solutions to problems that Paul Ramsey here shows can all be solved in a single (PostGIS) SQL query and some wrapper PHP script alongside a slippy map.\n\n<YouTube id=\"PwVRi37qXn8\"/>\n\nNow this h"
+  },
+  {
+    "slug": "things-you-see-on-a-journey",
+    "title": "The things you see on a journey",
+    "summary": "A tutorial on using GRASS, Git, Leaflet, bash, Javascript, CSS, HTML, and hosting map tiles on Amazon AWS. The tutorial takes a tangible (albeit frivolous) problem to completion: identifying the land that you can feasibly see from the train in the central plateau of New Zealand. The tutorial uses a realistic combination of tools to solve it, and shows how these separate tools come together.",
+    "tags": "Portfolio Tutorial GRASS GIS Git Leaflet Bash JavaScript CSS HTML Amazon AWS GIS",
+    "content": "\n\n![\"What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand.](/images/posts/things-you-see-on-a-journey/example.png \"What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand.\")\n\nSome moons ago, I met Dr Pierre Roudier, who works at [Landcare Research New Zealand](http://www.landcareresearch.co.nz/home), at a workshop on PostGIS being held at the National Institute"
+  },
+  {
+    "slug": "travel-time-variation",
+    "title": "Commuting and dropping the kids off at school",
+    "summary": "An analysis of travel time variation for the Airport Flyer bus route in Wellington, New Zealand, using real-time information (RTI) data. The analysis compares travel times during ordinary weekdays, school holiday weekdays, and weekends, highlighting the impact of school-related congestion on bus travel times and variability.",
+    "tags": "Portfolio Wellington Bus Travel Time Travel Time Variability",
+    "content": "\n\nI have recently been fortunate enough to gain access to the real-time information (RTI) for buses and trains in the Wellington region. This is the information that gets displayed in the box at your bus or train stop giving an estimate of how many minutes until your bus arrives. This information isn't publicly available as a download or as an API, although you can try your luck looking at [the mobile version of the Metlink website](http://m.metlink.org.nz/stop/5006 \"Change the number at the end"
+  },
+  {
+    "slug": "what-is-a-headway",
+    "title": "What is a headway?",
+    "summary": "A headway, as used in transit planning and modelling, is typically defined as the time between consecutive services. If you catch a bus that \"comes every half hour\", then the service you catch has a headway of 30 minutes. This concept is deceptively simple, and this blog post will explain why. There are several examples of transit analyses that I have seen that use an incorrect definition of the headway.",
+    "tags": "Portfolio Headway Computation Frequency Waiting Time",
+    "content": "\n\nA headway, as used in transit planning and modelling, is typically defined as the time between consecutive services. If you catch a bus that \"comes every half hour\", then the service you catch has a headway of 30 minutes.\n\nThis concept is deceptively simple, and this blog post will explain why. There are  several examples of transit analyses that I have seen that use an incorrect definition  of the headway.\n\nDefining the headway accurately is very important when modelling travel using public t"
+  }
+]
