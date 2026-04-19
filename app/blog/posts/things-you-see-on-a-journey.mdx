@@ -1,7 +1,8 @@
 ---
 title: The things you see on a journey
 publishedAt: "2015-06-01"
-summary: A tutorial on GRASS viewsheds
+subtitle: "A tutorial on GRASS, the UNIX shell, and Leaflet"
+summary: "A tutorial on using GRASS, Git, Leaflet, bash, Javascript, CSS, HTML, and hosting map tiles on Amazon AWS. The tutorial takes a tangible (albeit frivolous) problem to completion: identifying the land that you can feasibly see from the train in the central plateau of New Zealand. The tutorial uses a realistic combination of tools to solve it, and shows how these separate tools come together."
 ---
 
 !["What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand.](/images/posts/things-you-see-on-a-journey/example.png "What you'll be making: identifying the land that you can feasibly see from the train in the central plateau of New Zealand.")
@@ -26,30 +27,19 @@ This is a tutorial on using GRASS, Git, Leaflet, bash, JavaScript, CSS, HTML, an
 
 The end result is this [interactive map](http://spatialparalysis.xyz/train-landscapes).
 
----
-
-> **Update:** _The live example is now broken,_ as I was not willing to pay to host the tiles on AWS S3 for long. Sorry.
-
----
+<Marginalia side="left" marker="*">
+**Update:** _The live example is now broken,_ as I was not willing to pay to host the tiles on AWS S3 for long. Sorry.
+</Marginalia>
 
 ## What I can't cover
 
-I will not cover [beginning with Git](http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1), or fundamental Git concepts. But you'll learn some commands and how to host an interactive map on the Internet for free with Github pages.
+I will not cover [beginning with Git](http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1), or fundamental Git concepts. But you'll learn some commands and how to host an interactive map on the Internet for free with Github pages. I will not cover getting started with GRASS. Although this won't be a terrible introduction, I'm not detailing introductory concepts or using the GUI. I had the benefit of a hands-on GRASS introduction at the DMS/NIWA workshop. I won't be discussing web hosting of maps in much depth. I'm not yet much of a web developer, and I've only tinkered with Amazon AWS to get this to work. I'm not an authority.
 
-I will not cover getting started with GRASS. Although this won't be a terrible introduction, I'm not detailing introductory concepts or using the GUI.
-
----
-
-If you need more help, try
+<NewThought title="If you need more help, try these GRASS resources">
  - [This "first time users" GRASS tutorial](https://grass.osgeo.org/documentation/first-time-users/")
  - [The GRASS 7.0 manual](https://grass.osgeo.org/grass70/manuals/helptext.html")
  - [This quick GRASS GUI tutorial](https://grasswiki.osgeo.org/wiki/Quick_wxGUI_tutorial")
-
----
-
-I had the benefit of a hands-on GRASS introduction at the DMS/NIWA workshop.
-
-I won't be discussion web hosting of maps in much depth. I'm not yet much of a web developer, and I've only tinkered with Amazon AWS to get this to work. I'm not an authority.
+</NewThought>
 
 ## What do you need?
 
@@ -69,7 +59,9 @@ To solve this problem, you need to think abstractly about it, and then apply tha
 
 Translated into the vernacular: if you're sitting on the train, what can you see out of the window?
 
-What could be taken into consideration in this case, from a spatial perspective? The most straightforward ideas include: what is the terrain like? (Hills block views of what is behind them.) How far can you see out the window? ([Distance to the horizon](http://en.wikipedia.org/wiki/Horizon#Distance_to_the_horizon), coupled with personal eyesight, and atmospheric refraction.)
+What could be taken into consideration in this case, from a spatial perspective? The most straightforward ideas include: what is the terrain like? 
+<Marginalia side="left" marker="*">Hills block views of what is behind them.</Marginalia>
+How far can you see out the window? ([Distance to the horizon](http://en.wikipedia.org/wiki/Horizon#Distance_to_the_horizon), coupled with personal eyesight, and atmospheric refraction.)
 
 The not-so-straightforward, or even unresolvable issues include: are you on the left or right side of the train? Is the train going north or south? What speed is the train travelling at? Can you actually see out of the window? Is it dark? Are you asleep? Are there trees in the way? Are there tunnels?
 
@@ -143,13 +135,9 @@ The very first line is a "shebang" that just tells the program loader what kind 
 
 After that, we define a function called `usage`. Usage is called upon when checking inputs to the terminal when the code is executed. The function `usage` prints out a small bit of documentation for our code, telling a user that one of two possible arguments can be used: `-train` or `-road`. Choosing train will make sure the script uses some parameters that apply to travelling by train, and similarly for travelling by road.
 
----
-
-**Disclaimer**
-
-I don't actually know if this is proper practice for writing what is essentially help documentation. I can't imagine it's too far from this.
-
----
+<Marginalia side="left" marker="*">
+**Disclaimer:** I don't actually know if this is proper practice for writing what is essentially help documentation. I can't imagine it's too far from this.
+</Marginalia>
 
 The `usage` function and argument parsing:
 
@@ -491,11 +479,9 @@ So when we want to combine only a fraction of our intermediate viewshed rasters 
 
 What we're then left with is a series of 99 raster layers, each representing a small part of what will become our finished product.
 
----
-
+<Marginalia side="left" marker="*">
 I realise now that it would be smarter to combine the intermediate layer with the pattern-match layers as part of the above loop... but at the price of one additional `r.series` it ain't the end of the world.
-
----
+</Marginalia>
 
 So, combine these up into our finished product with another pattern matching exercise:
 
@@ -543,13 +529,9 @@ So how do we get to this next stage?
 
 There are a variety of ways to make map tiles.
 
----
-
-**Don't know what tiles are?**
-
+<NewThought title="Don't know what tiles are?">
 That's OK, everyone had to find out at some point. I really liked [this introduction](http://lyzidiamond.com/leaflet/#0) by [Lyzi Diamond](https://twitter.com/lyzidiamond).
-
----
+</NewThought>
 
 The simplest method for constructing map tiles, in my opinion, is to use a QGIS plugin called [QTiles](https://github.com/nextgis/QTiles). You can control all your styling and extents with QGIS layers, and then just tell the plugin to go away and make your map tiles.
 

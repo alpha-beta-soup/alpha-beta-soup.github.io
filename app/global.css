@@ -337,6 +337,7 @@ blockquote {
     padding-left: 1rem;
     padding-right: 1rem;
     box-sizing: border-box;
+    text-align: right;
     border-left: 0;
     border-right: 1px solid var(--editorial-note-border);
   }
