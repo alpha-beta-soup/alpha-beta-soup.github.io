@@ -23,7 +23,7 @@ export function BlogPosts({ posts }: { posts?: BlogPost[] }) {
               </div>
             </div>
             {post.metadata.summary && (
-              <div className="pointer-events-none absolute left-full top-1/2 z-10 hidden w-[24rem] max-w-xl -translate-y-1/2 rounded-md border border-neutral-200 bg-white/95 p-3 text-sm leading-relaxed text-neutral-600 shadow-sm transition-opacity duration-150 md:ml-6 md:group-hover:block md:group-focus-visible:block dark:border-neutral-800 dark:bg-neutral-950/95 dark:text-neutral-300">
+              <div className="pointer-events-none absolute left-full top-1/2 z-10 hidden w-[24rem] max-w-xl -translate-y-1/2 rounded-md border border-neutral-200 bg-white/95 p-3 text-sm leading-relaxed text-neutral-600 opacity-0 shadow-sm transition-opacity duration-200 md:ml-6 md:block md:group-hover:opacity-100 md:group-focus-visible:opacity-100 dark:border-neutral-800 dark:bg-neutral-950/95 dark:text-neutral-300">
                 {post.metadata.summary}
               </div>
             )}

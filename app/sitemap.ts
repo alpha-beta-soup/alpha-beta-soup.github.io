@@ -1,4 +1,4 @@
-import { getAllBlogTags, getBlogPosts } from 'app/blog/utils'
+import { getAllBlogCategories, getAllBlogTags, getBlogPosts } from 'app/blog/utils'
 
 export const baseUrl = 'https://spatialparalysis.xyz'
 
@@ -13,10 +13,15 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  let routes = ['', '/blog', '/blog/tag'].map((route) => ({
+  let categories = getAllBlogCategories().map((category) => ({
+    url: `${baseUrl}/blog/category/${category.slug}`,
+    lastModified: new Date().toISOString().split('T')[0],
+  }))
+
+  let routes = ['', '/blog', '/blog/tag', '/blog/category'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  return [...routes, ...blogs, ...tags]
+  return [...routes, ...blogs, ...tags, ...categories]
 }

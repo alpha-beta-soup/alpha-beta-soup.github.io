@@ -8,6 +8,7 @@ export type Metadata = {
   summary: string
   image?: string
   tags?: string[]
+  category?: string[]
 }
 
 export type BlogPost = {
@@ -38,7 +39,7 @@ function parseTagList(value: string) {
 }
 
 function parseFrontmatterValue(key: string, value: string) {
-  if (key === 'tags') {
+  if (key === 'tags' || key === 'category') {
     return parseTagList(value)
   }
 
@@ -134,6 +135,10 @@ export function slugifyTag(tag: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+export function slugifyCategory(category: string) {
+  return slugifyTag(category)
+}
+
 export function getAllBlogTags() {
   let tagMap = new Map<string, string>()
 
@@ -160,6 +165,38 @@ export function getBlogPostsByTag(tagSlug: string) {
   return sortBlogPosts(
     getBlogPosts().filter((post) =>
       post.metadata.tags?.some((tag) => slugifyTag(tag) === tagSlug)
+    )
+  )
+}
+
+export function getAllBlogCategories() {
+  let categoryMap = new Map<string, string>()
+
+  getBlogPosts().forEach((post) => {
+    post.metadata.category?.forEach((category) => {
+      let categorySlug = slugifyCategory(category)
+
+      if (!categoryMap.has(categorySlug)) {
+        categoryMap.set(categorySlug, category)
+      }
+    })
+  })
+
+  return Array.from(categoryMap.entries())
+    .map(([slug, name]) => ({ slug, name }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+export function getBlogCategoryBySlug(categorySlug: string) {
+  return getAllBlogCategories().find((category) => category.slug === categorySlug)
+}
+
+export function getBlogPostsByCategory(categorySlug: string) {
+  return sortBlogPosts(
+    getBlogPosts().filter((post) =>
+      post.metadata.category?.some(
+        (category) => slugifyCategory(category) === categorySlug
+      )
     )
   )
 }
