@@ -52,6 +52,37 @@ export default function Footer() {
             <p className="ml-2 h-7">ORCID</p>
           </a>
         </li>
+        <li className="mb-2 mb:mb-0 md:mr-4">
+          <a
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.linkedin.com/in/richardmlaw/"
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">LinkedIn</p>
+          </a>
+        </li>
+        <li className="mb-2 mb:mb-0 md:mr-4">
+          <a
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.duolingo.com/profile/alphabeta"
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">Duolingo</p>
+          </a>
+        </li>
+        <li className="mb-2 mb:mb-0 md:mr-4">
+          <a
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            href="mailto:richard.m.law@gmail.com"
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">Email</p>
+          </a>
+        </li>
       </ul>
       <p className="mt-8 text-neutral-600 dark:text-neutral-300">
         © 2014 – {new Date().getFullYear()} Richard Law
@@ -59,5 +90,3 @@ export default function Footer() {
     </footer>
   )
 }
-
-
