@@ -2,9 +2,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
+import { codeToHtml } from 'shiki'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import React from 'react'
+import LightboxImage from './lightbox-image'
+import { Dialogue, DialogueMessage } from './dialogue'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -53,6 +56,26 @@ function RoundedImage(props) {
 function Code({ children, ...props }) {
   let codeHTML = highlight(children)
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+}
+
+async function Pre({ children }: { children: React.ReactElement<{ className?: string; children?: string }> }) {
+  const lang = (children.props.className ?? '').replace('language-', '') || 'text'
+  const code = String(children.props.children ?? '').trimEnd()
+  let html: string
+  try {
+    html = await codeToHtml(code, {
+      lang,
+      themes: { light: 'github-light', dark: 'github-dark' },
+      defaultColor: false,
+    })
+  } catch {
+    html = await codeToHtml(code, {
+      lang: 'text',
+      themes: { light: 'github-light', dark: 'github-dark' },
+      defaultColor: false,
+    })
+  }
+  return <div dangerouslySetInnerHTML={{ __html: html }} />
 }
 
 function slugify(str) {
@@ -150,12 +173,16 @@ let components = {
   h5: createHeading(5),
   h6: createHeading(6),
   Image: RoundedImage,
+  LightboxImage,
   a: CustomLink,
   code: Code,
+  pre: Pre,
   Table,
   YouTube,
   NewThought,
   Marginalia,
+  Dialogue,
+  DialogueMessage,
 }
 
 export function CustomMDX(props) {

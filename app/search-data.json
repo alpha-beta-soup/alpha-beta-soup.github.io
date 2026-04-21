@@ -14,11 +14,24 @@
     "content": "\n\nI noticed this Tweet today, and thought it was such a great example of good a well-designed interface, and actually useful tool. I felt I needed to share it.\n\n<blockquote class=\"twitter-tweet\" lang=\"en\"><p lang=\"en\" dir=\"ltr\">Announcing Landsat 8 Mosaic: fast and easy mosaic creation of landsat data! &#10;<a href=\"http://t.co/Gd3DZjkBJJ\">http://t.co/Gd3DZjkBJJ</a> <a href=\"http://t.co/htzUcqveQ5\">pic.twitter.com/htzUcqveQ5</a></p>&mdash; Vincent Sarago (@_VincentS_) <a href=\"https://twitter.co"
   },
   {
+    "slug": "mediawatch-data",
+    "title": "Mediawatch on the role of data journalism",
+    "summary": "A very interesting interview with Harkanwal Singh, the New Zealand Herald Data Editor.",
+    "tags": "Data Journalism",
+    "content": "\n\nA very interesting interview with Harkanwal Singh, the New Zealand Herald Data Editor.\n\n<a href=\"https://www.rnz.co.nz/national/programmes/mediawatch/audio/201762824/mining-for-meaning-in-the-age-of-digitised-data\">Listen to the interview</a>\n"
+  },
+  {
     "slug": "one-day-in-montreal",
     "title": "One Day in Montréal",
     "summary": "A critique of a video showing 24 hours of transit in Montréal, created by Colin Stewart and Ahmed El-Geneidy at McGill University. The video visualizes the transit system using different colors and sizes for various modes of transportation, but the critique highlights issues with the information presentation, basemap design, and format choice.",
     "tags": "Critique Canada Québec Montréal Public Transport Animation",
     "content": "\n\nThis video of Montréal's transit system fell across my path today, made by Colin Stewart and Ahmed El-Geneidy at McGill University's School of Urban Planning. I've been reading a bit of professor El-Geneidy's work recently for my own research, and I've recently been entertaining the idea of visiting Montréal for an extended period of time once I print a thesis onto a reconstituted tree. Providence?\n\n<YouTube id=\"1ztMm5xmk3M\"/>\n\nThe video shows 24 hours of transit, from 4:30 in the morning for "
+  },
+  {
+    "slug": "parallel-geocoding",
+    "title": "Parallel geocoding in Python with geopy",
+    "tags": "Tutorials Geocoding Geopy Python Portfolio",
+    "content": "\n\nGeocoding: the process of taking an address as a piece of semi-structured text, and returning a coordinate somewhere on the surface of the Earth. It's very unlikely that you're not going to use an online service to do this. This means a few things. Firstly, that you have to decide on a geocoding provider. Secondly, you're going to have to sit tight while the geocoding takes place. Python can address both of these issues for you.\n\n## [GeoPy](https://geopy.readthedocs.org/en/1.11.0/)\n\nGeoPy is a"
   },
   {
     "slug": "spatial-isnt-special",

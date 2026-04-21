@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { BlogPost, formatDate, getBlogPosts, sortBlogPosts } from 'app/blog/utils'
 
-export function BlogPosts({ posts }: { posts?: BlogPost[] }) {
+export function BlogPosts({ posts, limit }: { posts?: BlogPost[], limit?: number }) {
   let allBlogs = sortBlogPosts(posts ?? getBlogPosts())
+  if (limit) allBlogs = allBlogs.slice(0, limit)
 
   return (
     <div>

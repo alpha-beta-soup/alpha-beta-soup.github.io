@@ -77,6 +77,17 @@ export default function Footer() {
         <li className="mb-2 mb:mb-0 md:mr-4">
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            href="https://www.strava.com/athletes/5226656"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">Strava</p>
+          </a>
+        </li>
+        <li className="mb-2 mb:mb-0 md:mr-4">
+          <a
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             href="mailto:richard.m.law@gmail.com"
           >
             <ArrowIcon />
