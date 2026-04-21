@@ -1,6 +1,7 @@
 import { BlogPosts } from 'app/components/posts'
 import { Clients } from 'app/components/clients'
 import { Techs } from 'app/components/tech-list'
+import Image from 'next/image'
 
 export default function Page() {
   return (
@@ -9,8 +10,15 @@ export default function Page() {
         Spatial Paralysis
       </h1>
       <div className="mb-8">
-        <p className="mb-4">
-          {`I'm a Kiwi geogapher/developer. I'm available for contract work in the following areas:`}
+        <Image
+          src="/icon.png"
+          alt="Spatial Paralysis icon"
+          width={120}
+          height={120}
+          className="float-right ml-4 mb-2 mt-1 rounded-md"
+          priority
+        />
+        <p className="mb-4">👋 I'm Richard, a Kiwi digital geogapher. I'm available for contract work in the following areas:
         </p>
         <ul className="mb-4">
             <li>

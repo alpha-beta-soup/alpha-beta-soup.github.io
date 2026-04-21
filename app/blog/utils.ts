@@ -102,9 +102,21 @@ export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
 }
 
+function parsePublishedAt(date: string) {
+  if (!date.includes('T')) {
+    return new Date(`${date}T00:00:00`)
+  }
+
+  return new Date(date)
+}
+
+function hasExplicitTime(date: string) {
+  return date.includes('T') && /T\d{2}:\d{2}/.test(date)
+}
+
 export function sortBlogPosts(posts: BlogPost[]) {
   return [...posts].sort((a, b) => {
-    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+    if (parsePublishedAt(a.metadata.publishedAt) > parsePublishedAt(b.metadata.publishedAt)) {
       return -1
     }
 
@@ -152,12 +164,19 @@ export function getBlogPostsByTag(tagSlug: string) {
   )
 }
 
-export function formatDate(date: string, includeRelative = false) {
+type FormatDateOptions = {
+  showTime?: boolean
+  showWeekday?: boolean
+}
+
+export function formatDate(
+  date: string,
+  includeRelative = false,
+  options: FormatDateOptions = {}
+) {
+  const { showTime = true, showWeekday = false } = options
   let currentDate = new Date()
-  if (!date.includes('T')) {
-    date = `${date}T00:00:00`
-  }
-  let targetDate = new Date(date)
+  let targetDate = parsePublishedAt(date)
 
   let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
   let monthsAgo = currentDate.getMonth() - targetDate.getMonth()
@@ -176,10 +195,18 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   let fullDate = targetDate.toLocaleString('en-nz', {
+    weekday: showWeekday ? 'long' : undefined,
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   })
+
+  if (showTime && hasExplicitTime(date)) {
+    const timeLabel = `${String(targetDate.getHours()).padStart(2, '0')}${String(
+      targetDate.getMinutes()
+    ).padStart(2, '0')}`
+    fullDate = `${fullDate}, ${timeLabel}`
+  }
 
   if (!includeRelative) {
     return fullDate

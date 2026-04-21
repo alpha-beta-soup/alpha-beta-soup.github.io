@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts, slugifyTag } from 'app/blog/utils'
+import { formatDate, getBlogPosts, slugifyTag, sortBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 
 export async function generateStaticParams() {
@@ -59,6 +59,11 @@ export default function Blog({ params }) {
     notFound()
   }
 
+  let publishedLabel = formatDate(post.metadata.publishedAt, false, {
+    showWeekday: true,
+  })
+  let publishedYearMatch = publishedLabel.match(/^(.*?)(\d{4})(.*)$/)
+
   return (
     <section className="page-breakout">
       <div className="page-shell">
@@ -94,7 +99,16 @@ export default function Blog({ params }) {
       )}
       <div className="mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
+          {publishedYearMatch ? (
+            <>
+              {publishedYearMatch[1]}
+              <span className="[font-variant-caps:all-small-caps]">ad</span>{' '}
+              {publishedYearMatch[2]}
+              {publishedYearMatch[3]}
+            </>
+          ) : (
+            publishedLabel
+          )}
         </p>
         {post.metadata.tags && post.metadata.tags.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -114,15 +128,12 @@ export default function Blog({ params }) {
         <CustomMDX source={post.content} />
       </article>
       {post.metadata.tags && post.metadata.tags.length > 0 && (() => {
-        const related = getBlogPosts()
-          .filter((p) =>
+        const related = sortBlogPosts(
+          getBlogPosts().filter((p) =>
             p.slug !== post.slug &&
             p.metadata.tags?.some((t) => post.metadata.tags!.includes(t))
           )
-          .sort((a, b) =>
-            new Date(b.metadata.publishedAt).getTime() -
-            new Date(a.metadata.publishedAt).getTime()
-          )
+        )
         return related.length > 0 ? (
           <div className="mt-12 border-t border-neutral-200 dark:border-neutral-800 pt-8">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400 mb-4">

@@ -14,7 +14,7 @@ export function BlogPosts({ posts }: { posts?: BlogPost[] }) {
           >
             <div className="w-full flex flex-col md:flex-row md:items-end md:space-x-2">
               <p className="text-neutral-600 dark:text-neutral-400 w-[100px] tabular-nums">
-                {formatDate(post.metadata.publishedAt, false)}
+                {formatDate(post.metadata.publishedAt, false, { showTime: false })}
               </p>
               <div className="flex-1 border-b border-transparent pb-0.5 transition-colors duration-150 md:group-hover:border-neutral-300 md:group-focus-visible:border-neutral-300 dark:md:group-hover:border-neutral-700 dark:md:group-focus-visible:border-neutral-700">
                 <p className="text-neutral-900 dark:text-neutral-100 tracking-tight">
