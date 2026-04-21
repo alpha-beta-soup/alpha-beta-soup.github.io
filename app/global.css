@@ -49,6 +49,30 @@ html {
   min-width: 360px;
 }
 
+/* Background decoration — shapes are clustered near the left/right edges of the
+   1920×1080 SVG, so they naturally flank the narrow centred content column. */
+@media (min-width: 1024px) {
+  html {
+    background-image: url('/bg.svg');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100vw auto;
+    background-attachment: fixed;
+  }
+}
+
+/* Tablet: scale the SVG wider and anchor it to the left so the right-side shapes
+   disappear off-screen while the left-side shapes remain in the narrow gutter. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  html {
+    background-image: url('/bg.svg');
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 180vw auto;
+    background-attachment: fixed;
+  }
+}
+
 .prose .anchor {
   @apply absolute invisible no-underline;
   margin-left: -1em;
