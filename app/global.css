@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 /* Remove top margin from first p and bottom margin from last p in DialogueMessage */
 .dialogue-message-content > p:first-child {
   margin-top: 0;
@@ -7,7 +9,6 @@
   margin-bottom: 0;
   padding-bottom: 0;
 }
-@import 'tailwindcss';
 
 /* shiki dual-theme support */
 .shiki,
@@ -115,7 +116,14 @@ html {
 }
 
 .prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+  @apply underline transition-all underline-offset-2 decoration-[0.1em];
+  text-decoration-color: var(--color-neutral-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose a {
+    text-decoration-color: var(--color-neutral-600);
+  }
 }
 
 p > a, a[href^="mailto:"] {
@@ -123,8 +131,14 @@ p > a, a[href^="mailto:"] {
 }
 
 .prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
+  color: var(--color-neutral-300);
   content: '#';
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose .anchor:after {
+    color: var(--color-neutral-700);
+  }
 }
 
 .prose *:hover > .anchor {
@@ -132,7 +146,16 @@ p > a, a[href^="mailto:"] {
 }
 
 .prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+  @apply rounded-lg overflow-x-auto border py-2 px-3 text-sm;
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-neutral-200);
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose pre {
+    background-color: var(--color-neutral-900);
+    border-color: var(--color-neutral-900);
+  }
 }
 
 .prose code {
@@ -155,7 +178,14 @@ p > a, a[href^="mailto:"] {
 }
 
 .prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
+  @apply my-4;
+  color: var(--color-neutral-800);
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose p {
+    color: var(--color-neutral-200);
+  }
 }
 
 .prose h1 {
